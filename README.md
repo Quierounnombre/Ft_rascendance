@@ -37,6 +37,4 @@
 >
 > **Stash local changes:** `git stash`
 >
-> **Stash local changes:** `git stash`
->
 > **Unstash:** `git stash pop`
