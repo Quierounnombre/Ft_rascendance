@@ -10,10 +10,11 @@
 
 ## workflow
 
-> - Hay dos branches de git fijas, ***main*** y ***development***
->   - ***main***: elementos finales/permanentes
->   - ***development***: tareas completadas, pero pendientes de testeo y/o aprobación
-> - Para cada tarea se creara una **nueva branch** a partir de ***development***, y una vez terminada se pusheará a ***development***
+> - Hay dos branches de git fijas, ***main*** y ***development***.
+>   - ***main***: elementos finales/permanentes.
+>   - ***development***: tareas completadas, pero pendientes de testeo y/o aprobación.
+> - Para cada tarea se creara una **nueva branch** a partir de ***development***. Una vez terminada esta se pusheará a ***development***.
+> - Las funcionalidades que se estimen finales se pushearan a ***main*** previo acuerdo de todos.
 
 ## git usage
 
