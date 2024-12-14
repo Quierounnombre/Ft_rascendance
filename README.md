@@ -20,7 +20,13 @@
 
 > **See files with changes:** `git status`
 >
+> **See differences between last comit and local changes:** `git diff`
+>
 > **Discard local changes:** `git restore <file>`
+>
+> **Stash local changes:** `git stash`
+>
+> **Unstash:** `git stash pop`
 >
 > **Stage a file:** `git add <file>`
 >
@@ -28,16 +34,14 @@
 >
 > **Unstage a file:** `git reset <file>`
 >
-> **Comit staged changes** `git commit -m "<commit message>"`
+> **Comit staged changes:** `git commit -m "<commit message>"`
 >
-> **Push to remote** `git push`
+> **Push to remote:** `git push`
 >
-> **Push and create new remote** `git push -u origin <new-branch-name>`
+> **Push and create new remote:** `git push -u origin <new-branch-name>`
 >
 > **Change current branch:** `git checkout <branch-name>`
 >
 > **Create new branch:** `git checkout -b <new-branch-name>`
 >
-> **Stash local changes:** `git stash`
->
-> **Unstash:** `git stash pop`
+> **See commit summary:** `git log`
