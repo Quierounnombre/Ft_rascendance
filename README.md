@@ -18,30 +18,86 @@
 
 ## git usage
 
-> **See files with changes:** `git status`
+> **See files with changes:**
+>>
+>> ```sh
+>> git status
+>> ```
 >
-> **See differences between last comit and local changes:** `git diff`
+> **See differences between last comit and local changes:**
+>>
+>>```sh
+>> git diff
+>> ```
 >
-> **Discard local changes:** `git restore <file>`
+> **Discard local changes:**
+>>
+>>```sh
+>> git restore <file>
+>> ```
 >
-> **Stash local changes:** `git stash`
+> **Stash local changes:**
+>>
+>>```sh
+>> git stash
+>> ```
 >
-> **Unstash:** `git stash pop`
+> **Unstash:**
+>>
+>>```sh
+>> git stash pop
+>> ```
 >
-> **Stage a file:** `git add <file>`
+> **Stage a file:**
+>>
+>>```sh
+>> git add <file>
+>> ```
 >
-> **Stage a file interactively:** `git add -i`
+> **Stage a file interactively:**
+>>
+>>```sh
+>> git add -i
+>> ```
 >
-> **Unstage a file:** `git reset <file>`
+> **Unstage a file:**
+>>
+>>```sh
+>> git reset <file>
+>> ```
 >
-> **Comit staged changes:** `git commit -m "<commit message>"`
+> **Comit staged changes:**
+>>
+>>```sh
+>> git commit -m "<commit message>"
+>> ```
 >
-> **Push to remote:** `git push`
+> **Push to remote:**
+>>
+>>```sh
+>> git push
+>> ```
 >
-> **Push and create new remote:** `git push -u origin <new-branch-name>`
+> **Push and create new remote:**
+>>
+>>```sh
+>> git push -u origin <new-branch-name>
+>> ```
 >
-> **Change current branch:** `git checkout <branch-name>`
+> **Change current branch:**
+>>
+>>```sh
+>> git checkout <branch-name>
+>> ```
 >
-> **Create new branch:** `git checkout -b <new-branch-name>`
+> **Create new branch:**
+>>
+>>```sh
+>> git checkout -b <new-branch-name>
+>> ```
 >
-> **See commit summary:** `git log`
+> **See commit summary:**
+>>
+>>```sh
+>> git log
+>> ````
