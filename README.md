@@ -84,13 +84,13 @@
 >> git push -u origin <new-branch-name>
 >> ```
 >
-> **Delete remote branch**
+> **Delete remote branch:**
 >>
 >> ```sh
 >> git push -d origin <remote-branch-name>
 >> ```
 >
-> **Delete local branch**
+> **Delete local branch:**
 >>
 >> ```sh
 >> git branch -d <local-branch-name>
