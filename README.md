@@ -1,4 +1,4 @@
-# ft_rascendance
+# Ft_rascendance
 
 ## Collaborators
 
@@ -8,15 +8,15 @@
 > - [pablo-is-a-goblin](https://github.com/pablo-is-a-goblin)
 > - [witemirlo](https://github.com/witemirlo)
 
-## workflow
+## Workflow
 
 > - Hay dos branches de git fijas, ***main*** y ***development***.
 >   - ***main***: elementos finales/permanentes.
 >   - ***development***: tareas completadas, pero pendientes de testeo y/o aprobación.
-> - Para cada tarea se creara una **nueva branch** a partir de ***development***. Una vez terminada esta se pusheará a ***development***.
+> - Para cada tarea se creara una **nueva branch** a partir de ***development***. Una vez terminada esta se mergeará a ***development***.
 > - Las funcionalidades que se estimen finales se pushearan a ***main*** previo acuerdo de todos.
 
-## git usage
+## Git usage
 
 > **See files with changes:**
 >>
