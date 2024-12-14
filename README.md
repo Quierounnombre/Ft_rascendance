@@ -32,6 +32,8 @@
 >
 > **Push to remote** `git push`
 >
+> **Push and create new remote** `git push -u origin <new-branch-name>`
+>
 > **Change current branch:** `git checkout <branch-name>`
 >
 > **Create new branch:** `git checkout -b <new-branch-name>`
