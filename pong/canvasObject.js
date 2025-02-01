@@ -40,5 +40,19 @@ export default class canvasObject {
 			return true;
 		return false
 	}
-	// TODO: method to move elements
+	
+	move() {
+		this.x += this.dx;
+		if (this.x < 0)
+			this.x = 0;
+		else if (this.x + this.hitboxWidth > canvas.width)
+			this.x = canvas.width - this.hitboxWidth;
+
+		this.y += this.dy;
+		if (this.y < 0)
+			this.y = 0;
+		else if (this.y + this.hitboxHeight > canvas.height)
+			this.y = canvas.height- this.hitboxHeight;
+
+	}
 }
