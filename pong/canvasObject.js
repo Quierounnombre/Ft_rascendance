@@ -24,6 +24,11 @@ export default class canvasObject {
 		context.fillRect(this.x, this.y, this.width, this.height);
 	}
 
+	renderHitBox() {
+		this.context.strokeStyle = "red";
+		this.context.strokeRect(this.x, this.y, this.hitboxWidth, this.hitboxHeight);
+	}
+
 	checkHit(x, y) {
 		if (this.x + (this.hitboxWidth / 2) == x)
 			return true;
