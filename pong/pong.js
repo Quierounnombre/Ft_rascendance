@@ -1,0 +1,88 @@
+import { Player } from "./Player.js"
+import { Ball } from "./Ball.js"
+
+const g_canvas = document.getElementById("pong");
+const g_context = g_canvas.getContext("2d");
+
+document.addEventListener("keyup", keyUpHandler);
+document.addEventListener("keydown", keyDownHandler);
+
+// TODO: que los valores de configuracion se importen de algun lado
+const PLAYER_WIDTH     = 20;
+const PLAYER_HEIGHT    = 100;
+const BALL_RADIUS      = 10;
+const SPEED            = 4;
+const OBJECT_COLOR     = "white";
+const BACKGROUND_COLOR = "black";
+
+const player1 = new Player(
+	g_context,
+	0,
+	(g_canvas.height - PLAYER_HEIGHT) / 2,
+	PLAYER_WIDTH,
+	PLAYER_HEIGHT,
+	OBJECT_COLOR,
+	"player1",
+);
+
+const player2 = new Player(
+	g_context,
+	g_canvas.width - PLAYER_WIDTH,
+	(g_canvas.height - PLAYER_HEIGHT) / 2,
+	PLAYER_WIDTH,
+	PLAYER_HEIGHT,
+	OBJECT_COLOR,
+	"player2",
+);
+
+const ball = new Ball(
+	g_context,
+	0,
+	0,
+	BALL_RADIUS,
+	OBJECT_COLOR,
+	"ball",
+);
+
+function keyUpHandler(event) {
+	if (event.key === "ArrowUp" || event.key === "ArrowDown")
+		player2.dy = 0;
+	else if (event.key == "w" || event.key == "s")
+		player1.dy = 0;
+}
+
+function keyDownHandler(e) {
+	if (e.key === "ArrowUp")
+		player2.dy = -8;
+	else if (e.key === "ArrowDown")
+		player2.dy = 8;
+	else if (e.key == "w")
+		player1.dy = -8;
+	else if (e.key == "s")
+		player1.dy = 8;
+}
+
+function game_loop(canvas_objects) {
+	g_context.fillStyle = BACKGROUND_COLOR;
+	g_context.fillRect(0, 0, g_canvas.width, g_canvas.height);
+
+	for (let i = 0; i < canvas_objects.legth; i++) {
+		canvas_objects[i].render();
+	}
+}
+
+function main() {
+	const canvas_objects = [];
+
+	canvas_objects.push(player1);
+	canvas_objects.push(player2);
+	canvas_objects.push(ball);
+	// TODO: counter class
+
+	// TODO: check end of game condition
+	while (true) {
+		requestAnimationFrame(game_loop(canvas_objects));
+	}
+}
+
+main();
