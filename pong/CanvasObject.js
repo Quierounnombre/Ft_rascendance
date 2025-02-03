@@ -1,7 +1,7 @@
 "use strict";
 
 export default class canvasObject {
-	constructor(context, x = 0, y = 0, width = 0, height = 0, color = "black") {
+	constructor(context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "generic") {
 		this.context = context;
 
 		this.x = x;
@@ -17,6 +17,8 @@ export default class canvasObject {
 		this.hitboxHeight = height;
 
 		this.color = color;
+
+		this.id = id;
 	}
 
 	render() {
