@@ -1,6 +1,6 @@
 "use strict";
 
-export default class canvasObject {
+class CanvasObject {
 	constructor(context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "generic") {
 		this.context = context;
 
@@ -58,3 +58,5 @@ export default class canvasObject {
 
 	}
 }
+
+export {CanvasObject};

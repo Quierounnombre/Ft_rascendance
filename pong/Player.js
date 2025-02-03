@@ -1,9 +1,9 @@
-import CanvasObject from "./CanvasObject";
+import { CanvasObject } from "./CanvasObject.js";
 "use strict";
 
-export default class Player extends CanvasObject {
+class Player extends CanvasObject {
 	constructor(context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "player") {
-		CanvasObject(context, x, y, width, height, color, id);
+		super(context, x, y, width, height, color, id);
 		this.pointsScored = 0;
 	}
 
@@ -13,3 +13,5 @@ export default class Player extends CanvasObject {
 		};
 	}
 }
+
+export {Player};
