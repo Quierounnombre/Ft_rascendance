@@ -19,8 +19,8 @@ const canvas_objects = [];
 
 const player1 = new Player(
 	g_context,
-	0,
-	(g_canvas.height - PLAYER_HEIGHT) / 2,
+	PLAYER_WIDTH / 2,
+	(g_canvas.height - PLAYER_HEIGHT) / 2 + (PLAYER_HEIGHT / 2), // TODO: simplificar la formula
 	PLAYER_WIDTH,
 	PLAYER_HEIGHT,
 	OBJECT_COLOR,
@@ -29,8 +29,8 @@ const player1 = new Player(
 
 const player2 = new Player(
 	g_context,
-	g_canvas.width - PLAYER_WIDTH,
-	(g_canvas.height - PLAYER_HEIGHT) / 2,
+	g_canvas.width - (PLAYER_WIDTH / 2),
+	(g_canvas.height - PLAYER_HEIGHT) / 2 + (PLAYER_HEIGHT / 2), // TODO: simplificar la formula
 	PLAYER_WIDTH,
 	PLAYER_HEIGHT,
 	OBJECT_COLOR,
@@ -49,7 +49,7 @@ const ball = new Ball(
 function keyUpHandler(event) {
 	if (event.key === "ArrowUp" || event.key === "ArrowDown")
 		player2.dy = 0;
-	else if (event.key == "w" || event.key == "s")
+	else if (event.key === "w" || event.key === "s")
 		player1.dy = 0;
 }
 
@@ -58,15 +58,20 @@ function keyDownHandler(e) {
 		player2.dy = -8;
 	else if (e.key === "ArrowDown")
 		player2.dy = 8;
-	else if (e.key == "w")
+	else if (e.key === "w")
 		player1.dy = -8;
-	else if (e.key == "s")
+	else if (e.key === "s")
 		player1.dy = 8;
 }
 
 function game_loop() {
 	g_context.fillStyle = BACKGROUND_COLOR;
 	g_context.fillRect(0, 0, g_canvas.width, g_canvas.height);
+
+	for (let i = 0; i < canvas_objects.length; i++) {
+		canvas_objects[i].render();
+		canvas_objects[i].renderHitBox();
+	}
 
 	// TODO: esto es debug, borrar------------------------------------------
 	g_context.beginPath();
@@ -79,13 +84,10 @@ function game_loop() {
 	g_context.lineTo(g_canvas.width, g_canvas.height / 2);
 	g_context.moveTo(g_canvas.width / 2, 0);
 	g_context.lineTo(g_canvas.width / 2, g_canvas.height);
+	g_context.closePath();
 	g_context.stroke()
 	// ---------------------------------------------------------------------
 
-	for (let i = 0; i < canvas_objects.length; i++) {
-		canvas_objects[i].render();
-		canvas_objects[i].renderHitBox();
-	}
 	window.requestAnimationFrame(game_loop);
 }
 

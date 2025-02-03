@@ -13,8 +13,24 @@ class CanvasObject {
 		this.width = width;
 		this.height = height;
 
-		this.hitboxWidth = width;
-		this.hitboxHeight = height;
+		/*
+		** xy1---------xy2
+		** |            |
+		** |     xy     |
+		** |            |
+		** xy3---------xy4
+		*/
+		this.point_x1 = x - width / 2;
+		this.point_y1 = y - height / 2;
+
+		this.point_x2 = x + width / 2;
+		this.point_y2 = y - height / 2;
+
+		this.point_x3 = x - width / 2;
+		this.point_y3 = y + height / 2;
+
+		this.point_x4 = x + width / 2;
+		this.point_y4 = y + height / 2;
 
 		this.color = color;
 
@@ -23,12 +39,16 @@ class CanvasObject {
 
 	render() {
 		this.context.fillStyle = this.color;
-		this.context.fillRect((this.x - (this.hitboxWidth / 2)), (this.y - (this.hitboxHeight / 2)), this.width, this.height);
+		this.context.fillRect(this.point_x1, this.point_y1, this.width, this.height);
 	}
 
 	renderHitBox() {
-		this.context.strokeStyle = "red";
-		this.context.strokeRect((this.x - (this.hitboxWidth / 2)), (this.y - (this.hitboxHeight / 2)), this.hitboxWidth, this.hitboxHeight);
+		this.context.strokeStyle = "magenta";
+		this.context.beginPath();
+		this.context.lineWidth = "1";
+		this.context.rect(this.point_x1, this.point_y1, this.width, this.height);
+		this.context.closePath();
+		this.context.stroke();
 	}
 
 	checkHit(x, y) {
@@ -37,6 +57,7 @@ class CanvasObject {
 		las esquinas deberian rodear el punto, 
 		no empezar desde la esquina superior izquierda
 		*/
+		// TODO: cambiar al nuevo hitbox
 		if (this.x + (this.hitboxWidth / 2) == x)
 			return true;
 		if (this.x - (this.hitboxWidth / 2) == x)
@@ -47,8 +68,9 @@ class CanvasObject {
 			return true;
 		return false
 	}
-	
+
 	move() {
+		// TODO: cambiar al nuevo hitbox
 		this.x += this.dx;
 		if (this.x < 0)
 			this.x = 0;
@@ -59,9 +81,9 @@ class CanvasObject {
 		if (this.y < 0)
 			this.y = 0;
 		else if (this.y + this.hitboxHeight > canvas.height)
-			this.y = canvas.height- this.hitboxHeight;
+			this.y = canvas.height - this.hitboxHeight;
 
 	}
 }
 
-export {CanvasObject};
+export { CanvasObject };
