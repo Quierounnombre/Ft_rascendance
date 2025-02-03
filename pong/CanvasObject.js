@@ -23,15 +23,20 @@ class CanvasObject {
 
 	render() {
 		this.context.fillStyle = this.color;
-		context.fillRect(this.x, this.y, this.width, this.height);
+		this.context.fillRect((this.x - (this.hitboxWidth / 2)), (this.y - (this.hitboxHeight / 2)), this.width, this.height);
 	}
 
 	renderHitBox() {
 		this.context.strokeStyle = "red";
-		this.context.strokeRect(this.x, this.y, this.hitboxWidth, this.hitboxHeight);
+		this.context.strokeRect((this.x - (this.hitboxWidth / 2)), (this.y - (this.hitboxHeight / 2)), this.hitboxWidth, this.hitboxHeight);
 	}
 
 	checkHit(x, y) {
+		/*
+		TODO: el punto x,y es el centro,
+		las esquinas deberian rodear el punto, 
+		no empezar desde la esquina superior izquierda
+		*/
 		if (this.x + (this.hitboxWidth / 2) == x)
 			return true;
 		if (this.x - (this.hitboxWidth / 2) == x)

@@ -15,6 +15,8 @@ const SPEED            = 4;
 const OBJECT_COLOR     = "white";
 const BACKGROUND_COLOR = "black";
 
+const canvas_objects = [];
+
 const player1 = new Player(
 	g_context,
 	0,
@@ -37,8 +39,8 @@ const player2 = new Player(
 
 const ball = new Ball(
 	g_context,
-	0,
-	0,
+	g_canvas.width / 2,
+	g_canvas.height / 2,
 	BALL_RADIUS,
 	OBJECT_COLOR,
 	"ball",
@@ -62,27 +64,25 @@ function keyDownHandler(e) {
 		player1.dy = 8;
 }
 
-function game_loop(canvas_objects) {
+function game_loop() {
 	g_context.fillStyle = BACKGROUND_COLOR;
 	g_context.fillRect(0, 0, g_canvas.width, g_canvas.height);
 
-	for (let i = 0; i < canvas_objects.legth; i++) {
+	for (let i = 0; i < canvas_objects.length; i++) {
 		canvas_objects[i].render();
+		canvas_objects[i].renderHitBox();
 	}
+	window.requestAnimationFrame(game_loop);
 }
 
 function main() {
-	const canvas_objects = [];
-
 	canvas_objects.push(player1);
 	canvas_objects.push(player2);
 	canvas_objects.push(ball);
 	// TODO: counter class
 
 	// TODO: check end of game condition
-	while (true) {
-		requestAnimationFrame(game_loop(canvas_objects));
-	}
+	window.requestAnimationFrame(game_loop);
 }
 
 main();
