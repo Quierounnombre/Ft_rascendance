@@ -1,7 +1,8 @@
 "use strict";
 
 class CanvasObject {
-	constructor(context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "generic") {
+	constructor(canvas, context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "generic") {
+		this.canvas = canvas;
 		this.context = context;
 
 		this.x = x;
@@ -37,11 +38,17 @@ class CanvasObject {
 		this.id = id;
 	}
 
+	/**
+	 * @brief puts itself in the canvas
+	 */
 	render() {
 		this.context.fillStyle = this.color;
 		this.context.fillRect(this.point_x1, this.point_y1, this.width, this.height);
 	}
 
+	/**
+	 * @brief puts the hitbox in the canvas
+	 */
 	renderHitBox() {
 		this.context.strokeStyle = "magenta";
 		this.context.beginPath();
@@ -52,7 +59,7 @@ class CanvasObject {
 	}
 
 	/**
-	 * Checks if a given (x, y) point is in contant with the object
+	 * @brief Checks if a given (x, y) point is in contant with the object
 	 * @param x position in x
 	 * @param y position in y 
 	 * @returns true if is in contact, false otherwise
@@ -95,20 +102,69 @@ class CanvasObject {
 		return false;
 	}
 
-	move() {
-		// TODO: cambiar al nuevo hitbox
-		this.x += this.dx;
-		if (this.x < 0)
-			this.x = 0;
-		else if (this.x + this.hitboxWidth > canvas.width)
-			this.x = canvas.width - this.hitboxWidth;
+	/**
+	 * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
+	 * it moves from current position in (x, y)
+	 * @param dx speed in x axis
+	 * @param dy speed in y axis
+	 */
+	slide(dx, dy) {
+		this.x += dx;
+		this.y += dy;
+		this.recalculateHitbox();
+		this.keepInsideCanvas();
+	}
 
-		this.y += this.dy;
-		if (this.y < 0)
-			this.y = 0;
-		else if (this.y + this.hitboxHeight > canvas.height)
-			this.y = canvas.height - this.hitboxHeight;
+	/**
+	 * @brief moves the object to global(x, y)
+	 * @param x position in x
+	 * @param y position in y 
+	 */
+	moveTo(x, y) {
+		this.x = x;
+		this.y = y;	
+		this.recalculateHitbox();
+		this.keepInsideCanvas();
+	}
 
+	/**
+	 * @brief updates the info of the object, it includes movement and collisions
+	 */
+	update() {
+		this.slide(this.dx, this.dy);
+	}
+	
+	/**
+	 * @brief recalculates the hitbox points with the current (x, y)
+	 */
+	recalculateHitbox() {
+		this.point_x1 = this.x - this.width / 2;
+		this.point_y1 = this.y - this.height / 2;
+
+		this.point_x2 = this.x + this.width / 2;
+		this.point_y2 = this.y - this.height / 2;
+
+		this.point_x3 = this.x - this.width / 2;
+		this.point_y3 = this.y + this.height / 2;
+
+		this.point_x4 = this.x + this.width / 2;
+		this.point_y4 = this.y + this.height / 2;
+	}
+
+	/**
+	 * @brief calculate if the object is outside the canvas, and moves it to
+	 * the border
+	 */
+	keepInsideCanvas() {
+		if (this.point_x1 < 0)
+			this.moveTo((this.point_x2 - this.point_x1) / 2, this.y)
+		else if (this.point_x2 > this.canvas.width)
+			this.moveTo(this.canvas.width - (this.point_x2 - this.point_x1) / 2, this.y)
+
+		if (this.point_y1 < 0)
+			this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
+		else if (this.point_y3 > this.canvas.height)
+			this.moveTo(this.x, this.canvas.height - (this.point_y3 - this.point_y1) / 2);
 	}
 }
 

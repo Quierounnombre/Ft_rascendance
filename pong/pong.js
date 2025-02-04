@@ -18,6 +18,7 @@ const BACKGROUND_COLOR = "black";
 const canvas_objects = [];
 
 const player1 = new Player(
+	g_canvas,
 	g_context,
 	PLAYER_WIDTH / 2,
 	(g_canvas.height - PLAYER_HEIGHT) / 2 + (PLAYER_HEIGHT / 2), // TODO: simplificar la formula
@@ -28,6 +29,7 @@ const player1 = new Player(
 );
 
 const player2 = new Player(
+	g_canvas,
 	g_context,
 	g_canvas.width - (PLAYER_WIDTH / 2),
 	(g_canvas.height - PLAYER_HEIGHT) / 2 + (PLAYER_HEIGHT / 2), // TODO: simplificar la formula
@@ -38,6 +40,7 @@ const player2 = new Player(
 );
 
 const ball = new Ball(
+	g_canvas,
 	g_context,
 	g_canvas.width / 2,
 	g_canvas.height / 2,
@@ -69,6 +72,7 @@ function game_loop() {
 	g_context.fillRect(0, 0, g_canvas.width, g_canvas.height);
 
 	for (let i = 0; i < canvas_objects.length; i++) {
+		canvas_objects[i].update(); // TODO: antes o despues de render?
 		canvas_objects[i].render();
 		canvas_objects[i].renderHitBox();
 	}

@@ -2,8 +2,8 @@ import { CanvasObject } from "./CanvasObject.js";
 "use strict";
 
 class Player extends CanvasObject {
-	constructor(context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "player") {
-		super(context, x, y, width, height, color, id);
+	constructor(canvas, context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "player") {
+		super(canvas, context, x, y, width, height, color, id);
 		this.pointsScored = 0;
 	}
 
