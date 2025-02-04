@@ -57,7 +57,7 @@ class CanvasObject {
 	 * @param y position in y 
 	 * @returns true if is in contact, false otherwise
 	 */
-	checkHit(x, y) {
+	pointHits(x, y) {
 		const triangle_area = (x1, y1, x2, y2, x3, y3) => {
 			return abs(
 				(x1 * (y2 - y3)  + 
@@ -75,7 +75,7 @@ class CanvasObject {
 		const area3 = triangle_area(x, y, this.x3, this.y3, this.x4, this.y4);
 		const area4 = triangle_area(x, y, this.x4, this.y4, this.x1, this.y1);
 
-		return !(hitbox_area === (area1 + area2 + area3 + area4));
+		return hitbox_area === (area1 + area2 + area3 + area4);
 	}
 
 	move() {
