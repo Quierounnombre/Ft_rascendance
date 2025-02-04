@@ -78,6 +78,23 @@ class CanvasObject {
 		return hitbox_area === (area1 + area2 + area3 + area4);
 	}
 
+	/**
+	 * @brief checks if a given canvasObject is in contact
+	 * @param object to check
+	 * @returns true if is in contact, false otherwise
+	 */
+	objectHits(object) {
+		if (this.pointHits(object.point_x1, object.point_y1))
+			return true;
+		if (this.pointHits(object.point_x2, object.point_y2))
+			return true;
+		if (this.pointHits(object.point_x3, object.point_y3))
+			return true;
+		if (this.pointHits(object.point_x4, object.point_y4))
+			return true;
+		return false;
+	}
+
 	move() {
 		// TODO: cambiar al nuevo hitbox
 		this.x += this.dx;
