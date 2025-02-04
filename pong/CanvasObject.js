@@ -60,8 +60,8 @@ class CanvasObject {
 
 	/**
 	 * @brief Checks if a given (x, y) point is in contant with the object
-	 * @param x position in x
-	 * @param y position in y 
+	 * @param {int} x position in x
+	 * @param {int} y position in y 
 	 * @returns true if is in contact, false otherwise
 	 */
 	pointHits(x, y) {
@@ -87,7 +87,7 @@ class CanvasObject {
 
 	/**
 	 * @brief checks if a given canvasObject is in contact
-	 * @param object to check
+	 * @param {CanvasObject} object to check
 	 * @returns true if is in contact, false otherwise
 	 */
 	objectHits(object) {
@@ -105,8 +105,8 @@ class CanvasObject {
 	/**
 	 * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
 	 * it moves from current position in (x, y)
-	 * @param dx speed in x axis
-	 * @param dy speed in y axis
+	 * @param {int} dx speed in x axis
+	 * @param {int} dy speed in y axis
 	 */
 	slide(dx, dy) {
 		this.x += dx;
@@ -117,8 +117,8 @@ class CanvasObject {
 
 	/**
 	 * @brief moves the object to global(x, y)
-	 * @param x position in x
-	 * @param y position in y 
+	 * @param {int} x position in x
+	 * @param {int} y position in y 
 	 */
 	moveTo(x, y) {
 		this.x = x;
