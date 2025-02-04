@@ -21,7 +21,7 @@ const player1 = new Player(
 	g_canvas,
 	g_context,
 	PLAYER_WIDTH / 2,
-	(g_canvas.height - PLAYER_HEIGHT) / 2 + (PLAYER_HEIGHT / 2), // TODO: simplificar la formula
+	(g_canvas.height - PLAYER_HEIGHT + PLAYER_HEIGHT) / 2,
 	PLAYER_WIDTH,
 	PLAYER_HEIGHT,
 	OBJECT_COLOR,
@@ -32,7 +32,7 @@ const player2 = new Player(
 	g_canvas,
 	g_context,
 	g_canvas.width - (PLAYER_WIDTH / 2),
-	(g_canvas.height - PLAYER_HEIGHT) / 2 + (PLAYER_HEIGHT / 2), // TODO: simplificar la formula
+	(g_canvas.height - PLAYER_HEIGHT + PLAYER_HEIGHT) / 2,
 	PLAYER_WIDTH,
 	PLAYER_HEIGHT,
 	OBJECT_COLOR,
