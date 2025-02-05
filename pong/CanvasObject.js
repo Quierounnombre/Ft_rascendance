@@ -65,24 +65,11 @@ renderHitBox() {
  * @returns true if is in contact, false otherwise
  */
 pointHits(x, y) {
-	const triangle_area = (x1, y1, x2, y2, x3, y3) => {
-		return abs(
-			(x1 * (y2 - y3)  + 
-				x2 * (y3 - y1)  + 
-				x3 * (y1 - y2)) / 
-				2.0
-		);
-	}
-
-	const hitbox_area = triangle_area(x1, y1, x2, y2, x3, y3) +
-				triangle_area(x2, y2, x3, y3, x4, y4);
-	
-	const area1 = triangle_area(x, y, this.x1, this.y1, this.x2, this.y2);
-	const area2 = triangle_area(x, y, this.x2, this.y2, this.x3, this.y3);
-	const area3 = triangle_area(x, y, this.x3, this.y3, this.x4, this.y4);
-	const area4 = triangle_area(x, y, this.x4, this.y4, this.x1, this.y1);
-
-	return hitbox_area === (area1 + area2 + area3 + area4);
+	if (this.point_x1 > x || this.point_x2 < x)
+		return false;
+	if (this.point_y1 > y || this.point_y3 < y)
+		return false;
+	return true;
 }
 
 /**
