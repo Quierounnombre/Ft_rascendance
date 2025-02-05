@@ -13,10 +13,11 @@ constructor (canvas, context, font = "42px arial", color = "white", id = "counte
 render() {
 	this.context.font = this.font;// TODO: quizas hacer esto en bucle es innecesario
 
-	let text = `[${this.player1_score} | ${this.player2_score}]`;
-	let text_width = this.context.measureText(text).width;
-	// this.context.textAlign = "end";
-	this.context.fillText(text, (this.canvas.width - text_width) / 2, this.canvas.height / 8);
+	this.context.textAlign = "end";
+	this.context.fillText(`${this.player1_score}  `, this.canvas.width / 2, this.canvas.height / 8);
+
+	this.context.textAlign = "start";
+	this.context.fillText(`  ${this.player2_score}`, this.canvas.width / 2, this.canvas.height / 8);
 }
 
 pointHits() {
