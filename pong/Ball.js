@@ -17,20 +17,41 @@ render() {
 }
 
 /**
+ * @brief calculate if the object is outside the canvas, and moves it to
+ * the border
+ */
+keepInsideCanvas() {
+	// TODO: puntuacion
+	if (this.point_x1 < 0)
+		this.moveTo((this.point_x2 - this.point_x1) / 2, this.y)
+	else if (this.point_x2 > this.canvas.width)
+		this.moveTo(this.canvas.width - (this.point_x2 - this.point_x1) / 2, this.y)
+
+	if (this.point_y1 < 0) {
+		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
+		this.dy = -this.dy;
+	}
+	else if (this.point_y3 > this.canvas.height) {
+		this.moveTo(this.x, this.canvas.height - (this.point_y3 - this.point_y1) / 2);
+		this.dy = -this.dy;
+	}
+}
+
+/**
  * @brief uptades the object state when is hitted
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
-	// TODO: rebotar contra las paredes
+	// TODO: rebotar contra las paredes, NOTE: que sea en keepInsideCanvas
 	// TODO: que dependiendo de en que zona de la pala vaya mas diagonal o menos
+	this.dx = -this.dx;
 	if (canvas_object.type === "player") {
-		this.dx = -this.dx;
+		if (this.dx > 0)
+			this.dx += 0.5;
+		else
+			this.dx -+ 0.5;
+		this.dy -= canvas_object.dy / 4;
 	}
-	if (this.dx > 0)
-		this.dx++;
-	else
-		this.dx--;
-	console.log(`${this.id} is resolving a hit with ${canvas_object.id}`);
 }
 }
 

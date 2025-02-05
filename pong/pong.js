@@ -37,7 +37,7 @@ const player2 = new Player(
 	PLAYER_HEIGHT,
 	OBJECT_COLOR,
 	"player2",
-);
+)
 
 const ball = new Ball(
 	g_canvas,
@@ -49,24 +49,36 @@ const ball = new Ball(
 	"ball",
 );
 
-ball.dx = 2;
+ball.dx = 4;
 
 function keyUpHandler(event) {
-	if (event.key === "ArrowUp" || event.key === "ArrowDown")
-		player2.dy = 0;
-	else if (event.key === "w" || event.key === "s")
-		player1.dy = 0;
+	if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+		// player2.dy = 0;
+		player2.is_moving = false;
+	}
+	else if (event.key === "w" || event.key === "s") {
+		// player1.dy = 0;
+		player1.is_moving = false;
+	}
 }
 
 function keyDownHandler(e) {
-	if (e.key === "ArrowUp")
+	if (e.key === "ArrowUp") {
 		player2.dy = -8;
-	else if (e.key === "ArrowDown")
+		player2.is_moving = true;
+	}
+	else if (e.key === "ArrowDown") {
 		player2.dy = 8;
-	else if (e.key === "w")
+		player2.is_moving = true;
+	}
+	else if (e.key === "w") {
 		player1.dy = -8;
-	else if (e.key === "s")
+		player1.is_moving = true;
+	}
+	else if (e.key === "s") {
 		player1.dy = 8;
+		player1.is_moving = true;
+	}
 }
 
 function game_loop() {

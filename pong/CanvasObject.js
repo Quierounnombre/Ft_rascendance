@@ -11,6 +11,8 @@ constructor(canvas, context, x = 0, y = 0, width = 0, height = 0, color = "black
 	this.dx = 0;
 	this.dy = 0;
 
+	this.is_moving = false;
+
 	this.width = width;
 	this.height = height;
 
