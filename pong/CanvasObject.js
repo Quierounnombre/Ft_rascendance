@@ -36,6 +36,7 @@ constructor(canvas, context, x = 0, y = 0, width = 0, height = 0, color = "black
 	this.color = color;
 
 	this.id = id;
+	this.type = "generic";
 }
 
 /**
@@ -78,13 +79,18 @@ pointHits(x, y) {
  * @returns true if is in contact, false otherwise
  */
 objectHits(object) {
-	if (this.pointHits(object.point_x1, object.point_y1))
+	/*
+	TODO: este planteamiento hace que como ninguno de los puntos de la pala
+	esta dentro de la bola, como tal la pala no sabe que ha golpeado a la
+	bola, asi que da problemas si un objeto es significativamete mas grande
+	*/
+	if (object.pointHits(this.point_x1, this.point_y1))
 		return true;
-	if (this.pointHits(object.point_x2, object.point_y2))
+	if (object.pointHits(this.point_x2, this.point_y2))
 		return true;
-	if (this.pointHits(object.point_x3, object.point_y3))
+	if (object.pointHits(this.point_x3, this.point_y3))
 		return true;
-	if (this.pointHits(object.point_x4, object.point_y4))
+	if (object.pointHits(this.point_x4, this.point_y4))
 		return true;
 	return false;
 }
@@ -121,11 +127,18 @@ moveTo(x, y) {
 update(canvas_objects) {
 	this.slide(this.dx, this.dy);
 	for (let i = 0; i < canvas_objects.length; i++) {
-		if (canvas_objects[i] != this && this.objectHits(canvas_objects[i])) // TODO: esto funciona? el primer check
-			resolveHit(canvas_objects[i]);
+		if (canvas_objects[i] != this && this.objectHits(canvas_objects[i]))
+			this.resolveHit(canvas_objects[i]);
 	}
 }
 
+/**
+ * @brief uptades the object state when is hitted
+ * @param {CanvasObject} canvas_object object in contact
+ */
+resolveHit(canvas_object) {
+	console.log(`${this.id} is resolving a hit with ${canvas_object.id}`);
+}
 
 /**
  * @brief recalculates the hitbox points with the current (x, y)

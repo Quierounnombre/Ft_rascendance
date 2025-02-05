@@ -49,6 +49,8 @@ const ball = new Ball(
 	"ball",
 );
 
+ball.dx = 2;
+
 function keyUpHandler(event) {
 	if (event.key === "ArrowUp" || event.key === "ArrowDown")
 		player2.dy = 0;
@@ -72,7 +74,7 @@ function game_loop() {
 	g_context.fillRect(0, 0, g_canvas.width, g_canvas.height);
 
 	for (let i = 0; i < canvas_objects.length; i++) {
-		canvas_objects[i].update(); // TODO: antes o despues de render?
+		canvas_objects[i].update(canvas_objects); // TODO: antes o despues de render?
 		canvas_objects[i].render();
 		canvas_objects[i].renderHitBox();
 	}
