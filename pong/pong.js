@@ -94,6 +94,13 @@ function keyDownHandler(e) {
 function game_loop() {
 	g_context.fillStyle = BACKGROUND_COLOR;
 	g_context.fillRect(0, 0, g_canvas.width, g_canvas.height);
+	g_context.beginPath();
+	g_context.strokeStyle = OBJECT_COLOR;
+	g_context.lineWidth = "2";
+	g_context.moveTo(g_canvas.width / 2, 0);
+	g_context.lineTo(g_canvas.width / 2, g_canvas.height);
+	g_context.closePath();
+	g_context.stroke();
 
 	for (let i = 0; i < canvas_objects.length; i++) {
 		canvas_objects[i].update(canvas_objects); // TODO: antes o despues de render?
@@ -102,18 +109,18 @@ function game_loop() {
 	}
 
 	// TODO: esto es debug, borrar------------------------------------------
-	g_context.beginPath();
-	g_context.strokeStyle = "magenta";
-	g_context.moveTo(0, 0);
-	g_context.lineTo(g_canvas.width, g_canvas.height);
-	g_context.moveTo(g_canvas.width, 0);
-	g_context.lineTo(0, g_canvas.height);
-	g_context.moveTo(0, g_canvas.height / 2);
-	g_context.lineTo(g_canvas.width, g_canvas.height / 2);
-	g_context.moveTo(g_canvas.width / 2, 0);
-	g_context.lineTo(g_canvas.width / 2, g_canvas.height);
-	g_context.closePath();
-	g_context.stroke()
+	// g_context.beginPath();
+	// g_context.strokeStyle = "magenta";
+	// g_context.moveTo(0, 0);
+	// g_context.lineTo(g_canvas.width, g_canvas.height);
+	// g_context.moveTo(g_canvas.width, 0);
+	// g_context.lineTo(0, g_canvas.height);
+	// g_context.moveTo(0, g_canvas.height / 2);
+	// g_context.lineTo(g_canvas.width, g_canvas.height / 2);
+	// g_context.moveTo(g_canvas.width / 2, 0);
+	// g_context.lineTo(g_canvas.width / 2, g_canvas.height);
+	// g_context.closePath();
+	// g_context.stroke()
 	// ---------------------------------------------------------------------
 
 	window.requestAnimationFrame(game_loop);

@@ -139,7 +139,6 @@ update(canvas_objects) {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
-	console.log(`${this.id} is resolving a hit with ${canvas_object.id}`);
 }
 
 /**
