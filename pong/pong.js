@@ -1,5 +1,6 @@
 import { Player } from "./Player.js"
 import { Ball } from "./Ball.js"
+import { Counter } from "./Counter.js"
 
 const g_canvas = document.getElementById("pong");
 const g_context = g_canvas.getContext("2d");
@@ -39,17 +40,26 @@ const player2 = new Player(
 	"player2",
 )
 
+const counter = new Counter(
+	g_canvas,
+	g_context,
+	"42px arial",
+	OBJECT_COLOR,
+	"counter",
+)
+
 const ball = new Ball(
 	g_canvas,
 	g_context,
 	g_canvas.width / 2,
 	g_canvas.height / 2,
 	BALL_RADIUS,
+	counter,
 	OBJECT_COLOR,
 	"ball",
 );
 
-ball.dx = 4;
+ball.dx = SPEED;
 
 function keyUpHandler(event) {
 	if (event.key === "ArrowUp" || event.key === "ArrowDown") {
@@ -113,6 +123,7 @@ function main() {
 	canvas_objects.push(player1);
 	canvas_objects.push(player2);
 	canvas_objects.push(ball);
+	canvas_objects.push(counter);
 	// TODO: counter class
 
 	// TODO: check end of game condition

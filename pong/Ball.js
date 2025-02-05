@@ -2,10 +2,11 @@ import { CanvasObject } from "./CanvasObject.js";
 "use strict";
 
 class Ball extends CanvasObject {
-constructor (canvas, context, x = 0, y = 0, radius = 0, color = "black", id = "ball") {
+constructor (canvas, context, x = 0, y = 0, radius = 0, counter, color = "black", id = "ball") {
 	super(canvas, context, x, y, radius * 2, radius * 2, color, id);
 	this.radius = radius;
 	this.type = "ball"
+	this.counter = counter;
 }
 
 render() {
@@ -22,10 +23,18 @@ render() {
  */
 keepInsideCanvas() {
 	// TODO: puntuacion
-	if (this.point_x1 < 0)
-		this.moveTo((this.point_x2 - this.point_x1) / 2, this.y)
-	else if (this.point_x2 > this.canvas.width)
-		this.moveTo(this.canvas.width - (this.point_x2 - this.point_x1) / 2, this.y)
+	if (this.point_x1 < 0) {
+		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
+		this.counter.player2_score += 1;
+		this.dy = 0;
+		this.dx = 4; // TODO: archivo con variables de las que importar todos estos, quizas cuanto la partida sea un objeto pueda acceder a ellos
+	}
+	else if (this.point_x2 > this.canvas.width) {
+		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
+		this.dy = 0;
+		this.dx = -4;
+		this.counter.player1_score += 1;
+	}
 
 	if (this.point_y1 < 0) {
 		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
