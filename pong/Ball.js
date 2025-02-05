@@ -22,14 +22,12 @@ render() {
  * the border
  */
 keepInsideCanvas() {
-	// TODO: puntuacion
 	if (this.point_x1 < 0) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.counter.player2_score += 1;
 		this.dy = 0;
 		this.dx = 4; // TODO: archivo con variables de las que importar todos estos, quizas cuanto la partida sea un objeto pueda acceder a ellos
-	}
-	else if (this.point_x2 > this.canvas.width) {
+	} else if (this.point_x2 > this.canvas.width) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.dy = 0;
 		this.dx = -4;
@@ -39,8 +37,7 @@ keepInsideCanvas() {
 	if (this.point_y1 < 0) {
 		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
 		this.dy = -this.dy;
-	}
-	else if (this.point_y3 > this.canvas.height) {
+	} else if (this.point_y3 > this.canvas.height) {
 		this.moveTo(this.x, this.canvas.height - (this.point_y3 - this.point_y1) / 2);
 		this.dy = -this.dy;
 	}
@@ -51,8 +48,6 @@ keepInsideCanvas() {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
-	// TODO: rebotar contra las paredes, NOTE: que sea en keepInsideCanvas
-	// TODO: que dependiendo de en que zona de la pala vaya mas diagonal o menos
 	this.dx = -this.dx;
 	if (canvas_object.type === "player") {
 		if (this.dx > 0)
