@@ -36,7 +36,7 @@ keepInsideCanvas() {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.counter.player2_score += 1;
 		this.dirY = 0;
-		this.dirX = 4; // TODO: archivo con variables de las que importar todos estos, quizas cuanto la partida sea un objeto pueda acceder a ellos
+		this.dirX = -4; // TODO: archivo con variables de las que importar todos estos, quizas cuanto la partida sea un objeto pueda acceder a ellos
 	} else if (this.point_x2 > this.canvas.width) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.dirY = 0;
