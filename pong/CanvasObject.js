@@ -8,8 +8,8 @@ constructor(canvas, context, x = 0, y = 0, width = 0, height = 0, color = "black
 	this.x = x;
 	this.y = y;
 
-	this.dx = 0;
-	this.dy = 0;
+	this.dirX = 0;
+	this.dirY = 0;
 
 	this.is_moving = false;
 
@@ -100,12 +100,12 @@ objectHits(object) {
 /**
  * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
  * it moves from current position in (x, y)
- * @param {int} dx speed in x axis
- * @param {int} dy speed in y axis
+ * @param {int} dirX speed in x axis
+ * @param {int} dirY speed in y axis
  */
-slide(dx, dy) {
-	this.x += dx;
-	this.y += dy;
+slide(dirX, dirY) {
+	this.x += dirX;
+	this.y += dirY;
 	this.recalculateHitbox();
 	this.keepInsideCanvas();
 }
@@ -127,7 +127,7 @@ moveTo(x, y) {
  * @param {CanvasObject[]} canvas_objects objects in the current canvas
  */
 update(canvas_objects) {
-	this.slide(this.dx, this.dy);
+	this.slide(this.dirX, this.dirY);
 	for (let i = 0; i < canvas_objects.length; i++) {
 		if (canvas_objects[i] != this && this.objectHits(canvas_objects[i]))
 			this.resolveHit(canvas_objects[i]);

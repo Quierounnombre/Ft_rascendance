@@ -25,21 +25,21 @@ keepInsideCanvas() {
 	if (this.point_x1 < 0) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.counter.player2_score += 1;
-		this.dy = 0;
-		this.dx = 4; // TODO: archivo con variables de las que importar todos estos, quizas cuanto la partida sea un objeto pueda acceder a ellos
+		this.dirY = 0;
+		this.dirX = 4; // TODO: archivo con variables de las que importar todos estos, quizas cuanto la partida sea un objeto pueda acceder a ellos
 	} else if (this.point_x2 > this.canvas.width) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
-		this.dy = 0;
-		this.dx = -4;
+		this.dirY = 0;
+		this.dirX = -4;
 		this.counter.player1_score += 1;
 	}
 
 	if (this.point_y1 < 0) {
 		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
-		this.dy = -this.dy;
+		this.dirY = -this.dirY;
 	} else if (this.point_y3 > this.canvas.height) {
 		this.moveTo(this.x, this.canvas.height - (this.point_y3 - this.point_y1) / 2);
-		this.dy = -this.dy;
+		this.dirY = -this.dirY;
 	}
 }
 
@@ -48,13 +48,13 @@ keepInsideCanvas() {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
-	this.dx = -this.dx;
+	this.dirX = -this.dirX;
 	if (canvas_object.type === "player") {
-		if (this.dx > 0)
-			this.dx += 0.5;
+		if (this.dirX > 0)
+			this.dirX += 0.5;
 		else
-			this.dx -+ 0.5;
-		this.dy -= canvas_object.dy / 4;
+			this.dirX -+ 0.5;
+		this.dirY -= canvas_object.dirY / 4;
 	}
 }
 }
