@@ -20,6 +20,7 @@ constructor(canvas, context, x, y, width, height, color, id) {
 
 	this.dirX = 0;
 	this.dirY = 0;
+	this.speed = 4; // TODO: ver si poner esto en el contructor, probablemente si
 
 	this.is_moving = false;
 

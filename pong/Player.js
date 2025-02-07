@@ -25,7 +25,7 @@ constructor(canvas, context, x, y, width, height, color, id) {
  * @param {int} dirY speed in y axis
  */
 slide(dirX, dirY) {
-	this.y += dirY;
+	this.y += this.speed * dirY;
 	if (!this.is_moving) {
 		if (this.dirY > 0)
 			this.dirY -= 1;

@@ -59,34 +59,30 @@ const ball = new Ball(
 	"ball",
 );
 
-ball.dirX = SPEED;
-
 function keyUpHandler(event) {
 	if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-		// player2.dirY = 0;
 		player2.is_moving = false;
 	}
 	else if (event.key === "w" || event.key === "s") {
-		// player1.dirY = 0;
 		player1.is_moving = false;
 	}
 }
 
 function keyDownHandler(e) {
 	if (e.key === "ArrowUp") {
-		player2.dirY = -8;
+		player2.dirY = -2;
 		player2.is_moving = true;
 	}
 	else if (e.key === "ArrowDown") {
-		player2.dirY = 8;
+		player2.dirY = 2;
 		player2.is_moving = true;
 	}
 	else if (e.key === "w") {
-		player1.dirY = -8;
+		player1.dirY = -2;
 		player1.is_moving = true;
 	}
 	else if (e.key === "s") {
-		player1.dirY = 8;
+		player1.dirY = 2;
 		player1.is_moving = true;
 	}
 }
