@@ -40,7 +40,7 @@ keepInsideCanvas() {
 	} else if (this.point_x2 > this.canvas.width) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.dirY = 0;
-		this.dirX = -4;
+		this.dirX = 4;
 		this.counter.player1_score += 1;
 	}
 
