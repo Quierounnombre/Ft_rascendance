@@ -111,12 +111,22 @@ objectHits(object) {
 /**
  * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
  * it moves from current position in (x, y)
- * @param {int} dirX speed in x axis
- * @param {int} dirY speed in y axis
+ * @param {int} dirX direction in x axis
+ * @param {int} dirY direction in y axis
  */
 slide(dirX, dirY) {
-	this.x += dirX;
-	this.y += dirY;
+	let length = Math.hypot(dirX, dirY);
+	if (length > 0) {
+	    dirX /= length;
+	    dirY /= length;
+	}
+
+	this.x += this.speed * dirX;
+	this.y += this.speed * dirY;
+
+	this.dirX = dirX;
+	this.dirY = dirY;
+
 	this.recalculateHitbox();
 	this.keepInsideCanvas();
 }

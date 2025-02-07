@@ -17,6 +17,7 @@ constructor (canvas, context, x, y, radius, counter, color, id) {
 	this.radius = radius;
 	this.type = "ball"
 	this.counter = counter;
+	this.dirX = 1;
 }
 
 render() {
@@ -36,11 +37,13 @@ keepInsideCanvas() {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.counter.player2_score += 1;
 		this.dirY = 0;
-		this.dirX = -4; // TODO: archivo con variables de las que importar todos estos, quizas cuanto la partida sea un objeto pueda acceder a ellos
+		this.dirX = -1;
+		this.speed = 4;
 	} else if (this.point_x2 > this.canvas.width) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.dirY = 0;
-		this.dirX = 4;
+		this.dirX = 1;
+		this.speed = 4;
 		this.counter.player1_score += 1;
 	}
 
@@ -59,13 +62,10 @@ keepInsideCanvas() {
  */
 resolveHit(canvas_object) {
 	this.dirX = -this.dirX;
-	if (canvas_object.type === "player") {
-		if (this.dirX > 0)
-			this.dirX += 0.5;
-		else
-			this.dirX -+ 0.5;
-		this.dirY -= canvas_object.dirY / 4;
-	}
+	this.dirY -= canvas_object.dirY / 4;
+
+	if (canvas_object.type === "player")
+		this.speed += 0.5;
 }
 }
 
