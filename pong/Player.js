@@ -2,7 +2,17 @@ import { CanvasObject } from "./CanvasObject.js";
 "use strict";
 
 class Player extends CanvasObject {
-constructor(canvas, context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "player") {
+/**
+ * @param {HTMLElement} canvas 
+ * @param {CanvasRenderingContext2D} context 
+ * @param {int} x 
+ * @param {int} y 
+ * @param {int} width 
+ * @param {int} height 
+ * @param {string} color 
+ * @param {string} id 
+ */
+constructor(canvas, context, x, y, width, height, color, id) {
 	super(canvas, context, x, y, width, height, color, id);
 	this.pointsScored = 0;
 	this.type = "player";

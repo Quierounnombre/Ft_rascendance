@@ -1,7 +1,17 @@
 "use strict";
 // TODO: hacer quitar un nivel de indentacion a las clases, no solo a esta
 class CanvasObject {
-constructor(canvas, context, x = 0, y = 0, width = 0, height = 0, color = "black", id = "generic") {
+/** 
+ * @param {HTMLElement} canvas 
+ * @param {CanvasRenderingContext2D} context 
+ * @param {int} x 
+ * @param {int} y 
+ * @param {int} width 
+ * @param {int} height 
+ * @param {string} color 
+ * @param {string} id 
+ */
+constructor(canvas, context, x, y, width, height, color, id) {
 	this.canvas = canvas;
 	this.context = context;
 

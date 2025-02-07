@@ -2,7 +2,14 @@ import { CanvasObject } from "./CanvasObject.js";
 "use strict";
 
 class Counter extends CanvasObject {
-constructor (canvas, context, font = "42px arial", color = "white", id = "counter") {
+/**
+ * @param {HTMLElement} canvas 
+ * @param {CanvasRenderingContext2D} context 
+ * @param {string} font 
+ * @param {string} color 
+ * @param {string} id 
+ */
+constructor (canvas, context, font, color, id) {
 	super(canvas, context, 0, 0, 0, 0, color, id);
 	this.type = "counter";
 	this.font = font;

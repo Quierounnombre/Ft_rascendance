@@ -2,7 +2,17 @@ import { CanvasObject } from "./CanvasObject.js";
 "use strict";
 
 class Ball extends CanvasObject {
-constructor (canvas, context, x = 0, y = 0, radius = 0, counter, color = "black", id = "ball") {
+/**
+ * @param {HTMLElement} canvas 
+ * @param {CanvasRenderingContext2D} context 
+ * @param {int} x 
+ * @param {int} y 
+ * @param {int} radius 
+ * @param {Counter} counter 
+ * @param {string} color 
+ * @param {string} id 
+ */
+constructor (canvas, context, x, y, radius, counter, color, id) {
 	super(canvas, context, x, y, radius * 2, radius * 2, color, id);
 	this.radius = radius;
 	this.type = "ball"
