@@ -3,19 +3,10 @@ import { CanvasObject } from "./CanvasObject.js";
 
 class Player extends CanvasObject {
 /**
- * @param {HTMLElement} canvas 
- * @param {CanvasRenderingContext2D} context 
- * @param {int} x 
- * @param {int} y 
- * @param {int} width 
- * @param {int} height 
- * @param {string} color 
- * @param {string} id 
+ * @param obj individual object of parsed with JSON.parse()
  */
-constructor(canvas, context, x, y, width, height, color, id) {
-	super(canvas, context, x, y, width, height, color, id);
-	this.pointsScored = 0;
-	this.type = "player";
+constructor(obj) {
+	super(obj);
 }
 
 /**
@@ -34,12 +25,6 @@ slide(dirX, dirY) {
 	}
 	this.recalculateHitbox();
 	this.keepInsideCanvas();
-}
-
-toJSON() {
-	return {
-		score: this.pointsScored,
-	};
 }
 }
 

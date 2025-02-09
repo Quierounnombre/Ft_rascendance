@@ -1,31 +1,24 @@
 "use strict";
-// TODO: hacer quitar un nivel de indentacion a las clases, no solo a esta
+
 class CanvasObject {
-/** 
- * @param {HTMLElement} canvas 
- * @param {CanvasRenderingContext2D} context 
- * @param {int} x 
- * @param {int} y 
- * @param {int} width 
- * @param {int} height 
- * @param {string} color 
- * @param {string} id 
+/**
+ * @param obj individual object of parsed with JSON.parse()
  */
-constructor(canvas, context, x, y, width, height, color, id) {
-	this.canvas = canvas;
-	this.context = context;
-
-	this.x = x;
-	this.y = y;
-
+constructor(obj) {
+	this.color = "white";
+	this.id = "generic";
+	this.type = "generic"
+	this.x = 0;
+	this.y = 0;
 	this.dirX = 0;
 	this.dirY = 0;
-	this.speed = 4; // TODO: ver si poner esto en el contructor, probablemente si
-
+	this.speed = 4;
 	this.is_moving = false;
+	this.width = 0;
+	this.height = 0;
 
-	this.width = width;
-	this.height = height;
+	for (let i in obj)
+		this[i] = obj[i];
 
 	/*
 	** xy1---------xy2
@@ -34,22 +27,17 @@ constructor(canvas, context, x, y, width, height, color, id) {
 	** |            |
 	** xy3---------xy4
 	*/
-	this.point_x1 = x - width / 2;
-	this.point_y1 = y - height / 2;
+	this.point_x1 = this.x - this.width / 2;
+	this.point_y1 = this.y - this.height / 2;
 
-	this.point_x2 = x + width / 2;
-	this.point_y2 = y - height / 2;
+	this.point_x2 = this.x + this.width / 2;
+	this.point_y2 = this.y - this.height / 2;
 
-	this.point_x3 = x - width / 2;
-	this.point_y3 = y + height / 2;
+	this.point_x3 = this.x - this.width / 2;
+	this.point_y3 = this.y + this.height / 2;
 
-	this.point_x4 = x + width / 2;
-	this.point_y4 = y + height / 2;
-
-	this.color = color;
-
-	this.id = id;
-	this.type = "generic";
+	this.point_x4 = this.x + this.width / 2;
+	this.point_y4 = this.y + this.height / 2;
 }
 
 /**
