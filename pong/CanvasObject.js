@@ -90,14 +90,17 @@ objectHits(object) {
 	esta dentro de la bola, como tal la pala no sabe que ha golpeado a la
 	bola, asi que da problemas si un objeto es significativamete mas grande
 	*/
-	if (object.pointHits(this.point_x1, this.point_y1))
-		return true;
-	if (object.pointHits(this.point_x2, this.point_y2))
-		return true;
-	if (object.pointHits(this.point_x3, this.point_y3))
-		return true;
-	if (object.pointHits(this.point_x4, this.point_y4))
-		return true;
+	if (this.dirX < 0) {
+		if (object.pointHits(this.point_x1, this.point_y1))
+			return true;
+		if (object.pointHits(this.point_x3, this.point_y3))
+			return true;
+	} else {
+		if (object.pointHits(this.point_x2, this.point_y2))
+			return true;
+		if (object.pointHits(this.point_x4, this.point_y4))
+			return true;
+	}
 	return false;
 }
 
