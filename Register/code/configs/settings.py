@@ -22,12 +22,13 @@ IMAGE_BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6fm6udk960-38nc#-8yhc7#()2x6c7o1z%1#uezkz%x_h4*at$'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+# 'django-insecure-6fm6udk960-38nc#-8yhc7#()2x6c7o1z%1#uezkz%x_h4*at$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 
 # Application definition
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts.apps.AccountsConfig',
+    'app.code.accounts.apps.AccountsConfig',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -80,8 +81,12 @@ WSGI_APPLICATION = 'configs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.{}'.format(os.getenv("DATABASE_ENGINE", 'sqlite3')),
+        'NAME': os.getenv("DATABASE_NAME", "polls"),
+        'USER': os.getenv("DATABASE_USERNAME", 'myprojectuser'),
+        'PASSWORD': os.getenv("DATABASE_PASSSWORD", 'password'),
+        'HOST': os.getenv("DATABASE_HOST", '127.0.0.1'),
+        'PORT': os.getenv("DATABASE_PORT", 5432),
     }
 }
 

@@ -18,15 +18,16 @@ services:
   #     - ./PATH_TO_DIR/code:/code
   #   command: python /code/manage.py runserver 0.0.0.0:${BACKEND_PORT}
   
-  nginx:
-    image: nginx:latest 
-    container_name: ${NGINX_CONTAINER_NAME}
-    env_file:
-      - .env
-    depends_on:
-      - db
+  # nginx:
+  #  image: nginx:latest 
+  #  container_name: ${NGINX_CONTAINER_NAME}
+  #  env_file:
+  #    - .env
+  #  depends_on:
+  #    - db
 
   db:
+    restart: always
     image: postgres:latest
     container_name: ${DB_CONTAINER_NAME}
     volumes:
@@ -39,9 +40,30 @@ services:
       POSTGRES_DB: ${DB_CONTAINER_NAME}
     networks:
       - rascendance-network
-
+    ports:
+      - "5432:5432"
     env_file:
       - .env
+  
+  register:
+    restart: always
+    build:
+      context: ./Register
+      dockerfile: Dockerfile
+    container_name: ${DJANGO_REGISTER}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_NAME: ${DB_CONTAINER_NAME}
+      DATABASE_PORT: ${POSTGRES_PORT}
+    networks:
+      - rascendance-network
 
 volumes:
   postgres_data:
