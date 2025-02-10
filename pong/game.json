@@ -37,6 +37,28 @@
 		"move_down": "ArrowDown"
 	},
 	{
+		"id": "ball42",
+		"type": "ball",
+
+		"x": 200,
+		"y": 200,
+		"dirX": 0,
+		"dirY": 1,
+	
+		"radius": 21
+	},
+	{
+		"id": "ball42",
+		"type": "ball",
+
+		"x": 600,
+		"y": 200,
+		"dirX": 0,
+		"dirY": -1,
+	
+		"radius": 21
+	},
+	{
 		"id": "ball",
 		"type": "ball",
 
@@ -44,7 +66,6 @@
 		"y": 200,
 		"dirX": -1,
 		"dirY": 0,
-		"is_moving": true,
 	
 		"radius": 10
 	}

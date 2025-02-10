@@ -90,18 +90,35 @@ objectHits(object) {
 	esta dentro de la bola, como tal la pala no sabe que ha golpeado a la
 	bola, asi que da problemas si un objeto es significativamete mas grande
 	*/
-	if (this.dirX < 0) {
+	switch (this.position_view(this.vector_dir(this.dirX, -this.dirY))) {
+	case "North":
 		if (object.pointHits(this.point_x1, this.point_y1))
 			return true;
-		if (object.pointHits(this.point_x3, this.point_y3))
+		if (object.pointHits(this.point_x2, this.point_y2))
 			return true;
-	} else {
+		return false;
+
+	case "West":
 		if (object.pointHits(this.point_x2, this.point_y2))
 			return true;
 		if (object.pointHits(this.point_x4, this.point_y4))
 			return true;
+		return false;
+
+	case "South":
+		if (object.pointHits(this.point_x3, this.point_y3))
+			return true;
+		if (object.pointHits(this.point_x4, this.point_y4))
+			return true;
+		return false;
+
+	case "East":
+		if (object.pointHits(this.point_x1, this.point_y1))
+			return true;
+		if (object.pointHits(this.point_x3, this.point_y3))
+			return true;
+		return false;
 	}
-	return false;
 }
 
 /**
@@ -189,6 +206,38 @@ keepInsideCanvas() {
 		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
 	else if (this.point_y3 > this.canvas.height)
 		this.moveTo(this.x, this.canvas.height - (this.point_y3 - this.point_y1) / 2);
+}
+
+/**
+ * @param {float} x x value
+ * @param {float} y y value
+ * @returns the direction (in form of an angle in degrees) of the given vector
+ */
+vector_dir(x, y)  {
+	const a = Math.atan(Math.abs(y) / Math.abs(x)) * (180 / Math.PI);
+
+	if (x >= 0 && y >= 0)
+		return a;
+	if (x <= 0 && y > 0)
+		return 180 - a;
+	if (x <= 0 && y <= 0)
+		return 180 + a;
+	if (x > 0 && y < 0)
+		return 360 - a;
+}
+
+/**
+ * @param {int} angle angle value in degrees
+ * @returns a string with the corresponding North, East, South or West from a given angle
+ */
+position_view(angle) {
+	if (angle >= 45 && angle < 135)
+		return "North"
+	if (angle >= 135 && angle < 225)
+		return "East"
+	if (angle >= 225 && angle < 315)
+		return "South";
+	return "West";
 }
 }
 

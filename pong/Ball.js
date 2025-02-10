@@ -57,6 +57,7 @@ keepInsideCanvas() {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
+	// TODO: hacer que se redirija la vola
 	this.dirX = -this.dirX;
 	this.dirY -= canvas_object.dirY / 4;
 
