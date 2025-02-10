@@ -6,6 +6,9 @@ RUN mkdir /app
 
 WORKDIR /app
 
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1 
+
 COPY reqs.txt .
 RUN pip install --no-cache-dir -r reqs.txt
 
@@ -20,6 +23,10 @@ COPY --from=builder  /usr/local/bin/ /usr/local/bin/
 
 COPY --chown=appuser:appuser . /app/
 
+RUN python3 -m django migrate --settings=app.code.configs.settings
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1 
 
 USER appuser
 
