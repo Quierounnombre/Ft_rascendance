@@ -1,8 +1,8 @@
 # django
-Django>=5.1.5
+Django=5.1.5
 
 # Postgres adapter
-psycopg>=3.2.3
+psycopg=3.2.3
 
 # File manipulation in Pyhton
 pillow>=11.1.0
