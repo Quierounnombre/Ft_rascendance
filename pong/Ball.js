@@ -4,11 +4,13 @@ import { CanvasObject } from "./CanvasObject.js";
 class Ball extends CanvasObject {
 /**
  * @param obj individual object of parsed with JSON.parse()
+ * @param canvas instance of the canvas
+ * @param context instance of the context
  */
-constructor(obj) {
+constructor(obj, canvas, context) {
 	// TODO: que la funcion que llame al constructor le ponga el counter
 	// TODO: la funcion que te genere los objetos a partir del array que produce JSON.parse(), que ponga el canvas y el context
-	super(obj);
+	super(obj, canvas, context);
 	this.width = this.radius * 2;
 	this.height = this.radius * 2;
 	this.recalculateHitbox();

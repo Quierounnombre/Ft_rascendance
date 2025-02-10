@@ -4,9 +4,11 @@ import { CanvasObject } from "./CanvasObject.js";
 class Player extends CanvasObject {
 /**
  * @param obj individual object of parsed with JSON.parse()
+ * @param canvas instance of the canvas
+ * @param context instance of the context
  */
-constructor(obj) {
-	super(obj);
+constructor(obj, canvas, context) {
+	super(obj, canvas, context);
 }
 
 /**

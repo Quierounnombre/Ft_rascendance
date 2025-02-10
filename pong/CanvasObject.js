@@ -3,8 +3,13 @@
 class CanvasObject {
 /**
  * @param obj individual object of parsed with JSON.parse()
+ * @param canvas instance of the canvas
+ * @param context instance of the context
  */
-constructor(obj) {
+constructor(obj, canvas, context) {
+	this.canvas = canvas;
+	this.context = context;
+
 	this.color = "white";
 	this.id = "generic";
 	this.type = "generic"

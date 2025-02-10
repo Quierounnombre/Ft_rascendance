@@ -27,19 +27,19 @@ function objectsGenerator(old_objs) {
 	for (let i in old_objs) {
 		switch (old_objs[i].type) {
 		case "player":
-			tmp_obj = new Player(old_objs[i]);
+			tmp_obj = new Player(old_objs[i], g_canvas, g_context);
 			break;
 		case "ball":
-			tmp_obj = new Ball(old_objs[i]);
+			tmp_obj = new Ball(old_objs[i], g_canvas, g_context);
 			break;
 		case "counter":
-			tmp_obj = new Counter(old_objs[i]);
+			tmp_obj = new Counter(old_objs[i], g_canvas, g_context);
 			break;
 		default:
-			tmp_obj = new CanvasObject(old_objs[i]);
+			tmp_obj = new CanvasObject(old_objs[i], g_canvas, g_context);
 		}
-		tmp_obj.canvas = g_canvas;
-		tmp_obj.context = g_context;
+		// tmp_obj.canvas = g_canvas;
+		// tmp_obj.context = g_context;
 		new_objs.push(tmp_obj);
 	}
 
