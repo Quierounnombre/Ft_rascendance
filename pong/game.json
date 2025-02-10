@@ -16,6 +16,8 @@
 		"width": 20,
 		"height": 100,
 
+		"speed": 2,
+
 		"move_up": "w",
 		"move_down": "s"
 	},
@@ -28,6 +30,8 @@
 	
 		"width": 20,
 		"height": 100,
+
+		"speed": 2,
 
 		"move_up": "ArrowUp",
 		"move_down": "ArrowDown"

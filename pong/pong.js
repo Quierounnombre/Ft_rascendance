@@ -6,13 +6,13 @@ import { CanvasObject } from "./CanvasObject.js";
 const g_canvas = document.getElementById("pong");
 const g_context = g_canvas.getContext("2d");
 
-document.addEventListener("keyup", keyUpHandler);
-document.addEventListener("keydown", keyDownHandler);
+// document.addEventListener("keyup", keyUpHandler);
+// document.addEventListener("keydown", keyDownHandler);
 
 const OBJECT_COLOR     = "white";
 const BACKGROUND_COLOR = "black";
 
-const tmp = JSON.parse(`[{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"},{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100},{"id":"ball","type":"ball","x":400,"y":200,"dirX":-1,"dirY":0,"is_moving":true,"radius":10}]`);
+const tmp = JSON.parse(`[{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"},{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100,"speed":2,"move_up":"w","move_down":"s"},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100,"speed":2,"move_up":"ArrowUp","move_down":"ArrowDown"},{"id":"ball","type":"ball","x":400,"y":200,"dirX":-1,"dirY":0,"is_moving":true,"radius":10}]`);
 const canvas_objects = objectsGenerator(tmp);
 
 /**

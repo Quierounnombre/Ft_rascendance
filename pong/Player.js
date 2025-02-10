@@ -9,6 +9,25 @@ class Player extends CanvasObject {
  */
 constructor(obj, canvas, context) {
 	super(obj, canvas, context);
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key === this.move_up) {
+			console.log(`${this.id} is going up`);
+			this.dirY = -4; // TODO: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+			this.is_moving = true;
+		} else if (event.key === this.move_down) {
+			console.log(`${this.id} is going down`);
+			this.dirY = 4; // TODO: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+			this.is_moving = true;
+		}
+	});
+
+	document.addEventListener("keyup", (event) => {
+		if (event.key == this.move_up || event.key == this.move_down) {
+			console.log(`${this.id} is stopping`);
+			this.is_moving = false;
+		}
+	});
 }
 
 /**
