@@ -26,7 +26,7 @@ COPY --chown=appuser:appuser . /Register/
 RUN mkdir /Register/code/static
 RUN mkdir /Register/code/staticfiles
 
-RUN python3 -m django migrate --settings=Register.code.configs.settings
+#RUN python3 -m django migrate --settings=Register.code.configs.settings
 RUN python3 -m django collectstatic --settings=Register.code.configs.settings --noinput
 
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -36,6 +36,10 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "Register.code.configs.wsgi:application"]
+RUN chmod +x Register/script.sh
+
+CMD ["Register/script.sh"]
+
+#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "Register.code.configs.wsgi:application"]
 
 

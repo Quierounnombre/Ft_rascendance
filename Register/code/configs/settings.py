@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'Register.code.configs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.{}'.format(os.getenv("DATABASE_ENGINE", 'sqlite3')),
-        'NAME': os.getenv("DATABASE_NAME", "polls"),
-        'USER': os.getenv("DATABASE_USERNAME", 'myprojectuser'),
-        'PASSWORD': os.getenv("DATABASE_PASSSWORD", 'password'),
-        'HOST': os.getenv("DATABASE_HOST", '127.0.0.1'),
+        'ENGINE': 'django.db.backends.{}'.format(os.getenv("DATABASE_ENGINE", 'postgresql_psycopg2')),
+        'NAME': os.getenv("DATABASE_NAME", "db_ranscendance"),
+        'USER': os.getenv("DATABASE_USERNAME", 'post_user'),
+        'PASSWORD': os.getenv("DATABASE_PASSWORD", 'AtwvC2PZ8IA8laU'),
+        'HOST': os.getenv("DATABASE_HOST", 'db'),
         'PORT': os.getenv("DATABASE_PORT", 5432),
     }
 }
