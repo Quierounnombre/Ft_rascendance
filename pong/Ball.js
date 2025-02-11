@@ -57,9 +57,12 @@ keepInsideCanvas() {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
-	// TODO: hacer que se redirija la vola
 	this.dirX = -this.dirX;
-	this.dirY -= canvas_object.dirY / 4;
+
+	if (canvas_object.dirY === 0)
+		this.dirY = 0;
+	else
+		this.dirY = -(canvas_object.dirY / Math.abs(canvas_object.dirY));
 
 	if (canvas_object.type === "player")
 		this.speed += 0.5;
