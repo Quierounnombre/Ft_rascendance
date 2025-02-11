@@ -40,10 +40,6 @@ services:
       POSTGRES_DB: ${DB_CONTAINER_NAME}
     networks:
       - rascendance-network
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
   
   register:
     restart: always
@@ -55,13 +51,14 @@ services:
       - "8000:8000"
     depends_on:
       - db
-    env_file:
-      - .env
     environment:
       DATABASE_USERNAME: ${POSTGRES_USER}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_NAME: ${DB_CONTAINER_NAME}
       DATABASE_PORT: ${POSTGRES_PORT}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
     networks:
       - rascendance-network
 

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app.code.accounts.apps.AccountsConfig',
+    'Register.code.accounts.apps.AccountsConfig',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'app.code.configs.urls'
+ROOT_URLCONF = 'Register.code.configs.urls'
 
 TEMPLATES = [
     {
@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'app.code.configs.wsgi.application'
+WSGI_APPLICATION = 'Register.code.configs.wsgi.application'
 
 
 # Database
@@ -127,12 +127,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIR = (
-    os.path.join(IMAGE_BASE_DIR, "static"),
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_ROOT = (IMAGE_BASE_DIR)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(IMAGE_BASE_DIR, 'static'),
+]
+
 MEDIA_URL = "/media/"
+MEDIA_ROOT = IMAGE_BASE_DIR
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
