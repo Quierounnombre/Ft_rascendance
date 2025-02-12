@@ -85,40 +85,67 @@ pointHits(x, y) {
  * @returns true if is in contact, false otherwise
  */
 objectHits(object) {
-	/*
-	TODO: este planteamiento hace que como ninguno de los puntos de la pala
-	esta dentro de la bola, como tal la pala no sabe que ha golpeado a la
-	bola, asi que da problemas si un objeto es significativamete mas grande
-	*/
-	switch (this.position_view(this.vector_dir(this.dirX, -this.dirY))) {
-	case "North":
-		if (object.pointHits(this.point_x1, this.point_y1))
-			return true;
-		if (object.pointHits(this.point_x2, this.point_y2))
-			return true;
-		return false;
+	let horizontal_check = true;
+	let vertical_check = true;
 
-	case "West":
-		if (object.pointHits(this.point_x2, this.point_y2))
-			return true;
-		if (object.pointHits(this.point_x4, this.point_y4))
-			return true;
-		return false;
+	const horizontal_proyection_center = Math.abs(this.x - object.x);
+	const horizontal_proyection_obj1 = Math.abs(this.x - this.point_x2);
+	const horizontal_proyection_obj2 = Math.abs(object.x - object.point_x2);
+	
+	if ((horizontal_proyection_obj1 + horizontal_proyection_obj2) < horizontal_proyection_center)
+		horizontal_check = false;
 
-	case "South":
-		if (object.pointHits(this.point_x3, this.point_y3))
-			return true;
-		if (object.pointHits(this.point_x4, this.point_y4))
-			return true;
-		return false;
+	const vertical_proyection_center = Math.abs(this.y - object.y);
+	const vertical_proyection_obj1 = Math.abs(this.y - this.point_y2);
+	const vertical_proyection_obj2 = Math.abs(object.y - object.point_y2);
 
-	case "East":
-		if (object.pointHits(this.point_x1, this.point_y1))
-			return true;
-		if (object.pointHits(this.point_x3, this.point_y3))
-			return true;
-		return false;
+	if ((vertical_proyection_obj1 + vertical_proyection_obj2) < vertical_proyection_center)
+		vertical_check = false;
+
+	return horizontal_check && vertical_check;
+}
+
+/**
+ * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
+ * it moves from current position in (x, y)
+ * @param {int} dirX direction in x axis
+ * @param {int} dirY direction in y axis
+ */
+slide(dirX, dirY) {
+	let length = Math.hypot(dirX, dirY);
+	if (length > 0) {
+	    dirX /= length;
+	    dirY /= length;
 	}
+
+	this.x += this.speed * dirX;
+	this.y += this.speed * dirY;
+
+	this.dirX = dirX;
+	this.dirY = dirY;
+
+	// sacar proyeccion grande vertial
+}
+
+/**
+ * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
+ * it moves from current position in (x, y)
+ * @param {int} dirX direction in x axis
+ * @param {int} dirY direction in y axis
+ */
+slide(dirX, dirY) {
+	let length = Math.hypot(dirX, dirY);
+	if (length > 0) {
+	    dirX /= length;
+	    dirY /= length;
+	}
+
+	this.x += this.speed * dirX;
+	this.y += this.speed * dirY;
+
+	this.dirX = dirX;
+	this.dirY = dirY;
+
 }
 
 /**
