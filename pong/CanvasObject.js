@@ -123,8 +123,6 @@ slide(dirX, dirY) {
 
 	this.dirX = dirX;
 	this.dirY = dirY;
-
-	// sacar proyeccion grande vertial
 }
 
 /**
