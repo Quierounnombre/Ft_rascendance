@@ -112,26 +112,7 @@ objectHits(object) {
  * @param {int} dirY direction in y axis
  */
 slide(dirX, dirY) {
-	let length = Math.hypot(dirX, dirY);
-	if (length > 0) {
-	    dirX /= length;
-	    dirY /= length;
-	}
-
-	this.x += this.speed * dirX;
-	this.y += this.speed * dirY;
-
-	this.dirX = dirX;
-	this.dirY = dirY;
-}
-
-/**
- * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
- * it moves from current position in (x, y)
- * @param {int} dirX direction in x axis
- * @param {int} dirY direction in y axis
- */
-slide(dirX, dirY) {
+	console.log(`${this.x}, ${this.y}`);
 	let length = Math.hypot(dirX, dirY);
 	if (length > 0) {
 	    dirX /= length;
