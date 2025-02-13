@@ -42,7 +42,7 @@ keepInsideCanvas() {
 		this.speed = 4;
 		this.counter.player1_score += 1;
 	}
-
+	
 	if (this.point_y1 < 0) {
 		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
 		this.dirY = -this.dirY;

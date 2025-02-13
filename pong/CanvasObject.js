@@ -110,29 +110,7 @@ objectHits(object) {
  * it moves from current position in (x, y)
  * @param {int} dirX direction in x axis
  * @param {int} dirY direction in y axis
- */
-slide(dirX, dirY) {
-	console.log(`${this.x}, ${this.y}`);
-	let length = Math.hypot(dirX, dirY);
-	if (length > 0) {
-	    dirX /= length;
-	    dirY /= length;
-	}
-
-	this.x += this.speed * dirX;
-	this.y += this.speed * dirY;
-
-	this.dirX = dirX;
-	this.dirY = dirY;
-
-}
-
-/**
- * @brief moves the object in (x, y), it DOESN'T move to global (x,y),
- * it moves from current position in (x, y)
- * @param {int} dirX direction in x axis
- * @param {int} dirY direction in y axis
- */
+*/
 slide(dirX, dirY) {
 	let length = Math.hypot(dirX, dirY);
 	if (length > 0) {
@@ -140,6 +118,8 @@ slide(dirX, dirY) {
 	    dirY /= length;
 	}
 
+	// if (this.id === "ball")
+		console.log(`${this.speed}`)
 	this.x += this.speed * dirX;
 	this.y += this.speed * dirY;
 
@@ -167,6 +147,7 @@ moveTo(x, y) {
  * @param {CanvasObject[]} canvas_objects objects in the current canvas
  */
 update(canvas_objects) {
+	console.log(`hi`);
 	this.slide(this.dirX, this.dirY);
 	for (let i = 0; i < canvas_objects.length; i++) {
 		if (canvas_objects[i] != this && this.objectHits(canvas_objects[i]))

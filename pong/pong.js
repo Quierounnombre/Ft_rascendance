@@ -12,7 +12,7 @@ const g_context = g_canvas.getContext("2d");
 const OBJECT_COLOR     = "white";
 const BACKGROUND_COLOR = "black";
 
-const tmp = JSON.parse(`[{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100,"speed":2,"move_up":"w","move_down":"s"},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100,"speed":2,"move_up":"ArrowUp","move_down":"ArrowDown"},{"id":"ball","type":"ball","x":400,"y":200,"dirX":1,"dirY":0,"radius":10},{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"}]`);
+const tmp = JSON.parse(`[{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100,"speed":2,"move_up":"w","move_down":"s"},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100,"speed":2,"move_up":"ArrowUp","move_down":"ArrowDown"},{"id":"ball","type":"ball","x":400,"y":200,"dirX":0,"dirY":1,"radius":10},{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"}]`);
 const canvas_objects = objectsGenerator(tmp);
 
 /**
@@ -38,12 +38,9 @@ function objectsGenerator(old_objs) {
 		default:
 			tmp_obj = new CanvasObject(old_objs[i], g_canvas, g_context);
 		}
-		// tmp_obj.canvas = g_canvas;
-		// tmp_obj.context = g_context;
 		new_objs.push(tmp_obj);
 	}
 
-	// TODO: hacer que todas las ball hagan referencia a un counter
 	const counter_index = new_objs.map((obj) => obj.type).indexOf("counter");
 	new_objs.forEach((obj) => {
 		if (obj.type === "ball")
@@ -52,38 +49,6 @@ function objectsGenerator(old_objs) {
 	})
 
 	return new_objs;
-}
-
-function keyUpHandler(event) {
-	// TODO: esto es asumiendo que siempre hay dos jugadores, y ambos en local
-	// TODO: de momento no funciona
-	if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-		 player2.is_moving = false;
-	}
-	else if (event.key === "w" || event.key === "s") {
-		player1.is_moving = false;
-	}
-}
-
-function keyDownHandler(e) {
-	// TODO: esto es asumiendo que siempre hay dos jugadores, y ambos en local
-	// TODO: de momento no funciona
-	if (e.key === "ArrowUp") {
-		player2.dirY = -2;
-		player2.is_moving = true;
-	}
-	else if (e.key === "ArrowDown") {
-		player2.dirY = 2;
-		player2.is_moving = true;
-	}
-	else if (e.key === "w") {
-		player1.dirY = -2;
-		player1.is_moving = true;
-	}
-	else if (e.key === "s") {
-		player1.dirY = 2;
-		player1.is_moving = true;
-	}
 }
 
 function game_loop() {
