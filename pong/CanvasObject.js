@@ -66,20 +66,6 @@ renderHitBox() {
 }
 
 /**
- * @brief Checks if a given (x, y) point is in contant with the object
- * @param {int} x position in x
- * @param {int} y position in y 
- * @returns true if is in contact, false otherwise
- */
-pointHits(x, y) {
-	if (this.point_x1 > x || this.point_x2 < x)
-		return false;
-	if (this.point_y1 > y || this.point_y3 < y)
-		return false;
-	return true;
-}
-
-/**
  * @brief checks if a given canvasObject is in contact
  * @param {CanvasObject} object to check
  * @returns true if is in contact, false otherwise
@@ -118,14 +104,12 @@ slide(dirX, dirY) {
 	    dirY /= length;
 	}
 
-	// if (this.id === "ball")
-		console.log(`${this.speed}`)
 	this.x += this.speed * dirX;
 	this.y += this.speed * dirY;
-
+	
 	this.dirX = dirX;
 	this.dirY = dirY;
-
+	
 	this.recalculateHitbox();
 	this.keepInsideCanvas();
 }
@@ -147,7 +131,6 @@ moveTo(x, y) {
  * @param {CanvasObject[]} canvas_objects objects in the current canvas
  */
 update(canvas_objects) {
-	console.log(`hi`);
 	this.slide(this.dirX, this.dirY);
 	for (let i = 0; i < canvas_objects.length; i++) {
 		if (canvas_objects[i] != this && this.objectHits(canvas_objects[i]))

@@ -11,6 +11,11 @@ constructor(obj, canvas, context) {
 	super(obj, canvas, context);
 	this.player1_score = 0;
 	this.player2_score = 0;
+	this.x = -1;
+	this.y = -1;
+	this.width = 0;
+	this.height = 0;
+	this.recalculateHitbox();
 }
 
 render() {
@@ -26,10 +31,6 @@ render() {
 	this.context.textAlign = "start";
 	this.context.strokeText(`${this.player2_score}`, (this.canvas.width / 4) * 3, this.canvas.height / 8);
 	this.context.fillText(`${this.player2_score}`, (this.canvas.width / 4) * 3, this.canvas.height / 8);
-}
-
-pointHits() {
-	return false;
 }
 }
 
