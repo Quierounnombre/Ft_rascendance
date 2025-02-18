@@ -73,6 +73,9 @@ services:
       DATABASE_ENGINE: ${DATABASE_ENGINE}
       DATABASE_HOST: ${DB_HOST}
       BACKEND_PORT: ${BACKEND_PORT}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
+      SUPER_USER: ${SUPER_USER}
+      SUPER_EMAIL: ${SUPER_EMAIL}
     networks:
       - rascendance-network
 
