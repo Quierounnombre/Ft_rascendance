@@ -25,6 +25,18 @@ services:
   #  depends_on:
   #    - db
 
+  nginx:
+    image: nginx:latest 
+    container_name: ${NGINX_CONTAINER_NAME}
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./nginx-files://usr/share/nginx/html
+    ports:
+      - 7000:80
+
   db:
     restart: always
     image: postgres:latest
@@ -40,26 +52,27 @@ services:
     networks:
       - rascendance-network
 
-  register:
+  usermng:
     restart: always
     build:
-      context: ./Register
+      context: ./UserMng
       dockerfile: Dockerfile
-    container_name: ${DJANGO_REGISTER}
+    container_name: UserMng
     ports:
-      - "8000:8000"
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     depends_on:
       - db
     environment:
-      DATABASE_USERNAME: ${POSTGRES_USER}
-      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
-      DATABASE_NAME: ${POSTGRES_DB}
-      DATABASE_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DEBUG: ${DEBUG}
       DATABASE_ENGINE: ${DATABASE_ENGINE}
       DATABASE_HOST: ${DB_HOST}
+      BACKEND_PORT: ${BACKEND_PORT}
     networks:
       - rascendance-network
 

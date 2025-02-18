@@ -26,3 +26,11 @@ re:
 	make down
 	make create
 	make up
+
+reall:
+	docker rm -f $(shell docker ps -qa)
+	docker rmi $(shell docker images -qa)
+	docker volume rm $(shell docker volume ls -q)
+	docker network prune -f
+	make create
+	make up
