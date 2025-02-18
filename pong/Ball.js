@@ -67,6 +67,17 @@ resolveHit(canvas_object) {
 	if (canvas_object.type === "player")
 		this.speed += 0.5;
 }
+
+/**
+ * @brief updates the info of the object, it includes movement and collisions
+ * @param {CanvasObject[]} canvas_objects objects in the current canvas
+ */
+update(canvas_objects) {
+	if (this.dirY === 0)
+		this.dirY = 0.01;
+	super.update(canvas_objects);
+}
+
 }
 
 export {Ball};
