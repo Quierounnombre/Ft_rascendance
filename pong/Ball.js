@@ -57,12 +57,15 @@ keepInsideCanvas() {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
-	this.dirX = -this.dirX;
+	this.repel_from_object(canvas_object);
 
-	if (canvas_object.dirY === 0)
-		this.dirY = 0;
-	else
-		this.dirY = -(canvas_object.dirY / Math.abs(canvas_object.dirY));
+	this.dirX = -this.dirX;
+	this.dirY = -this.dirY;
+
+	// if (canvas_object.dirY === 0)
+	// 	this.dirY = 0;
+	// else
+	// 	this.dirY = -(canvas_object.dirY / Math.abs(canvas_object.dirY));
 
 	if (canvas_object.type === "player")
 		this.speed += 0.5;
@@ -76,6 +79,23 @@ update(canvas_objects) {
 	if (this.dirY === 0)
 		this.dirY = 0.01;
 	super.update(canvas_objects);
+}
+
+repel_from_object(canvas_object) {
+	switch(this.position_view(this.vector_dir(this.dirX, -this.dirY))) {
+	case "North":
+		this.moveTo(this.x, (this.y - canvas_object.point_y2 - canvas_object.y));
+		break;
+	case "East":
+		this.moveTo((this.x + canvas_object.x - canvas_object.point_x2), this.y);
+		break;
+	case "South":
+		this.moveTo(this.x, (this.y + canvas_object.point_y2 - canvas_object.y));
+		break;
+	case "West":
+		this.moveTo((this.x - canvas_object.x - canvas_object.point_x2), this.y);
+		break;
+	}
 }
 
 }
