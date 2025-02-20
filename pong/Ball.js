@@ -82,20 +82,17 @@ update(canvas_objects) {
 }
 
 repel_from_object(canvas_object) {
-	switch(this.position_view(this.vector_dir(this.dirX, -this.dirY))) {
-	case "North":
-		this.moveTo(this.x, (canvas_object.point_y3 - (this.height / 2)));
-		break;
-	case "East":
-		this.moveTo((canvas_object.point_x2 + (this.width / 2)), this.y);
-		break;
-	case "South":
-		this.moveTo(this.x, (canvas_object.point_y3 + (this.height / 2)));
-		break;
-	case "West":
-		this.moveTo(canvas_object.point_x1 - (this.width / 2), this.y);
-		break;
-	}
+	const old_speed = this.speed;
+	const old_dirX = this.dirX;
+	const old_dirY = this.dirY;
+
+	this.speed = 1;
+	while (this.objectHits(canvas_object))
+		this.slide(-old_dirX, -old_dirY);
+
+	this.speed = old_speed;
+	this.dirX = old_dirX;
+	this.dirY = old_dirY;
 }
 
 }
