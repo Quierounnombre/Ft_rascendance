@@ -8,17 +8,17 @@
 
 <body>
   <main>
-    {% if login %}
-      {% include 'email_login/login.html' %}
-    {% endif %}
+	{% if login %}
+	  {% include 'email_login/login.html' %}
+	{% endif %}
 
-    {% if user.is_authenticated %}
-      {% include 'email_login/profile.html' %}
-      {% include 'email_login/logout.html' %}
-    {% else %}
-      <p>You are not logged in</p>
-      <a href="{% url 'login' %}">Log In</a>
-    {% endif %}
+	{% if user.is_authenticated %}
+	  {% include 'email_login/profile.html' %}
+	  {% include 'email_login/logout.html' %}
+	{% else %}
+	  <p>You are not logged in</p>
+	  <a href="{% url 'login' %}">Log In</a>
+	{% endif %}
   </main>
 </body>
 

@@ -8,9 +8,9 @@ CATALAN = "CAT"
 ENGLISH = "ENG"
 
 LANGUAGES = [
-    (SPANISH, "Spanish"),
-    (CATALAN, "Catalan"),
-    (ENGLISH, "English"),
+	(SPANISH, "Spanish"),
+	(CATALAN, "Catalan"),
+	(ENGLISH, "English"),
 ]
 
 class User(AbstractUser):

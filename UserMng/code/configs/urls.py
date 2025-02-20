@@ -26,12 +26,5 @@ from rest_framework.authtoken import views as token_views
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
-	path("users/", api_views.UserList.as_view(
-		permission_classes = [permissions.IsAuthenticated], 
-		authentication_classes = [authentication.TokenAuthentication]
-		), name="api_user_list"),
-	path('users/<int:pk>/', api_views.UserDetail.as_view(permission_classes = [permissions.IsAuthenticated])),
-	path('api-auth/', include('rest_framework.urls')),
-	
-	path('api-token/', token_views.obtain_auth_token)
+	path('profile', include('user.urls')),
 ]
