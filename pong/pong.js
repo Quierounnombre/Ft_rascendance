@@ -12,7 +12,7 @@ const g_context = g_canvas.getContext("2d");
 const OBJECT_COLOR     = "white";
 const BACKGROUND_COLOR = "black";
 
-const tmp = JSON.parse(`[{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100,"speed":2,"move_up":"w","move_down":"s"},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100,"speed":2,"move_up":"ArrowUp","move_down":"ArrowDown"},{"id":"ball2","type":"ball","x":200,"y":200,"dirX":0,"dirY":-1,"radius":21},{"id":"ball2","type":"ball","x":600,"y":200,"dirX":0,"dirY":1,"radius":21},{"id":"ball","type":"ball","x":400,"y":200,"dirX":1,"dirY":1,"radius":10},{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"}]`);
+const tmp = JSON.parse(`[{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100,"speed":2,"move_up":"w","move_down":"s"},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100,"speed":2,"move_up":"ArrowUp","move_down":"ArrowDown"},{"id":"ball","type":"ball","x":400,"y":200,"dirX":1,"dirY":0,"radius":10},{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"}]`);
 const canvas_objects = objectsGenerator(tmp);
 
 /**
