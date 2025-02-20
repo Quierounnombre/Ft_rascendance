@@ -12,45 +12,69 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSingUpSerializer
 from .serializers import UserLoginSerializer
 
-class UserLoginAPIView(APIView):
+class	UserLoginAPIView(APIView):
+
+	def login_empty_user_response():
+		response = {
+			"email": {
+				"detail": "User Doesnot exist!"
+			}
+		}
+		return (response)
+	
+	def login_succesfull_response(user):
+		response = { 
+			'success': True,
+			'username': user.username,
+			'email': user.email,
+			'token':token.key
+		}
+		return (response)
+
 	def post(self, request, *args, **kargs):
 		serializer = UserLoginSerializer(data=request.data)
 		if serializer.is_valid():
-			response = {
-				"username": {
-					"detail": "User Doesnot exist!"
-				}
-			}
-			if User.objects.filter(username=request.data['username']).exists():
-				user = User.objects.get(username=request.data['username'])
+			response = login_empty_user_response()
+			if User.objects.filter(username=request.data['email']).exists():
+				user = User.objects.get(username=request.data['email'])
 				token, created = Token.objects.get_or_create(user=user)
-				response = {
-					'success': True,
-					'username': user.username,
-					'email': user.email,
-					'token':token.key
-				}
+				response = login_succesfull_response(user)
 				return Response(response, status=status.HTTP_200_OK)
 			return Response(response, status=status.HTTP_400_BAD_REQUEST) 
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
-# Create your views here.
-from django.contrib.auth import get_user_model
-from .serializers import UserSerializer
-from rest_framework import generics
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-from .forms import UserCreationForm
 
-class UserList(generics.ListAPIView):
-	queryset = get_user_model().objects.all()
-	serializer_class = UserSerializer
+class	UserSingUpAPIView(APIView):
 
-class UserDetail(generics.RetrieveAPIView):
-	queryset = get_user_model().objects.all()
-	serializer_class = UserSerializer
+	def sing_up_succesfull_response(user, serializer):
+		response = {
+			'success': True,
+			'user': serializer.data,
+			'token': Token.objects.get(
+			user=User.objects.get(username=serializer.data['email'])).key
+		}
+		return (response)
 
-class SignUpView(CreateView):
-	form_class = UserCreationForm
-	success_url = reverse_lazy("login")
-	template_name = "registration/signup.html"
+	def post(self, request, *args, **kargs):
+		serializer = UserSingUpSerializer(data=request.data)
+		if (serializer.is_valid()):
+			serializer.save()
+			response = sing_up_succesfull_response(user, serializer)
+			return Response(response, status=status.HTTP_200_OK)
+		raise ValidationError(serializer.errors, code=status.HTTP_406_NOT_ACCEPTABLE)
+
+class UserLogoutAPIView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def logout_response():
+		response = {
+			"success": True,
+			"detail": "Logged out!"
+		}
+		return (response)
+
+	def post(self, request, *args):
+		token = Token.objects.get(user=request.user)
+		token.delete()
+		return Response(logout_response(), status=status.HTTP_200_OK)
+

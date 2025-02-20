@@ -26,5 +26,5 @@ from rest_framework.authtoken import views as token_views
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
-	path('profile', include('user.urls')),
+	path('profile/', include('UserMng.urls')),
 ]
