@@ -33,5 +33,10 @@ urlpatterns = [
 	path('users/<int:pk>/', api_views.UserDetail.as_view(permission_classes = [permissions.IsAuthenticated])),
 	path('api-auth/', include('rest_framework.urls')),
 	
-	path('api-token/', token_views.obtain_auth_token)
+	path('api-token/', token_views.obtain_auth_token),
+	path('me/', api_views.ProfileView.as_view(
+		{'get':'me'},
+		permission_classes = [permissions.IsAuthenticated], 
+		authentication_classes = [authentication.TokenAuthentication],
+		), name="profile")
 ]
