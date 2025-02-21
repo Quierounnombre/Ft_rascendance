@@ -57,6 +57,7 @@ keepInsideCanvas() {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
+	// TODO: definir como se va a comportar al golpear con cada objeto
 	this.repel_from_object(canvas_object);
 
 	this.dirX = -this.dirX;
@@ -81,6 +82,10 @@ update(canvas_objects) {
 	super.update(canvas_objects);
 }
 
+/**
+ * @brief undoes the movement till hit
+ * @param {CanvasObject} canvas_object object hitted
+ */
 repel_from_object(canvas_object) {
 	const old_speed = this.speed;
 	const old_dirX = this.dirX;
