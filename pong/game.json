@@ -1,5 +1,10 @@
 [
 	{
+		"type": "config",
+		"timeout": 60,
+		"points": 3
+	},
+	{
 		"id": "player1",
 		"type": "player",
 
