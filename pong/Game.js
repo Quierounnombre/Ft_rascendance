@@ -93,7 +93,7 @@ gameLoop() {
 	}
 
 	if (!this.isEnd())
-		window.requestAnimationFrame(this.gameLoop);
+		window.requestAnimationFrame(this.gameLoop.bind(this));
 }
 }
 
