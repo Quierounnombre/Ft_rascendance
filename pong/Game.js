@@ -16,8 +16,8 @@ constructor(objs) {
 	// TODO: valores por defecto a los valores que extraerá de config
 	this.background_color = "black";
 	this.object_color = "white";
-	this.timeout = 180;
-	this.points = 5;
+	this.timeout = 180000;
+	this.max_score = 5;
 
 	for (let i in objs) {
 		switch (objs[i].type) {
@@ -40,6 +40,8 @@ constructor(objs) {
 	}
 
 	this.counter = game_objects.filter((obj) => obj.type === "counter");
+	this.counter.timeout = this.timeout;
+
 	game_objects.filter((obj) => obj.type === "ball")
 	            .forEach((obj) => obj.counter = this.counter);
 
@@ -81,9 +83,16 @@ drawBackground() {
 	this.context.stroke();
 }
 
+/**
+ * @returns true if game has reached any end condition, false otherwise
+ */
 isEnd() {
-// TODO: comprobar puntuacion
-// TODO: comprobar tiempo
-}
+	if (this.counter.time_passed >= this.timeout)
+		return true;
 
+	if (this.counter.highest_score >= this.max_score)
+		return true;
+
+	return false;
+}
 }

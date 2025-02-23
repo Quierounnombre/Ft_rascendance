@@ -99,7 +99,6 @@ repel_from_object(canvas_object) {
 	this.dirX = old_dirX;
 	this.dirY = old_dirY;
 }
-
 }
 
 export {Ball};
