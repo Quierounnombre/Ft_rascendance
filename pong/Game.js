@@ -10,7 +10,7 @@ class Game {
  */
 constructor(objs) {	
 	this.canvas = document.getElementById("pong"); // TODO: pong o game? elegir nombre
-	this.context = canvas.getContext("2d");
+	this.context = this.canvas.getContext("2d");
 	this.game_objects = [];
 
 	// TODO: valores por defecto a los valores que extraerá de config
@@ -26,43 +26,27 @@ constructor(objs) {
 				this[j] = objs[i][j];
 			break;
 		case "player":
-			game_objects.push(new Player(objs[i], canvas, context));
+			this.game_objects.push(new Player(objs[i], this.canvas, this.context));
 			break;
 		case "ball":
-			game_objects.push(new Ball(objs[i], canvas, context));
+			this.game_objects.push(new Ball(objs[i], this.canvas, this.context));
 			break;
 		case "counter":
-			game_objects.push(new Counter(objs[i], canvas, context));
+			this.game_objects.push(new Counter(objs[i], this.canvas, this.context));
 			break;
 		default:
-			game_objects.push(new CanvasObject(objs[i], canvas, context));
+			this.game_objects.push(new CanvasObject(objs[i], this.canvas, this.context));
 		}
 	}
 
-	this.counter = game_objects.filter((obj) => obj.type === "counter");
+	this.counter = this.game_objects.filter((obj) => obj.type === "counter");
 	this.counter.timeout = this.timeout;
 
-	game_objects.filter((obj) => obj.type === "ball")
+	this.game_objects.filter((obj) => obj.type === "ball")
 	            .forEach((obj) => obj.counter = this.counter);
 
 	// TODO: sacar color jugadores 1 y 2. Que cada jugador pueda jugar con los colores que desee
 	// esto no iria en el json que genera la sala?
-}
-
-/**
- * @brief game loop
- */
-gameLoop() {
-	this.drawBackground();
-
-	for (let i in this.game_objects) {
-		this.game_objects[i].update(this.game_objects);
-		this.game_objects[i].render();
-		this.game_objects[i].renderHitBox();
-	}
-
-	if (!this.isEnd())
-		window.requestAnimationFrame(this.gameLoop);
 }
 
 /**
@@ -95,4 +79,22 @@ isEnd() {
 
 	return false;
 }
+
+/**
+ * @brief game loop
+ */
+gameLoop() {
+	this.drawBackground();
+
+	for (let i in this.game_objects) {
+		this.game_objects[i].update(this.game_objects);
+		this.game_objects[i].render();
+		this.game_objects[i].renderHitBox();
+	}
+
+	if (!this.isEnd())
+		window.requestAnimationFrame(this.gameLoop);
 }
+}
+
+export {Game}

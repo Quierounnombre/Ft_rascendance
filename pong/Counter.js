@@ -52,7 +52,8 @@ render() {
 
 	this.context.textAlign = "center";
 	const time = new Date(this.timeout - this.time_passed);
-	this.context.strokeText(`${time.getMinutes()}:${time.getSeconds()}`, this.canvas.width / 2, this.canvas.height / 2);
+	this.context.strokeText(`${time.getMinutes()}:${time.getSeconds()}`, this.canvas.width / 2, this.canvas.height / 8);
+	this.context.fillText(`${time.getMinutes()}:${time.getSeconds()}`, this.canvas.width / 2, this.canvas.height / 8);
 }
 }
 
