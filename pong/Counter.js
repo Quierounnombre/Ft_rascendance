@@ -39,10 +39,9 @@ update(canvas_objects) {
  */
 render() {
 	// TODO: creo que no son los numeros que tocan, pero puede ser por la marcha atras
-	let time = this.timeout - this.time_passed;
-	console.log(`${time} = ${this.timeout} - ${this.time_passed}`);
-	const minutes = Math.round((time / 60000) % 60);
-	const seconds = Math.round((time / 1000) % 60);
+	const time = this.timeout - this.time_passed;
+	const minutes = Math.trunc((time / 60000) % 60);
+	const seconds = Math.trunc((time / 1000) % 60);
 
 	this.context.font = this.font;// TODO: quizas hacer esto en bucle es innecesario
 	this.context.fillStyle = this.color;
