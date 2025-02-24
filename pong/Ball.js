@@ -69,7 +69,7 @@ resolveHit(canvas_object) {
 		this.dirY = -(canvas_object.dirY / Math.abs(canvas_object.dirY));
 
 	if (canvas_object.type === "player")
-		this.speed += 0.5;
+		this.speed = (this.speed < 20) ? (this.speed + 0.5) : 20; // TODO: mirar que numero seria
 }
 
 /**
