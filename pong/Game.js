@@ -39,11 +39,14 @@ constructor(objs) {
 		}
 	}
 
-	this.counter = this.game_objects.filter((obj) => obj.type === "counter");
-	this.counter.timeout = this.timeout;
+	let tmp = this.game_objects.findIndex((obj) => obj.type === "counter")
+	this.counter = this.game_objects[tmp];
+	this.game_objects[tmp].timeout = this.timeout;
 
-	this.game_objects.filter((obj) => obj.type === "ball")
-	            .forEach((obj) => obj.counter = this.counter);
+	for (let i in this.game_objects) {
+		if (this.game_objects[i].type === "ball")
+			this.game_objects[i].counter = this.game_objects[tmp];
+	}
 
 	// TODO: sacar color jugadores 1 y 2. Que cada jugador pueda jugar con los colores que desee
 	// esto no iria en el json que genera la sala?

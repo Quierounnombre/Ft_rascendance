@@ -38,14 +38,12 @@ update(canvas_objects) {
  * @brief renders the scores and the countdown
  */
 render() {
-	// TODO: creo que no son los numeros que tocan, pero puede ser por la marcha atras
 	const time = this.timeout - this.time_passed;
 	const minutes = Math.trunc((time / 60000) % 60);
 	const seconds = Math.trunc((time / 1000) % 60);
 
-	this.context.font = this.font;// TODO: quizas hacer esto en bucle es innecesario
+	this.context.font = this.font;
 	this.context.fillStyle = this.color;
-	this.context.strokeStyle = "black"; // TODO: harcoded
 	this.context.lineWidth = "1";
 
 	this.context.textAlign = "center";
