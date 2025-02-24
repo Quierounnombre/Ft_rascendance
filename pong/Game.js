@@ -16,7 +16,7 @@ constructor(objs) {
 	// TODO: valores por defecto a los valores que extraerá de config
 	this.background_color = "black";
 	this.object_color = "white";
-	this.timeout = 180000;
+	this.timeout = 60000;
 	this.max_score = 5;
 
 	for (let i in objs) {
@@ -60,7 +60,7 @@ drawBackground() {
 	// Draw the center line
 	this.context.beginPath();
 	this.context.strokeStyle = this.object_color;
-	this.context.lineWidth = "1";
+	this.context.lineWidth = "2";
 	this.context.moveTo(this.canvas.width / 2, this.canvas.height / 8);
 	this.context.lineTo(this.canvas.width / 2, this.canvas.height);
 	this.context.moveTo(0, this.canvas.height / 8);
