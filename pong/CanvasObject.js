@@ -173,10 +173,10 @@ keepInsideCanvas() {
 	else if (this.point_x2 > this.canvas.width)
 		this.moveTo(this.canvas.width - (this.point_x2 - this.point_x1) / 2, this.y)
 
-	if (this.point_y1 < 0)
-		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
+	if (this.point_y1 < this.canvas.height / 8)
+		this.moveTo(this.x, (this.canvas.height / 8) + ((this.point_y3 - this.point_y1) / 2));
 	else if (this.point_y3 > this.canvas.height)
-		this.moveTo(this.x, this.canvas.height - (this.point_y3 - this.point_y1) / 2);
+		this.moveTo(this.x, this.canvas.height - ((this.point_y3 - this.point_y1) / 2));
 }
 
 /**

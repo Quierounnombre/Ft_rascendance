@@ -43,8 +43,8 @@ keepInsideCanvas() {
 		this.counter.player1_score += 1;
 	}
 	
-	if (this.point_y1 < 0) {
-		this.moveTo(this.x, (this.point_y3 - this.point_y1) / 2);
+	if (this.point_y1 < this.canvas.height / 8) {
+		this.moveTo(this.x, (this.canvas.height / 8) + ((this.point_y3 - this.point_y1) / 2));
 		this.dirY = -this.dirY;
 	} else if (this.point_y3 > this.canvas.height) {
 		this.moveTo(this.x, this.canvas.height - (this.point_y3 - this.point_y1) / 2);
