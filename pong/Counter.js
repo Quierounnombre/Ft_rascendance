@@ -9,7 +9,7 @@ class Counter extends CanvasObject {
  */
 constructor(obj, canvas, context) {
 	super(obj, canvas, context);
-	this.timeout = 60000; // TODO: algo guarrada
+	this.timeout = 60000;
 
 	this.player1_score = 0;
 	this.player2_score = 0;

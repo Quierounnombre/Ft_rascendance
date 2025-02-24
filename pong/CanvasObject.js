@@ -167,7 +167,6 @@ recalculateHitbox() {
  * the border
  */
 keepInsideCanvas() {
-	// TODO: hacer que el borde superior coincida con la linea dibujada
 	if (this.point_x1 < 0)
 		this.moveTo((this.point_x2 - this.point_x1) / 2, this.y)
 	else if (this.point_x2 > this.canvas.width)

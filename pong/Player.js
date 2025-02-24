@@ -12,10 +12,10 @@ constructor(obj, canvas, context) {
 
 	document.addEventListener("keydown", (event) => {
 		if (event.key === this.move_up) {
-			this.dirY = -4; // TODO: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+			this.dirY = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
 		} else if (event.key === this.move_down) {
-			this.dirY = 4; // TODO: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+			this.dirY = 4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
 		}
 	});

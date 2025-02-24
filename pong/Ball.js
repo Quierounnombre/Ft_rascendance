@@ -8,8 +8,6 @@ class Ball extends CanvasObject {
  * @param context instance of the context
  */
 constructor(obj, canvas, context) {
-	// TODO: que la funcion que llame al constructor le ponga el counter
-	// TODO: la funcion que te genere los objetos a partir del array que produce JSON.parse(), que ponga el canvas y el context
 	super(obj, canvas, context);
 	this.width = this.radius * 2;
 	this.height = this.radius * 2;
@@ -57,19 +55,19 @@ keepInsideCanvas() {
  * @param {CanvasObject} canvas_object object in contact
  */
 resolveHit(canvas_object) {
-	// TODO: definir como se va a comportar al golpear con cada objeto
 	this.repel_from_object(canvas_object);
 
 	this.dirX = -this.dirX;
-	// this.diry = -this.diry;
 
-	if (canvas_object.dirY === 0)
-		this.dirY = 0;
-	else
-		this.dirY = -(canvas_object.dirY / Math.abs(canvas_object.dirY));
+	if (canvas_object.type === "player") {
+		if (canvas_object.dirY === 0)
+			this.dirY = 0;
+		else
+			this.dirY = -(canvas_object.dirY / Math.abs(canvas_object.dirY));
 
-	if (canvas_object.type === "player")
 		this.speed = (this.speed < 20) ? (this.speed + 0.5) : 20; // TODO: mirar que numero seria
+	} else 
+		this.dirY = -this.dirY;
 }
 
 /**
