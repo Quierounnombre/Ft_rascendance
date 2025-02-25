@@ -7,7 +7,7 @@ async function displayUsers(token) {
 
 async function getUsers(token) {
 	try {
-		const response = await fetch("http://localhost:8080/me/", {
+		const response = await fetch("http://localhost:8080/profile/me/", {
 			method: "GET",
 			headers: {
 				"Authorization": "Token " + token,

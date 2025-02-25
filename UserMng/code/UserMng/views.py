@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import get_user_model
 
 from rest_framework.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
@@ -12,6 +13,7 @@ from rest_framework import viewsets
 
 from .serializers import UserSingUpSerializer
 from .serializers import UserLoginSerializer
+from .serializers import UserProfileSerializer
 
 class	UserLoginAPIView(APIView):
 
@@ -81,9 +83,10 @@ class UserLogoutAPIView(APIView):
 
 class ProfileView(viewsets.ModelViewSet):
 	queryset = get_user_model().objects.all()
-	serializer_class = UserSerializer
+	serializer_class = UserProfileSerializer
 
 	def me(self, request, *args, **kwargs):
 		User = get_user_model()
 		self.object = get_object_or_404(User, pk=request.user.id)
 		serializer = self.get_serializer(self.object)
+		return Response(serializer.data)

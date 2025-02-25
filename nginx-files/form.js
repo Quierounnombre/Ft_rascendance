@@ -8,7 +8,7 @@ async function sendData() {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("http://localhost:8080/api-token/", {
+		const response = await fetch("http://localhost:8080/profile/login/", {
 			method: "POST",
 			body: formData,
 		});
