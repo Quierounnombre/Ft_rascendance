@@ -1,7 +1,67 @@
+from UserMng.models import User
+from rest_framework.exceptions import ValidationError
+from rest_framework.authtoken.models import Token
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from rest_framework import status
 
-class UserSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.ModelSerializer):
+	id = serializers.PrimaryKeyRelatedField(read_only=True)
+	username = serializers.CharField(read_only=True)
+	password = serializers.CharField(write_only=True)
+
 	class Meta:
-		model = get_user_model()
-		fields = '__all__'
+		model = User
+		fields = [
+			"id",
+			"username",
+			"password"
+		]
+
+class UserSingUpSerializer(serializers.ModelSerializer):
+	id = serializers.PrimaryKeyRelatedField(read_only=True)
+	username = serializers.CharField()
+	first_name = serializers.CharField()
+	last_name = serializers.CharField()
+	email = serializers.EmailField()
+	password = serializers.CharField(write_only=True)
+	password2 = serializers.CharField(write_only=True)
+
+	class Meta:
+		model = User
+		fields = [
+			"id",
+			"username",
+			"first_name",
+			"last_name",
+			"email",
+			"password",
+			"password2"
+		]
+		extra_kwargs = {
+			'password': {"write_only": True}
+		}
+
+	def validate_email(self, email):
+		if (User.objects.filter(email=email).exists()):
+			detail = {
+				"detail": "User Already exist!"
+			}
+			raise ValidationError(detail=detail)
+		return email
+	
+	def validate(self, instance):
+		if (instance['password'] != instance['password2']):
+			msg = {
+				"message": "Both password must match"
+			}
+			raise ValidationError(msg)
+		return instance
+
+	def create(self, validated_data):
+		password = validated_data.pop('password')
+		validated_data.pop('password2')
+		user = User.objects.create(**validated_data)
+		user.set_password(password)
+		user.save()
+		Token.objects.create(user=user)
+		return (user)

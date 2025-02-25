@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
+from django.conf.urls.static import static
+from . import settings
 from django.contrib.auth import views as auth_views
 from rest_framework import permissions
 from rest_framework import authentication
@@ -26,22 +28,7 @@ from rest_framework.authtoken import views as token_views
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
-	path("users/", api_views.UserList.as_view(
-		permission_classes = [permissions.IsAuthenticated], 
-		authentication_classes = [authentication.TokenAuthentication]
-		), name="api_user_list"),
-	path('users/<int:pk>/', api_views.UserDetail.as_view(permission_classes = [permissions.IsAuthenticated])),
-	path('api-auth/', include('rest_framework.urls')),
-	
-	path('api-token/', token_views.obtain_auth_token),
-	path('me/', api_views.ProfileView.as_view(
-		{'get':'me',
-		'put':'update'},
-		permission_classes = [permissions.IsAuthenticated], 
-		authentication_classes = [authentication.TokenAuthentication],
-		), name="profile")
+	path('profile/', include('UserMng.urls')),
 ]
 
-from django.conf.urls.static import static
-from . import settings
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
