@@ -34,14 +34,13 @@ class	UserLoginAPIView(APIView):
 	def post(self, request, *args, **kargs):
 		serializer = UserLoginSerializer(data=request.data)
 		if serializer.is_valid():
+			response = self.login_empty_user_response()
 			if User.objects.filter(email=request.data['email']).exists():
 				user = User.objects.get(email=request.data['email'])
 				token, created = Token.objects.get_or_create(user=user)
 				response = self.login_succesfull_response(user, token)
 				return Response(response, status=status.HTTP_200_OK)
-			else:
-				response = self.login_empty_user_response()
-				return Response(response, status=status.HTTP_400_BAD_REQUEST) 
+			return Response(response, status=status.HTTP_400_BAD_REQUEST) 
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 
