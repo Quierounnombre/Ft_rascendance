@@ -1,16 +1,11 @@
-function seeProfile() {
-	const display = document.getElementById("my_token");
-	if (!token)
-		display.innerHTML = "You are not logged!";
-	else
-		display.innerHTML = displayUsers();
+async function displayUsers(token) {
+	const display = document.getElementById("my_profile");
+	const user = await getUsers(token);
+	console.log(user);
+	display.innerHTML = formatTable(user);
 }
 
-function displayUsers() {
-	return formatTable(users);
-}
-
-async function getUsers() {
+async function getUsers(token) {
 	try {
 		const response = await fetch("http://localhost:8080/me/", {
 			method: "GET",
@@ -19,7 +14,7 @@ async function getUsers() {
 			}
 		});
 		const data = await response.json();
-		users = data;
+		return data;
 	} catch (e) {
 		console.error(e);
 	}
@@ -28,12 +23,14 @@ async function getUsers() {
 function formatTable(jsonData) {
 	console.log(jsonData)
 
-	var table = "<h2>Hi, " + jsonData["username"] + "</h2>\
+	var table = "<h2>Hi, " + jsonData["username"] + 
+	"<img src=\"" + jsonData["avatar"] + "\" class=\"img-thumbnail\" style=\"width:100px\" />\
+	</h2>\
 	<table class=\"table\">\
   <tbody>";
 
 	for (let i in jsonData) {
-		if (i !== "email" && i !== "username") { continue; };
+		if (i !== "email" && i !== "username" && i !== "font" && i !== "language") { continue; };
 		table = table + "<tr>\n" +
 			"<th scope=\"row\">" + i + "</th>\n" +
 			"<td>" + jsonData[i] + "</td>\n" +
@@ -42,3 +39,5 @@ function formatTable(jsonData) {
 	table + "</tbody></table>";
 	return table;
 }
+
+export default displayUsers;

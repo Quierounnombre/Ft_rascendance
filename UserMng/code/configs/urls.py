@@ -35,8 +35,13 @@ urlpatterns = [
 	
 	path('api-token/', token_views.obtain_auth_token),
 	path('me/', api_views.ProfileView.as_view(
-		{'get':'me'},
+		{'get':'me',
+		'put':'update'},
 		permission_classes = [permissions.IsAuthenticated], 
 		authentication_classes = [authentication.TokenAuthentication],
 		), name="profile")
 ]
+
+from django.conf.urls.static import static
+from . import settings
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

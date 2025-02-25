@@ -1,8 +1,8 @@
 "use strict";
+import displayUsers from "./displayUsers.js";
 
 const form = document.getElementById("my_form");
 let token;
-let users;
 
 async function sendData() {
 	const formData = new FormData(form);
@@ -15,10 +15,11 @@ async function sendData() {
 		const data = await response.json();
 		token = data.token;
 		if (token) {
-			getUsers();
+			await displayUsers(token);
 			validLogin();
 		} else {
 			invalidLogin();
+			//hide users
 		}
 	} catch (e) {
 		console.error(e);
@@ -46,11 +47,3 @@ form.addEventListener("submit", (event) => {
 	event.preventDefault();
 	sendData();
 });
-
-function toggleForm() {
-	if (form.hasAttribute("hidden")) {
-		form.removeAttribute("hidden");
-	} else {
-		form.setAttribute("hidden", "");
-	}
-}

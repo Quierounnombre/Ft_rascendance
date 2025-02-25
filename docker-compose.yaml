@@ -60,6 +60,8 @@ services:
     container_name: UserMng
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
+    volumes:
+      - ./UserMng/code:/UserMng/code
     depends_on:
       - db
     environment:
