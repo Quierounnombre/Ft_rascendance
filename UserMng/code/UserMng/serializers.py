@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from UserMng.models import User
 from rest_framework.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
@@ -11,7 +11,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ["id", "username", "password"]
+		fields = [
+			"id",
+			"username",
+			"password"
+		]
 
 class UserSingUpSerializer(serializers.ModelSerializer):
 	id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -24,7 +28,7 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		Fields = [
+		fields = [
 			"id",
 			"username",
 			"first_name",
@@ -38,12 +42,12 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 		}
 
 	def validate_email(self, email):
-		if (User.objecs.filter(email=email).exists()):
+		if (User.objects.filter(email=email).exists()):
 			detail = {
 				"detail": "User Already exist!"
 			}
 			raise ValidationError(detail=detail)
-		return username
+		return email
 	
 	def validate(self, instance):
 		if (instance['password'] != instance['password2']):
@@ -53,11 +57,11 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 			raise ValidationError(msg)
 		return instance
 
-def create(self, validated_data):
-	password = validated_data.pop('password')
-	password2 = validated_data.pop('password2')
-	user = User.objects.create(**validated_data)
-	user.set_password(password)
-	user.save()
-	Token.objects.create(user=user)
-	return (user)
+	def create(self, validated_data):
+		password = validated_data.pop('password')
+		validated_data.pop('password2')
+		user = User.objects.create(**validated_data)
+		user.set_password(password)
+		user.save()
+		Token.objects.create(user=user)
+		return (user)
