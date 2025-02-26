@@ -1,8 +1,7 @@
-async function displayUsers(token) {
-	const display = document.getElementById("my_profile");
+async function displayProfile(token) {
 	const user = await getUsers(token);
 	console.log(user);
-	display.innerHTML = formatTable(user);
+	return (formatTable(user));
 }
 
 async function getUsers(token) {
@@ -39,5 +38,3 @@ function formatTable(jsonData) {
 	table + "</tbody></table>";
 	return table;
 }
-
-export default displayUsers;
