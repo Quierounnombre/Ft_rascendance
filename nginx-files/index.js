@@ -14,29 +14,41 @@ function changeLayout() {
 	}
 }
 
+const home = document.createElement("div");
+home.innerHTML = `
+<h1>Welcome to Rascendance</h1>
+<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.hash=\'\#profile\'\">See your profile</button>
+`;
+
+const profile = document.createElement("div");
+
+const login_page = document.createElement("div");
+login_page.innerHTML = `
+<h1>Log in to see your profile</h1>
+<div id="buttons">
+<button class="btn btn-secondary" type="button" id="log_button" onclick="toggleForm('login')">Log in</button>
+<button class="btn btn-primary" type="button" id="singup_button" onclick="toggleForm('signup')">Don't have an account? Sign Up!</button>
+</div>
+<div id="form_div"></div>
+`
+
 function loadHome() {
 	const root = document.getElementById("root");
-	root.innerHTML = "<h1>Welcome to Rascendance</h1>" +
-	"<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.hash=\'\#profile\'\">See your profile</button>";
+	root.replaceChildren(home);
 }
 
 async function loadProfile() {
 	const root = document.getElementById("root");
 	if (token) {
-		root.innerHTML = await displayProfile(token);
-		root.innerHTML += `
+		profile.innerHTML = await displayProfile(token);
+		profile.innerHTML += `
 		<button class="btn btn-primary" type="button" id="backhome_button" onclick=\"window.location.hash=\'\#home\'\">Back to home</button>
 		<button class="btn btn-danger" type="button" id="logout_button" onclick="logOut()">Log out</button>
 		`;
+		root.replaceChildren(profile);
 	} else {
-		root.innerHTML = `
-		<h1>Log in to see your profile</h1>
-		<div id="buttons">
-		<button class="btn btn-secondary" type="button" id="log_button" onclick="toggleForm('login')">Log in</button>
-		<button class="btn btn-primary" type="button" id="singup_button" onclick="toggleForm('signup')">Don't have an account? Sign Up!</button>
-		</div>
-		<div id="form_div"></div>
-	`;}
+		root.replaceChildren(login_page);
+	}
 }
 
 async function logOut() {
