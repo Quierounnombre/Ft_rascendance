@@ -19,22 +19,25 @@ async function getUsers(token) {
 	}
 }
 
+
+
 function formatTable(jsonData) {
 	console.log(jsonData)
 
 	var table = "<h2>Hi, " + jsonData["username"] + 
-	"<img src=\"" + jsonData["avatar"] + "\" class=\"img-thumbnail\" style=\"width:100px\" />\
+	"<img src=\"" + jsonData["avatar"] + "\" class=\"img-thumbnail\" style=\"max-width:100px\" />\
 	</h2>\
-	<table class=\"table\">\
-  <tbody>";
+	<form id=\"profile\">";
 
 	for (let i in jsonData) {
 		if (i !== "email" && i !== "username" && i !== "font" && i !== "language") { continue; };
-		table = table + "<tr>\n" +
-			"<th scope=\"row\">" + i + "</th>\n" +
-			"<td>" + jsonData[i] + "</td>\n" +
-			"</tr>";
+		table += `<div class="mb-3 row">
+    	<label for="` + i + 
+		`" class="col-sm-2 col-form-label">`+ i + 
+		`</label><div class="col-sm-10"><input type="text" readonly class="form-control-plaintext" id="`+ i + 
+		`" value="` + jsonData[i] +
+		`"></div></div>`;
 	}
-	table + "</tbody></table>";
+	table += "</form>";
 	return table;
 }
