@@ -10,29 +10,34 @@
 </head>
 
 <body>
-	<form class="row g-3">
-		<div class="col">
-			<div class="form-floating">
-				<input type="number" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180">
-				<label for="timeout" class="form-label">Maximum time of the game in seconds</label>
-			</div>
-
-			
-			<div class="form-check form-switch">
-				<label class="form-check-label" for="flexSwitchCheckDefault" name="power-up">Power Ups</label>
-				<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-			</div>
+	<form id="dataForm" class="container">
+		<div class="form-floating">
+			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180">
+			<label for="timeout" class="form-label">Maximum time of the game in seconds</label>
 		</div>
 
-		<div class="col">
-			<div class="form-floating">
-				<input type="number" id="max-score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42">
-				<label for="max-score" class="form-label">Maximum score for a player</label>
-			</div>
+		<!-- <div class="form-floating">
+			<input required type="number" name="number-players" id="number-players" class="form-control" aria-describedby="number of players of the game" min="1" max="10">
+			<label for="number-players" class="form-label">Number of players</label>
+		</div> -->
+
+		<div class="form-floating">
+			<input required type="number" name="max-score" id="max-score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42">
+			<label for="max-score" class="form-label">Maximum score for a player</label>
 		</div>
 
-		<input type="submit" name="submit" id="submit" />
+		<!-- <div class="form-check form-switch">
+			<label class="form-check-label" for="flexSwitchCheckDefault">Power Ups</label>
+			<input name="power-up" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+		</div> -->
+
+		<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
+
+	<div class="container" id="jsonOutput"></div>
+
+	<script type="module" src="prueba.js"></script>
+	<script type="module" src="pong.js"></script>
 </body>
 
 </html>
