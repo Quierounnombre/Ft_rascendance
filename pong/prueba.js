@@ -66,6 +66,9 @@ form.addEventListener("submit", (event) => {
 	tmp.push(ball);
 	tmp.push(counter);
 
+	if (config.map === "madness") {
+	};
+
 	const jsonData = JSON.stringify(tmp);
 	const game_container = document.getElementById("canvas_container");
 	game_container.innerHTML = `<canvas id="pong" width="800" height="400"></canvas>`;
