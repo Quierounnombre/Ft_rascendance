@@ -10,20 +10,29 @@
 </head>
 
 <body>
+	<div class="container" id="canvas_container">
 	<form id="dataForm" class="container">
 		<div class="form-floating">
-			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180">
+			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
 			<label for="timeout" class="form-label">Maximum time of the game in seconds</label>
 		</div>
 
-		<!-- <div class="form-floating">
-			<input required type="number" name="number-players" id="number-players" class="form-control" aria-describedby="number of players of the game" min="1" max="10">
-			<label for="number-players" class="form-label">Number of players</label>
-		</div> -->
+		<div class="form-floating">
+			<input required type="number" name="max_score" id="max_score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42" value="3">
+			<label for="max_score" class="form-label">Maximum score for a player</label>
+		</div>
+		
+		<div class="form-floating">
+			<select class="form-select" name="map" id="map" aria-label="map">
+				<option selected ="default">Default map</option>
+				<option value="madness">Madness</option>
+			</select>
+			<label for="map" class="form-label">Maximum score for a player</label>
+		</div>
 
 		<div class="form-floating">
-			<input required type="number" name="max-score" id="max-score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42">
-			<label for="max-score" class="form-label">Maximum score for a player</label>
+			<input type="color" class="form-control form-control-color" name="backgound_color" id="backgound_color" value="#000">
+			<label for="backgound_color" class="form-label">Color picker for backgound color</label>
 		</div>
 
 		<!-- <div class="form-check form-switch">
@@ -33,8 +42,7 @@
 
 		<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
-
-	<div class="container" id="jsonOutput"></div>
+	</div>
 
 	<script type="module" src="prueba.js"></script>
 	<script type="module" src="pong.js"></script>

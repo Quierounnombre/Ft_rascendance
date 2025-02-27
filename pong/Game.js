@@ -93,7 +93,7 @@ gameLoop() {
 	for (let i in this.game_objects) {
 		this.game_objects[i].update(this.game_objects);
 		this.game_objects[i].render();
-		this.game_objects[i].renderHitBox();
+		// this.game_objects[i].renderHitBox();
 	}
 
 	if (!this.isEnd())
