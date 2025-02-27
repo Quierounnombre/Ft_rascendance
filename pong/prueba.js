@@ -15,6 +15,7 @@ form.addEventListener("submit", (event) => {
 	const player1 = {
 		id: "player1",
 		type: "player",
+		color: config.player1_color,
 		x: 10,
 		y: 200,
 		width: 20,
@@ -27,6 +28,7 @@ form.addEventListener("submit", (event) => {
 	const player2 = {
 		id: "player2",
 		type: "player",
+		color: config.player2_color,
 		x: 790,
 		y: 200,
 		width: 20,
@@ -39,6 +41,7 @@ form.addEventListener("submit", (event) => {
 	const ball = {
 		id: "ball",
 		type: "ball",
+		color: config.ball_color,
 		x: 400,
 		y: 200,
 		dirX: 1,
@@ -49,6 +52,7 @@ form.addEventListener("submit", (event) => {
 	const counter = {
 		id: "counter",
 		type: "counter",
+		color: config.counter_color,
 		x: 400,
 		y: 10,
 		font: "42px Arial"
