@@ -71,7 +71,7 @@ form.addEventListener("submit", (event) => {
 
 	const jsonData = JSON.stringify(tmp);
 	const game_container = document.getElementById("canvas_container");
-	game_container.innerHTML = `<canvas id="pong" width="800" height="400"></canvas>`;
+	game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${counter.color}"></canvas>`;
 	console.log(JSON.parse(jsonData));
 	pong(jsonData);
 });

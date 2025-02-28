@@ -61,7 +61,7 @@ drawBackground() {
 
 	// Draw the center line
 	this.context.beginPath();
-	this.context.strokeStyle = this.object_color;
+	this.context.strokeStyle = this.counter.color;
 	this.context.lineWidth = "2";
 	this.context.moveTo(this.canvas.width / 2, this.canvas.height / 8);
 	this.context.lineTo(this.canvas.width / 2, this.canvas.height);
