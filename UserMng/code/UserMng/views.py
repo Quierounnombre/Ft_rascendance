@@ -90,3 +90,12 @@ class ProfileView(viewsets.ModelViewSet):
 		self.object = get_object_or_404(User, pk=request.user.id)
 		serializer = self.get_serializer(self.object)
 		return Response(serializer.data)
+
+	def update(self, request, *args, **kwargs):
+		User = get_user_model()
+		self.object = get_object_or_404(User, pk=request.user.id)
+		serializer = self.get_serializer(self.object, data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -52,14 +52,45 @@ async function loadProfile() {
 	}
 }
 
+function saveChanges() {
+	const form = document.getElementById("profile");
+	const formData = new FormData(form);
+	formData.values().forEach(x => console.log(x));
+	try {
+		fetch("http://localhost:8080/profile/me/", {
+			method: "PUT",
+			headers: {
+				"Authorization": "Token " + token,
+			},
+			body: formData,
+		}).then((response) => {
+			var event = new Event('hashchange');
+			window.dispatchEvent(event);
+		})
+	} catch (e) {
+		console.error(e);
+	}
+}
+
 function editProfile() {
 	const form = document.getElementById("profile");
 	const fields = form.getElementsByTagName("input");
+	const button = document.createElement("input");
+	button.setAttribute("type", "submit");
+	button.setAttribute("value", "Save Changes");
+	button.setAttribute("id", "submit");
+	form.appendChild(button);
 
-	for (let field in fields) {
-		fields[field].setAttribute("class", "form-control");
-		fields[field].removeAttribute("readonly");
-	}
+	form.addEventListener("submit", (event) => {
+		event.preventDefault();
+		saveChanges();
+	});
+
+	[...fields].forEach(field => {
+		field.setAttribute("class", "form-control");
+		field.removeAttribute("readonly");
+	});
+
 }
 
 async function logOut() {
@@ -114,7 +145,8 @@ async function signUp(form) {
 		token = data.token;
 		if (token) {
 			validLogin();
-			window.location.hash = '#profile';
+			var event = new Event('hashchange');
+			window.dispatchEvent(event);
 		} else {
 			invalidLogin();
 		}

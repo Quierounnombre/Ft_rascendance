@@ -34,7 +34,7 @@ function formatTable(jsonData) {
 		table += `<div class="mb-3 row">
     	<label for="` + i + 
 		`" class="col-sm-2 col-form-label">`+ i + 
-		`</label><div class="col-sm-10"><input type="text" readonly class="form-control-plaintext" id="`+ i + 
+		`</label><div class="col-sm-10"><input type="text" readonly class="form-control-plaintext" id="`+ i + `" name="` + i +
 		`" value="` + jsonData[i] +
 		`"></div></div>`;
 	}
