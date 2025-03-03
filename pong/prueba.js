@@ -12,11 +12,16 @@ form.addEventListener("submit", (event) => {
 	config.max_score = parseInt(config.max_score);
 	config.type = "config";
 
-	if (config.map === "default") {
-		data_to_send = defaultMap(config);
-	} else if (config.map === "doubleBall") {
+	switch(config.map) {
+	case "doubleBall":
 		data_to_send = doubleBallMap(config);
-	};
+		break;
+	case "floating":
+		data_to_send = floatingMap(config);
+		break;
+	default:
+		data_to_send = defaultMap(config);
+	}
 
 	const jsonData = JSON.stringify(data_to_send);
 
@@ -149,6 +154,88 @@ function doubleBallMap(config) {
 	data_to_send.push(player2);
 	data_to_send.push(ball1);
 	data_to_send.push(ball2);
+	data_to_send.push(counter);
+	
+	return data_to_send;
+}
+
+function floatingMap(config) {
+	const data_to_send = [];
+
+	const player1 = {
+		id: "player1",
+		type: "player",
+		color: config.player1_color,
+		x: 10,
+		y: 200,
+		width: 20,
+		height: 100,
+		speed: 2,
+		move_up: "w",
+		move_down: "s"
+	};
+
+	const player2 = {
+		id: "player2",
+		type: "player",
+		color: config.player2_color,
+		x: 790,
+		y: 200,
+		width: 20,
+		height: 100,
+		speed: 2,
+		move_up: "ArrowUp",
+		move_down: "ArrowDown"
+	};
+
+	const ball = {
+		id: "ball",
+		type: "ball",
+		color: config.ball_color,
+		x: 400,
+		y: 200,
+		dirX: 1,
+		dirY: 1,
+		radius: 10
+	};
+
+	const floating1 = {
+		id: "floating1",
+		type: "floating",
+		color: config.counter_color, // TODO: bastante horrible esto
+		x: 225,
+		y: 200,
+		width: 42,
+		height: 42,
+		dirY: 1
+	};
+
+	const floating2 = {
+		id: "floating2",
+		type: "floating",
+		color: config.counter_color, // TODO: bastante horrible esto
+		x: 575,
+		y: 200,
+		width: 42,
+		height: 42,
+		dirY: -1
+	};
+
+	const counter = {
+		id: "counter",
+		type: "counter",
+		color: config.counter_color,
+		x: 400,
+		y: 10,
+		font: "42px Arial"
+	};
+
+	data_to_send.push(config);
+	data_to_send.push(player1);
+	data_to_send.push(player2);
+	data_to_send.push(ball);
+	data_to_send.push(floating1);
+	data_to_send.push(floating2);
 	data_to_send.push(counter);
 	
 	return data_to_send;

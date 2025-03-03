@@ -2,6 +2,7 @@ import { CanvasObject } from "./CanvasObject.js";
 import { Counter } from "./Counter.js";
 import { Ball } from "./Ball.js";
 import { Player } from "./Player.js";
+import { Floating } from "./Floating.js";
 "use strict";
 
 class Game {
@@ -32,6 +33,9 @@ constructor(objs) {
 			break;
 		case "counter":
 			this.game_objects.push(new Counter(objs[i], this.canvas, this.context));
+			break;
+		case "floating":
+			this.game_objects.push(new Floating(objs[i], this.canvas, this.context));
 			break;
 		default:
 			this.game_objects.push(new CanvasObject(objs[i], this.canvas, this.context));
