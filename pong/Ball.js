@@ -30,12 +30,12 @@ keepInsideCanvas() {
 	if (this.point_x1 < 0) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
 		this.counter.player2_score += 1;
-		this.dirY = 0;
+		this.dirY = -1;
 		this.dirX = -1;
 		this.speed = 4;
 	} else if (this.point_x2 > this.canvas.width) {
 		this.moveTo(this.canvas.width / 2, this.canvas.height / 2);
-		this.dirY = 0;
+		this.dirY = 1;
 		this.dirX = 1;
 		this.speed = 4;
 		this.counter.player1_score += 1;
