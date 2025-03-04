@@ -91,7 +91,7 @@ isEnd() {
 /**
  * @brief game loop
  */
-async gameLoop() {
+gameLoop() {
 	let animation;
 
 	this.drawBackground();
@@ -104,8 +104,10 @@ async gameLoop() {
 
 	if (!this.isEnd())
 		animation = window.requestAnimationFrame(this.gameLoop.bind(this));
-	else
+	else {
+		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		window.cancelAnimationFrame(animation);
+	}
 }
 }
 
