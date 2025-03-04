@@ -1,9 +1,3 @@
-async function displayProfile(token) {
-	const user = await getUsers(token);
-	console.log(user);
-	return (formatTable(user));
-}
-
 async function getUsers(token) {
 	try {
 		const response = await fetch("http://localhost:8080/profile/me/", {
@@ -18,8 +12,6 @@ async function getUsers(token) {
 		console.error(e);
 	}
 }
-
-
 
 function formatTable(jsonData) {
 	console.log(jsonData)
@@ -40,4 +32,9 @@ function formatTable(jsonData) {
 	}
 	table += "</form>";
 	return table;
+}
+
+async function displayProfile(token) {
+	const user = await getUsers(token);
+	return (formatTable(user));
 }

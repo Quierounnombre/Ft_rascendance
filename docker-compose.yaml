@@ -81,10 +81,58 @@ services:
     networks:
       - rascendance-network
 
+# websocket
+
+  websocket: 
+    build:
+      context: websocket
+    container_name: ${WEBSOCKET_NAME}
+    env_file:
+      - .env
+    depends_on:
+      - web-db
+    networks:
+      - websocket-network
+    ports:
+      - ${WEBSOCKET_PORT}:${WEBSOCKET_PORT}
+    expose:
+      - ${WS_DATABASE_PORT}
+    volumes:
+      - ./websocket/code:/code
+    command: python /code/manage.py runserver 0.0.0.0:${WEBSOCKET_PORT}
+
+  redis:
+    image: redis
+    command: --port ${WS_REDIS_PORT}
+    container_name: redis
+    expose:
+      -  ${WS_REDIS_PORT}
+    networks:
+      - websocket-network
+
+  web-db:
+    restart: always
+    image: postgres:latest
+    container_name: ${WS_DATABASE_NAME}
+    volumes:
+      - websocket_data:/var/lib/postgresql/data
+    expose:
+      - ${WS_DATABASE_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - websocket-network
+
 volumes:
   postgres_data:
     name: postgres_data
+  websocket_data:
+    name: websocket_data
 
 networks:
   rascendance-network:
+    driver: bridge
+  websocket-network:
     driver: bridge
