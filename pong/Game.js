@@ -91,7 +91,9 @@ isEnd() {
 /**
  * @brief game loop
  */
-gameLoop() {
+async gameLoop() {
+	let animation;
+
 	this.drawBackground();
 
 	for (let i in this.game_objects) {
@@ -101,7 +103,9 @@ gameLoop() {
 	}
 
 	if (!this.isEnd())
-		window.requestAnimationFrame(this.gameLoop.bind(this));
+		animation = window.requestAnimationFrame(this.gameLoop.bind(this));
+	else
+		window.cancelAnimationFrame(animation);
 }
 }
 
