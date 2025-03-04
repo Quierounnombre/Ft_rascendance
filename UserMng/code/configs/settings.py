@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': [
 		'rest_framework.authentication.TokenAuthentication',
-	]
+	],
 }
 
 AUTH_USER_MODEL = 'UserMng.User'
@@ -56,13 +56,13 @@ LOGIN_REDIRECT_URL = "/loguser/"
 LOGIN_REDIRECT_URL = "/loguser/"
 
 MIDDLEWARE = [
+	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
-	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
