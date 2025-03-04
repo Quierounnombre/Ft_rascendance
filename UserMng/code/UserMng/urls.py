@@ -16,5 +16,5 @@ urlpatterns = [
 		'put':'update'},
 		permission_classes = [permissions.IsAuthenticated], 
 		authentication_classes = [authentication.TokenAuthentication],
-		), name="profile")
+		), name="profile"),
 ]
