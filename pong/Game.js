@@ -109,6 +109,21 @@ gameLoop() {
 		window.cancelAnimationFrame(animation);
 	}
 }
+
+toJSON() {
+	// TODO: definir bien el JSON que posteriormente se serializara
+	// TODO: id del torneo
+	// TODO: bool de si esta dentro de un torneo
+	return {
+		player1_pk: this.game_objects.find((obj) => obj.id === "player1").pk,
+		player1_score: this.counter.player1_score,
+
+		player1_pk: this.game_objects.find((obj) => obj.id === "player2").pk,
+		player2_score: this.counter.player2_score,
+
+		game_time: this.counter.time_passed - this.counter.start_time
+	}
+}
 }
 
 export {Game}
