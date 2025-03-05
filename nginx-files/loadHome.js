@@ -6,7 +6,7 @@ home.innerHTML = `
 <button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.hash=\'\#chat\'\">Test websocket</button>
 `;
 
-function loadHome() {
+export default function loadHome() {
 	const root = document.getElementById("root");
 	root.replaceChildren(home);
 }

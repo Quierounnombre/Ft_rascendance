@@ -1,6 +1,9 @@
+import loadHome from "./loadHome.js";
+import loadGame from "./loadGame.js";
+import loadProfile from "./loadProfile.js";
+import loadChat from "./loadChat.js";
 "use strict";
 
-let token;
 function changeLayout() {
 	var loc = window.location.hash;
 	if (loc == "") {

@@ -1,4 +1,4 @@
-import pong from "./pong.js"
+import pong from "./pong/pong.js"
 
 const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");
@@ -58,7 +58,7 @@ gameCreator.innerHTML = `
 	</form>
 `;
 
-function loadGame() {
+export default function loadGame() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
