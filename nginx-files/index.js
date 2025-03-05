@@ -11,6 +11,8 @@ function changeLayout() {
 		loadHome();
 	} else if (loc === "#profile") {
 		loadProfile();
+	} else if (loc === "#chat") {
+		loadChat();
 	} else {
 		loadGame();
 	}
