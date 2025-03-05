@@ -1,5 +1,6 @@
 #!/bin/sh
 
+python3 /UserMng/code/manage.py	makemigrations UserMng
 python3 /UserMng/code/manage.py	makemigrations
 python3 /UserMng/code/manage.py	migrate
 

@@ -1,6 +1,6 @@
 async function getUsers(token) {
 	try {
-		const response = await fetch("http://localhost:8080/profile/me/", {
+		const response = await fetch("https://" + window.location.hostname + ":7000/profile/me/", {
 			method: "GET",
 			headers: {
 				"Authorization": "Token " + token,
@@ -45,7 +45,7 @@ function saveChanges() {
 	const token = localStorage.getItem("token")
 	formData.values().forEach(x => console.log(x));
 	try {
-		fetch("http://localhost:8080/profile/me/", {
+		fetch("https://" + window.location.hostname + ":7000/profile/me/", {
 			method: "PUT",
 			headers: {
 				"Authorization": "Token " + token,
@@ -84,7 +84,7 @@ function editProfile() {
 async function logOut() {
 	const token = localStorage.getItem("token");
 	try {
-		const response = await fetch("http://localhost:8080/profile/logout/", {
+		const response = await fetch("https://" + window.location.hostname + ":7000/profile/logout/", {
 			method: "POST",
 			headers: {
 				"Authorization": "Token " + token,
@@ -102,7 +102,7 @@ async function logIn(form) {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("http://localhost:8080/profile/login/", {
+		const response = await fetch("http://" + window.location.hostname + ":7000/profile/login/", {
 			method: "POST",
 			body: formData,
 		});
@@ -124,7 +124,7 @@ async function signUp(form) {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("http://localhost:8080/profile/singup/", {
+		const response = await fetch("https://" + window.location.hostname + ":7000/profile/singup/", {
 			method: "POST",
 			body: formData,
 		});

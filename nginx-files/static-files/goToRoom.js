@@ -1,3 +1,10 @@
+const room = document.createElement("div");
+room.setAttribute("class", "container");
+
+room.innerHTML = `<textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <input id="chat-message-input" type="text" size="100"><br>
+    <input id="chat-message-submit" type="button" value="Send">`
+
 async function getUsername() {
 	var user;
 	token = localStorage.getItem("token");
@@ -13,8 +20,9 @@ async function goToRoom() {
 	const root = document.getElementById("root");
 	const username = await getUsername();
 	const chatSocket = new WebSocket(
-		'ws://'
-		+ "localhost:9000"
+		'wss://'
+		+ window.location.hostname
+		+ ":7000"
 		+ '/ws/chat/'
 		+ roomName
 		+ '/'
