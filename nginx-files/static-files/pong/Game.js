@@ -96,11 +96,12 @@ gameLoop() {
 
 	this.drawBackground();
 
-	for (let i in this.game_objects) {
+	for (let i in this.game_objects)
 		this.game_objects[i].update(this.game_objects);
+
+	this.drawBackground();
+	for (let i in this.game_objects)
 		this.game_objects[i].render();
-		// this.game_objects[i].renderHitBox();
-	}
 
 	if (!this.isEnd())
 		animation = window.requestAnimationFrame(this.gameLoop.bind(this));
