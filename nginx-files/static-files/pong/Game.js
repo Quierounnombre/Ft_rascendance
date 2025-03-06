@@ -122,7 +122,7 @@ toJSON() {
 		player1_pk: this.game_objects.find((obj) => obj.id === "player2").pk,
 		player2_score: this.counter.player2_score,
 
-		game_time: this.counter.time_passed - this.counter.start_time
+		game_time: this.counter.time_passed
 	}
 }
 }
