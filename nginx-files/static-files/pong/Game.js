@@ -19,6 +19,8 @@ constructor(objs) {
 	this.timeout = 60000;
 	this.max_score = 5;
 
+	this.websocket_queue = '';
+
 	for (let i in objs) {
 		switch (objs[i].type) {
 		case "config":
@@ -53,6 +55,64 @@ constructor(objs) {
 
 	// TODO: sacar color jugadores 1 y 2. Que cada jugador pueda jugar con los colores que desee
 	// esto no iria en el json que genera la sala?
+}
+
+async setWebSocket() {
+	return new Promise((resolve, reject) => {
+		this.websocket_queue = ''; // TODO: quizas luego no haga falta
+		this.websocket = new WebSocket(
+			'wss://'
+			+ window.location.hostname
+			+ ":7000"
+			+ '/ws/pong/'
+			+ this.room_name
+			+ '/'
+		)	
+		// TODO: no se puede leer directamente del socket cuando quiera?
+		this.websocket.onopen = () => {
+			console.log(`WebSocket opened`);
+
+			getUsers(localStorage.getItem("token")).then((user) => {
+				this.websocket.send(JSON.stringify({
+					"id": user.id,
+					"player1_selected": false
+				}));
+			});
+		}
+
+		this.websocket.onclose = () => {
+			console.log(`WebSocket closed`);
+		}
+
+		this.websocket.onmessage = (event) => {
+			const data = JSON.parse(event["data"]);
+
+			// TODO: meter en el json algo para identificar si es que ya se puede conectar a la sala o que esta en la seleccion de jugadores
+			getUsers(localStorage.getItem("token")).then(user => {
+				if (data["id"] === user.id)
+					return;
+
+				if (data["player1_selected"] === true) {
+					this.game_objects.find((obj) => obj.id === "player2").pk = user.id;
+					// TODO: enviar al otro mensaje para que ambos puedan comenzar
+					return;
+				}
+
+				this.game_objects.find((obj) => obj.id === "player1").pk = user.id;
+				
+				this.websocket.send(JSON.stringify({
+					"id": user.id,
+					"player1_selected": true
+				}));
+
+			});
+
+		}
+
+		setTimeout(() => {
+			resolve();
+		}, 500);
+	})
 }
 
 /**
@@ -94,7 +154,44 @@ isEnd() {
 gameLoop() {
 	let animation;
 
-	this.drawBackground();
+	// TODO: quizas deberia haber alguna manera de diferenciar si la instancia es de player1 / player2
+	const player1 = this.game_objects.find((obj) => obj.id === 'player1'); 
+	const player2 = this.game_objects.find((obj) => obj.id === 'player2'); 
+
+	this.websocket.send(JSON.stringify({
+		'message': {
+			'player1_x':      player1.x,
+			'player1_dirX':   player1.dirX,
+			'player1_dirY':   player1.dirY,
+			'player1_speed':  player1.speed,
+			'player1_width':  player1.width,
+			'player1_height': player1.height,
+
+			'player2_x':      player2.x,
+			'player2_dirX':   player2.dirX,
+			'player2_dirY':   player2.dirY,
+			'player2_speed':  player2.speed,
+			'player2_width':  player2.width,
+			'player2_height': player2.height,
+		}
+	}));
+
+	console.log(this.websocket_queue);
+	if (this.websocket_queue != '') {
+		player1.x      = this.websocket_queue.player1_x
+		player1.dirX   = this.websocket_queue.player1_dirX,
+		player1.dirY   = this.websocket_queue.player1_dirY,
+		player1.speed  = this.websocket_queue.player1_speed,
+		player1.width  = this.websocket_queue.player1_width,
+		player1.height = this.websocket_queue.player1_height,
+		player2.x      = this.websocket_queue.player2_x,
+		player2.dirX   = this.websocket_queue.player2_dirX,
+		player2.dirY   = this.websocket_queue.player2_dirY,
+		player2.speed  = this.websocket_queue.player2_speed,
+		player2.width  = this.websocket_queue.player2_width,
+		player2.height = this.websocket_queue.player2_height
+		this.websocket_queue = '';
+	}
 
 	for (let i in this.game_objects)
 		this.game_objects[i].update(this.game_objects);

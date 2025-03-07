@@ -54,6 +54,11 @@ gameCreator.innerHTML = `
 			<input name="power-up" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
 		</div> -->
 
+		<div class="form-floating">
+			<input required name="room_name" id="room_name" type="text" class="form-control" size="100">
+			<label class="form-label" for="room_name">Pong room</label>
+		</div>
+
 		<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 `;
