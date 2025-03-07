@@ -2,10 +2,13 @@ from django.urls import path
 from .views import UserLoginAPIView
 from .views import UserSingUpAPIView
 from .views import UserLogoutAPIView
+from .views import OAuthCallbackAPIView
 from .views import ProfileView
 
 from rest_framework import permissions
 from rest_framework import authentication
+
+from authlib.integrations.django_client import OAuth
 
 urlpatterns = [
 	path('login/', UserLoginAPIView.as_view(), name="user_login"),
@@ -17,4 +20,5 @@ urlpatterns = [
 		permission_classes = [permissions.IsAuthenticated], 
 		authentication_classes = [authentication.TokenAuthentication],
 		), name="profile"),
+	path('auth/callback/', OAuthCallbackAPIView.as_view(), name='auth_callback')
 ]

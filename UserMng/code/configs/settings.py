@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
 	'rest_framework',
 	'rest_framework.authtoken',
+	'authlib',
 	'UserMng',
 ]
 
@@ -52,8 +53,7 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'UserMng.User'
-LOGIN_REDIRECT_URL = "/loguser/"
-LOGIN_REDIRECT_URL = "/loguser/"
+LOGIN_REDIRECT_URL = "/"
 
 MIDDLEWARE = [
 	'corsheaders.middleware.CorsMiddleware',
@@ -122,6 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
 	},
 ]
 
+API_UID = os.environ.get('API_UID')
+API_SECRET = os.environ.get('API_SECRET')
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

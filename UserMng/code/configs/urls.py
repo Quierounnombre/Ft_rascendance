@@ -24,7 +24,6 @@ from django.conf.urls.static import static
 
 #IMPORTS FROM OUR CODE
 from . import settings
-from UserMng import views as api_views
 
 #IMPORTS FROM REST CORE
 from rest_framework import permissions

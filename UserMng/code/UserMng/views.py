@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
 from rest_framework.exceptions import ValidationError
@@ -14,6 +16,12 @@ from rest_framework import viewsets
 from .serializers import UserSingUpSerializer
 from .serializers import UserLoginSerializer
 from .serializers import UserProfileSerializer
+
+from django.conf import settings
+
+from authlib.integrations.django_client import OAuth
+
+oauth = OAuth()
 
 class	UserLoginAPIView(APIView):
 
@@ -79,7 +87,7 @@ class UserLogoutAPIView(APIView):
 	def post(self, request, *args):
 		token = Token.objects.get(user=request.user)
 		token.delete()
-		return Response(self.logout_response(), status=status.HTTP_200_OK)
+		return (Response(self.logout_response(), status=status.HTTP_200_OK))
 
 class ProfileView(viewsets.ModelViewSet):
 	queryset = get_user_model().objects.all()
@@ -89,4 +97,27 @@ class ProfileView(viewsets.ModelViewSet):
 		User = get_user_model()
 		self.object = get_object_or_404(User, pk=request.user.id)
 		serializer = self.get_serializer(self.object)
-		return Response(serializer.data)
+		return (Response(serializer.data))
+
+oauth.register(
+	name = 'ft',
+	client_id = settings.API_UID,
+	client_secret = settings.API_SECRET,
+	access_token_url = 'https://api.intra.42.fr/v2/oauth/token',
+	access_token_params = None,
+	authorize_url = 'https://api.intra.42.fr/v2/oauth/authorize',
+	authorize_params= None,
+	api_base_url = 'https://api.intra.42.fr/v2/',
+	client_kwargs = {},
+)
+
+class OAuthLoginAPIView(APIView):
+	def get(self, request):
+		redirect_uri = request.build_absolute_uri('/auth/callback')
+		return (oauth.ft.authorize_redirect(request, redirect_uri))
+
+class OAuthCallbackAPIView(APIView):
+	def	get(self, request, *args):
+		token = oauth.ft.authorize_access_token(request)
+		user_info  = oauth.ft.parse_id_token(request, token)
+		return (redirect('/'))
