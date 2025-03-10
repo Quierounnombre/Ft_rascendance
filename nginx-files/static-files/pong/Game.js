@@ -75,13 +75,7 @@ async setWebSocket() {
 			console.log(`WebSocket opened`);
 
 			getUsers(localStorage.getItem("token")).then((user) => {
-				console.log(`
-"message": {
-	"id": ${user.id},
-	"player1_selected": false,
-	"room_ready": false
-}`); // TODO: borrar
-
+				this.user_id = user.id;
 				this.websocket.send(JSON.stringify({
 					"message": {
 						"id": user.id,
@@ -93,6 +87,7 @@ async setWebSocket() {
 		}
 
 		this.websocket.onclose = () => {
+			// TODO: en chrome un CTRL + R no trigerea esto
 			console.log(`WebSocket closed`);
 		}
 
@@ -104,13 +99,16 @@ async setWebSocket() {
 				if (data["message"]["id"] === user.id)
 					return;
 
-				console.log(JSON.stringify(data)); // TODO: borrar
-
 				if (data["message"]["room_ready"]) {
 					this.game_objects.find((obj) => obj.id === "player2").pk = data["message"]["player2_id"];
+
+					this.websocket.onmessage = (event) => {
+						const data = JSON.parse(event["data"]);
+						this.websocket_queue = data["message"];
+					}
+
 					resolve();
-					return;
-					// TODO: hacer overload al onmessage para que pase a ser el de la partida
+					return; // TODO: es necesario?
 				}
 
 				if (data["message"]["player1_selected"] === true) {
@@ -126,9 +124,13 @@ async setWebSocket() {
 						}
 					}));
 
+					this.websocket.onmessage = (event) => {
+						const data = JSON.parse(event["data"]);
+						this.websocket_queue = data["message"];
+					}
+
 					resolve();
-					return;
-					// TODO: hacer overload al onmessage para que pase a ser el de la partida
+					return; // TODO: es necesario?
 				}
 
 				this.game_objects.find((obj) => obj.id === "player1").pk = user.id;
@@ -192,39 +194,25 @@ gameLoop() {
 	// TODO: quizas deberia haber alguna manera de diferenciar si la instancia es de player1 / player2
 	const player1 = this.game_objects.find((obj) => obj.id === 'player1'); 
 	const player2 = this.game_objects.find((obj) => obj.id === 'player2'); 
+	let key;
+	let value;
 
-	this.websocket.send(JSON.stringify({
-		'message': {
-			'player1_x':      player1.x,
-			'player1_dirX':   player1.dirX,
-			'player1_dirY':   player1.dirY,
-			'player1_speed':  player1.speed,
-			'player1_width':  player1.width,
-			'player1_height': player1.height,
+	// TODO: dos funciones, una para player1 y otra para player2
+	if (this.user_id === player1.pk) {
+		key = "player1_dirY";
+		value = player1.dirY;
+	} else {
+		key = "player2_dirY";
+		value = player2.dirY;
+	}
 
-			'player2_x':      player2.x,
-			'player2_dirX':   player2.dirX,
-			'player2_dirY':   player2.dirY,
-			'player2_speed':  player2.speed,
-			'player2_width':  player2.width,
-			'player2_height': player2.height,
-		}
-	}));
+	this.websocket.send(`{"message":{"${key}":${value}}}`);
 
-	console.log(this.websocket_queue);
+	console.log(JSON.stringify(this.websocket_queue));
 	if (this.websocket_queue != '') {
-		player1.x      = this.websocket_queue.player1_x
-		player1.dirX   = this.websocket_queue.player1_dirX,
-		player1.dirY   = this.websocket_queue.player1_dirY,
-		player1.speed  = this.websocket_queue.player1_speed,
-		player1.width  = this.websocket_queue.player1_width,
-		player1.height = this.websocket_queue.player1_height,
-		player2.x      = this.websocket_queue.player2_x,
-		player2.dirX   = this.websocket_queue.player2_dirX,
-		player2.dirY   = this.websocket_queue.player2_dirY,
-		player2.speed  = this.websocket_queue.player2_speed,
-		player2.width  = this.websocket_queue.player2_width,
-		player2.height = this.websocket_queue.player2_height
+		// player1.dirY = this.websocket_queue.player1_dirY;
+		// player2.dirY = this.websocket_queue.player2_dirY;
+
 		this.websocket_queue = '';
 	}
 
