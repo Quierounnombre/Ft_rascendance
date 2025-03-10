@@ -25,6 +25,10 @@ constructor(obj, canvas, context) {
 	this.start_time = Date.now();
 }
 
+setStartTime(time) {
+	this.start_time = time;
+}
+
 /**
  * @brief updates the time passed since creation and the highest score in the current game
  * @param {CanvasObject[]} canvas_objects in the current canvas

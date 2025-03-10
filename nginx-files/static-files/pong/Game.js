@@ -75,10 +75,18 @@ async setWebSocket() {
 			console.log(`WebSocket opened`);
 
 			getUsers(localStorage.getItem("token")).then((user) => {
+				console.log(`
+"message": {
+	"id": ${user.id},
+	"player1_selected": false,
+	"room_ready": false
+}`); // TODO: borrar
+
 				this.websocket.send(JSON.stringify({
 					"message": {
 						"id": user.id,
-						"player1_selected": false
+						"player1_selected": false,
+						"room_ready": false
 					}
 				}));
 			});
@@ -90,18 +98,20 @@ async setWebSocket() {
 
 		this.websocket.onmessage = (event) => {
 			const data = JSON.parse(event["data"]);
-			console.log(data);
 
 			// TODO: meter en el json algo para identificar si es que ya se puede conectar a la sala o que esta en la seleccion de jugadores
 			getUsers(localStorage.getItem("token")).then(user => {
+				if (data["message"]["id"] === user.id)
+					return;
+
+				console.log(JSON.stringify(data)); // TODO: borrar
+
 				if (data["message"]["room_ready"]) {
 					this.game_objects.find((obj) => obj.id === "player2").pk = data["message"]["player2_id"];
+					resolve();
 					return;
 					// TODO: hacer overload al onmessage para que pase a ser el de la partida
 				}
-
-				if (data["message"]["player1_id"] === user.id)
-					return;
 
 				if (data["message"]["player1_selected"] === true) {
 					this.game_objects.find((obj) => obj.id === "player1").pk = data["message"]["player1_id"];
@@ -109,11 +119,14 @@ async setWebSocket() {
 
 					this.websocket.send(JSON.stringify({
 						"message": {
+							"id": user.id,
 							"player2_id": user.id,
 							"player1_selected": false,
 							"room_ready": true	
 						}
 					}));
+
+					resolve();
 					return;
 					// TODO: hacer overload al onmessage para que pase a ser el de la partida
 				}
@@ -122,17 +135,17 @@ async setWebSocket() {
 				
 				this.websocket.send(JSON.stringify({
 					"message": {
+						"id": user.id,
 						"player1_id": user.id,
 						"player1_selected": true
 					}
 				}));
 
 			});
-
 		}
 
 		setTimeout(() => {
-			resolve();
+			reject();
 		}, 500000);
 	})
 }
@@ -229,6 +242,10 @@ gameLoop() {
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		window.cancelAnimationFrame(animation);
 	}
+}
+
+setStartTime(time) {
+	this.game_objects.find((obj) => obj.id === "counter").setStartTime(time);
 }
 
 toJSON() {
