@@ -57,6 +57,7 @@ constructor(objs) {
 	// esto no iria en el json que genera la sala?
 }
 
+// TODO: refactorizar esto
 async setWebSocket() {
 	return new Promise((resolve, reject) => {
 		this.websocket_queue = ''; // TODO: quizas luego no haga falta
@@ -75,8 +76,10 @@ async setWebSocket() {
 
 			getUsers(localStorage.getItem("token")).then((user) => {
 				this.websocket.send(JSON.stringify({
-					"id": user.id,
-					"player1_selected": false
+					"message": {
+						"id": user.id,
+						"player1_selected": false
+					}
 				}));
 			});
 		}
@@ -87,23 +90,41 @@ async setWebSocket() {
 
 		this.websocket.onmessage = (event) => {
 			const data = JSON.parse(event["data"]);
+			console.log(data);
 
 			// TODO: meter en el json algo para identificar si es que ya se puede conectar a la sala o que esta en la seleccion de jugadores
 			getUsers(localStorage.getItem("token")).then(user => {
-				if (data["id"] === user.id)
+				if (data["message"]["room_ready"]) {
+					this.game_objects.find((obj) => obj.id === "player2").pk = data["message"]["player2_id"];
+					return;
+					// TODO: hacer overload al onmessage para que pase a ser el de la partida
+				}
+
+				if (data["message"]["player1_id"] === user.id)
 					return;
 
-				if (data["player1_selected"] === true) {
+				if (data["message"]["player1_selected"] === true) {
+					this.game_objects.find((obj) => obj.id === "player1").pk = data["message"]["player1_id"];
 					this.game_objects.find((obj) => obj.id === "player2").pk = user.id;
-					// TODO: enviar al otro mensaje para que ambos puedan comenzar
+
+					this.websocket.send(JSON.stringify({
+						"message": {
+							"player2_id": user.id,
+							"player1_selected": false,
+							"room_ready": true	
+						}
+					}));
 					return;
+					// TODO: hacer overload al onmessage para que pase a ser el de la partida
 				}
 
 				this.game_objects.find((obj) => obj.id === "player1").pk = user.id;
 				
 				this.websocket.send(JSON.stringify({
-					"id": user.id,
-					"player1_selected": true
+					"message": {
+						"player1_id": user.id,
+						"player1_selected": true
+					}
 				}));
 
 			});
@@ -112,7 +133,7 @@ async setWebSocket() {
 
 		setTimeout(() => {
 			resolve();
-		}, 500);
+		}, 500000);
 	})
 }
 
@@ -218,7 +239,7 @@ toJSON() {
 		player1_pk: this.game_objects.find((obj) => obj.id === "player1").pk,
 		player1_score: this.counter.player1_score,
 
-		player1_pk: this.game_objects.find((obj) => obj.id === "player2").pk,
+		player2_pk: this.game_objects.find((obj) => obj.id === "player2").pk,
 		player2_score: this.counter.player2_score,
 
 		game_time: this.counter.time_passed
