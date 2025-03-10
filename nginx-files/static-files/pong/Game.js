@@ -60,6 +60,7 @@ constructor(objs) {
 async setWebSocket() {
 	return new Promise((resolve, reject) => {
 		this.websocket_queue = ''; // TODO: quizas luego no haga falta
+
 		this.websocket = new WebSocket(
 			'wss://'
 			+ window.location.hostname
@@ -67,7 +68,7 @@ async setWebSocket() {
 			+ '/ws/pong/'
 			+ this.room_name
 			+ '/'
-		)	
+		)
 		// TODO: no se puede leer directamente del socket cuando quiera?
 		this.websocket.onopen = () => {
 			console.log(`WebSocket opened`);
@@ -203,6 +204,7 @@ gameLoop() {
 	if (!this.isEnd())
 		animation = window.requestAnimationFrame(this.gameLoop.bind(this));
 	else {
+		this.websocket.close();
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		window.cancelAnimationFrame(animation);
 	}
