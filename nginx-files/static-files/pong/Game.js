@@ -191,27 +191,41 @@ isEnd() {
 gameLoop() {
 	let animation;
 
-	// TODO: quizas deberia haber alguna manera de diferenciar si la instancia es de player1 / player2
+	// TODO: esto no funciona con multiples mapas
 	const player1 = this.game_objects.find((obj) => obj.id === 'player1'); 
 	const player2 = this.game_objects.find((obj) => obj.id === 'player2'); 
-	let key;
-	let value;
+	const ball = this.game_objects.find((obj) => obj.id === 'ball'); 
+	let message;
 
 	// TODO: dos funciones, una para player1 y otra para player2
 	if (this.user_id === player1.pk) {
-		key = "player1_dirY";
-		value = player1.dirY;
+		message = `"player1_dirY":${player1.dirY},`;
+		message += `"player1_x":${player1.x},`;
 	} else {
-		key = "player2_dirY";
-		value = player2.dirY;
+		message = `"player2_dirY":${player2.dirY},`;
+		message += `"player2_x":${player2.x},`;
 	}
+	message += `"ball_x":${ball.x},`;
+	message += `"ball_y":${ball.y},`;
+	message += `"ball_dirX":${ball.dirX},`;
+	message += `"ball_dirY":${ball.dirY},`;
+	message += `"ball_speed":${ball.speed}`;
 
-	this.websocket.send(`{"message":{"${key}":${value}}}`);
+	this.websocket.send(`{"message":{${message}}}`);
 
 	console.log(JSON.stringify(this.websocket_queue));
 	if (this.websocket_queue != '') {
-		// player1.dirY = this.websocket_queue.player1_dirY;
-		// player2.dirY = this.websocket_queue.player2_dirY;
+		if (this.websocket_queue.player1_dirY) player1.dirY = this.websocket_queue.player1_dirY;
+		if (this.websocket_queue.player2_dirY) player2.dirY = this.websocket_queue.player2_dirY;
+
+		if (this.websocket_queue.player1_y) player1.y = this.websocket_queue.player1_y;
+		if (this.websocket_queue.player2_y) player2.y = this.websocket_queue.player2_y;
+
+		if (this.websocket_queue.ball_x) ball.x = (ball.x + this.websocket_queue.ball_x) / 2
+		if (this.websocket_queue.ball_y) ball.y = (ball.y + this.websocket_queue.ball_y) / 2
+		if (this.websocket_queue.ball_dirX) ball.dirX = (ball.dirX + this.websocket_queue.ball_dirX) / 2
+		if (this.websocket_queue.ball_dirY) ball.dirY = (ball.dirY + this.websocket_queue.ball_dirY) / 2
+		if (this.websocket_queue.ball_speed) ball.speed = (ball.speed + this.websocket_queue.ball_speed) / 2
 
 		this.websocket_queue = '';
 	}

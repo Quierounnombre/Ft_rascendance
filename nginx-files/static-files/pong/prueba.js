@@ -35,7 +35,7 @@ function defaultMap(config) {
 	const data_to_send = [];
 
 	const player1 = {
-		pk: 42, // TODO: hay que sacar el pk de los usuarios
+		pk: -1, // TODO: hay que sacar el pk de los usuarios
 		id: "player1",
 		type: "player",
 		color: config.player1_color,
@@ -49,7 +49,7 @@ function defaultMap(config) {
 	};
 
 	const player2 = {
-		pk: 42, // TODO: hay que sacar el pk de los usuarios
+		pk: -1, // TODO: hay que sacar el pk de los usuarios
 		id: "player2",
 		type: "player",
 		color: config.player2_color,
@@ -95,7 +95,7 @@ function doubleBallMap(config) {
 	const data_to_send = [];
 
 	const player1 = {
-		pk: 42, // TODO: hay que sacar el pk de los usuarios
+		pk: -1, // TODO: hay que sacar el pk de los usuarios
 		id: "player1",
 		type: "player",
 		color: config.player1_color,
@@ -109,7 +109,7 @@ function doubleBallMap(config) {
 	};
 
 	const player2 = {
-		pk: 42, // TODO: hay que sacar el pk de los usuarios
+		pk: -1, // TODO: hay que sacar el pk de los usuarios
 		id: "player2",
 		type: "player",
 		color: config.player2_color,
@@ -167,7 +167,7 @@ function floatingMap(config) {
 	const data_to_send = [];
 
 	const player1 = {
-		pk: 42, // TODO: hay que sacar el pk de los usuarios
+		pk: -1, // TODO: hay que sacar el pk de los usuarios
 		id: "player1",
 		type: "player",
 		color: config.player1_color,
@@ -181,7 +181,7 @@ function floatingMap(config) {
 	};
 
 	const player2 = {
-		pk: 42, // TODO: hay que sacar el pk de los usuarios
+		pk: -1, // TODO: hay que sacar el pk de los usuarios
 		id: "player2",
 		type: "player",
 		color: config.player2_color,
