@@ -57,10 +57,9 @@ constructor(objs) {
 	// esto no iria en el json que genera la sala?
 }
 
-// TODO: refactorizar esto
 async setWebSocket() {
 	return new Promise((resolve, reject) => {
-		this.websocket_queue = ''; // TODO: quizas luego no haga falta
+		this.websocket_queue = '';
 
 		this.websocket = new WebSocket(
 			'wss://'
@@ -70,7 +69,6 @@ async setWebSocket() {
 			+ this.room_name
 			+ '/'
 		)
-		// TODO: no se puede leer directamente del socket cuando quiera?
 		this.websocket.onopen = () => {
 			console.log(`WebSocket opened`);
 
@@ -87,14 +85,12 @@ async setWebSocket() {
 		}
 
 		this.websocket.onclose = () => {
-			// TODO: en chrome un CTRL + R no trigerea esto
 			console.log(`WebSocket closed`);
 		}
 
 		this.websocket.onmessage = (event) => {
 			const data = JSON.parse(event["data"]);
 
-			// TODO: meter en el json algo para identificar si es que ya se puede conectar a la sala o que esta en la seleccion de jugadores
 			getUsers(localStorage.getItem("token")).then(user => {
 				if (data["message"]["id"] === user.id)
 					return;
@@ -102,18 +98,26 @@ async setWebSocket() {
 				if (data["message"]["room_ready"]) {
 					this.game_objects.find((obj) => obj.id === "player2").pk = data["message"]["player2_id"];
 
+					this.game_objects.find((obj) => obj.id === "player2").move_up = '';
+					this.game_objects.find((obj) => obj.id === "player2").move_down = '';
+
 					this.websocket.onmessage = (event) => {
 						const data = JSON.parse(event["data"]);
 						this.websocket_queue = data["message"];
 					}
 
 					resolve();
-					return; // TODO: es necesario?
+					return; // TODO: es necesario?, hay otro abajo
 				}
 
 				if (data["message"]["player1_selected"] === true) {
 					this.game_objects.find((obj) => obj.id === "player1").pk = data["message"]["player1_id"];
+
 					this.game_objects.find((obj) => obj.id === "player2").pk = user.id;
+
+					// TODO: guarrada, pero funciona
+					this.game_objects.find((obj) => obj.id === "player1").move_up = '';
+					this.game_objects.find((obj) => obj.id === "player1").move_down = '';
 
 					this.websocket.send(JSON.stringify({
 						"message": {
@@ -130,7 +134,7 @@ async setWebSocket() {
 					}
 
 					resolve();
-					return; // TODO: es necesario?
+					return;
 				}
 
 				this.game_objects.find((obj) => obj.id === "player1").pk = user.id;

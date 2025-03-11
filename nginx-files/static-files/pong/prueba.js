@@ -35,7 +35,7 @@ function defaultMap(config) {
 	const data_to_send = [];
 
 	const player1 = {
-		pk: -1, // TODO: hay que sacar el pk de los usuarios
+		pk: -1,
 		id: "player1",
 		type: "player",
 		color: config.player1_color,
@@ -49,7 +49,7 @@ function defaultMap(config) {
 	};
 
 	const player2 = {
-		pk: -1, // TODO: hay que sacar el pk de los usuarios
+		pk: -1,
 		id: "player2",
 		type: "player",
 		color: config.player2_color,
@@ -95,7 +95,7 @@ function doubleBallMap(config) {
 	const data_to_send = [];
 
 	const player1 = {
-		pk: -1, // TODO: hay que sacar el pk de los usuarios
+		pk: -1,
 		id: "player1",
 		type: "player",
 		color: config.player1_color,
@@ -109,7 +109,7 @@ function doubleBallMap(config) {
 	};
 
 	const player2 = {
-		pk: -1, // TODO: hay que sacar el pk de los usuarios
+		pk: -1,
 		id: "player2",
 		type: "player",
 		color: config.player2_color,
@@ -167,7 +167,7 @@ function floatingMap(config) {
 	const data_to_send = [];
 
 	const player1 = {
-		pk: -1, // TODO: hay que sacar el pk de los usuarios
+		pk: -1,
 		id: "player1",
 		type: "player",
 		color: config.player1_color,
@@ -181,7 +181,7 @@ function floatingMap(config) {
 	};
 
 	const player2 = {
-		pk: -1, // TODO: hay que sacar el pk de los usuarios
+		pk: -1,
 		id: "player2",
 		type: "player",
 		color: config.player2_color,
@@ -208,7 +208,7 @@ function floatingMap(config) {
 	const floating1 = {
 		id: "floating1",
 		type: "floating",
-		color: config.counter_color, // TODO: bastante horrible esto
+		color: config.counter_color,
 		x: 225,
 		y: 200,
 		width: 42,
@@ -219,7 +219,7 @@ function floatingMap(config) {
 	const floating2 = {
 		id: "floating2",
 		type: "floating",
-		color: config.counter_color, // TODO: bastante horrible esto
+		color: config.counter_color,
 		x: 575,
 		y: 200,
 		width: 42,

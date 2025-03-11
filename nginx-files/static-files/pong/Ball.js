@@ -65,7 +65,7 @@ resolveHit(canvas_object) {
 		else
 			this.dirY = -(canvas_object.dirY / Math.abs(canvas_object.dirY));
 
-		this.speed = (this.speed < 20) ? (this.speed + 0.5) : 20; // TODO: mirar que numero seria
+		this.speed = (this.speed < 20) ? (this.speed + 0.5) : 20;
 	} else 
 		this.dirY = -this.dirY;
 }

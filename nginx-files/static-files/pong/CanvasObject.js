@@ -12,7 +12,7 @@ constructor(obj, canvas, context) {
 
 	this.color = "white";
 	this.id = "generic";
-	this.type = "generic"
+	this.type = "generic";
 	this.x = 0;
 	this.y = 0;
 	this.dirX = 0;

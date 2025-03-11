@@ -10,21 +10,8 @@ class Player extends CanvasObject {
 constructor(obj, canvas, context) {
 	super(obj, canvas, context);
 
-	document.addEventListener("keydown", (event) => {
-		if (event.key === this.move_up) {
-			this.dirY = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
-			this.is_moving = true;
-		} else if (event.key === this.move_down) {
-			this.dirY = 4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
-			this.is_moving = true;
-		}
-	});
-
-	document.addEventListener("keyup", (event) => {
-		if (event.key == this.move_up || event.key == this.move_down) {
-			this.is_moving = false;
-		}
-	});
+	document.addEventListener("keydown", playerKeyDownHandler.bind(this));
+	document.addEventListener("keyup", playerKeyUpHandler.bind(this));
 }
 
 /**
@@ -45,5 +32,21 @@ slide(dirX, dirY) {
 	this.keepInsideCanvas();
 }
 }
+
+function playerKeyDownHandler(event) {
+	if (event.key === this.move_up) {
+		this.dirY = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+		this.is_moving = true;
+	} else if (event.key === this.move_down) {
+		this.dirY = 4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+		this.is_moving = true;
+	}
+}
+
+function playerKeyUpHandler(event) {
+	if (event.key == this.move_up || event.key == this.move_down)
+		this.is_moving = false;
+}
+
 
 export {Player};
