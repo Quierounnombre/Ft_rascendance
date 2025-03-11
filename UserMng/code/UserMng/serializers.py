@@ -5,6 +5,11 @@ from rest_framework import serializers
 from rest_framework import status
 
 class UserProfileSerializer(serializers.ModelSerializer):
+	avatar = serializers.SerializerMethodField()
+
+	def get_avatar(self, obj):
+		return obj.avatar.path.replace("/UserMng/code/", "")
+
 	class Meta:
 		model = User
 		fields = [

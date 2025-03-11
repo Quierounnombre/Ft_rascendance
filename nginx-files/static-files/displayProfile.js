@@ -6,15 +6,18 @@ async function getUsers(token) {
 				"Authorization": "Token " + token,
 			}
 		});
-		const data = await response.json();
-		return data;
+		if (response.ok) {
+			const data = await response.json();
+			return data;
+		} else {
+			localStorage.removeItem("token");
+		}
 	} catch (e) {
 		console.error(e);
 	}
 }
 
 function formatTable(jsonData) {
-	console.log(jsonData)
 
 	var table = "<h2>Hi, " + jsonData["username"] + 
 	"<img src=\"" + jsonData["avatar"] + "\" class=\"img-thumbnail\" style=\"max-width:100px\" />\
@@ -36,14 +39,15 @@ function formatTable(jsonData) {
 
 async function displayProfile(token) {
 	const user = await getUsers(token);
+	if (!user)
+		return ;
 	return (formatTable(user));
 }
 
 function saveChanges() {
 	const form = document.getElementById("profile");
 	const formData = new FormData(form);
-	const token = localStorage.getItem("token")
-	formData.values().forEach(x => console.log(x));
+	const token = localStorage.getItem("token");
 	try {
 		fetch("https://" + window.location.hostname + ":7000/profile/me/", {
 			method: "PUT",
@@ -60,14 +64,19 @@ function saveChanges() {
 	}
 }
 
+const button = document.createElement("input");
+button.setAttribute("type", "submit");
+button.setAttribute("value", "Save Changes");
+button.setAttribute("class", "btn btn-primary")
+button.setAttribute("id", "submit");
+const avatar_field = document.createElement("div");
+avatar_field.setAttribute("class", "mb-3 row");
+avatar_field.innerHTML = `<label for="avtar" class="col-sm-2 col-form-label">Change Avatar:</label>
+		<div class="col-sm-10"><input type="file" class="form-control" id="avtar" name="avatar"</div>`
+
 function editProfile() {
 	const form = document.getElementById("profile");
 	const fields = form.getElementsByTagName("input");
-	const button = document.createElement("input");
-	button.setAttribute("type", "submit");
-	button.setAttribute("value", "Save Changes");
-	button.setAttribute("id", "submit");
-	form.appendChild(button);
 
 	form.addEventListener("submit", (event) => {
 		event.preventDefault();
@@ -75,10 +84,14 @@ function editProfile() {
 	});
 
 	[...fields].forEach(field => {
-		field.setAttribute("class", "form-control");
-		field.removeAttribute("readonly");
+		if (field.name !== "email") {
+			field.setAttribute("class", "form-control");
+			field.removeAttribute("readonly");
+		}
 	});
 
+	form.appendChild(avatar_field);
+	form.appendChild(button);
 }
 
 async function logOut() {
@@ -107,8 +120,8 @@ async function logIn(form) {
 			body: formData,
 		});
 		const data = await response.json();
-		localStorage.setItem("token", data.token);
 		if (data.token) {
+			localStorage.setItem("token", data.token);
 			validLogin();
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
@@ -129,8 +142,8 @@ async function signUp(form) {
 			body: formData,
 		});
 		const data = await response.json();
-		localStorage.setItem("token", data.token);
 		if (data.token) {
+			localStorage.setItem("token", data.token);
 			validLogin();
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
@@ -143,18 +156,26 @@ async function signUp(form) {
 }
 
 function invalidLogin() {
-	const emailField = document.getElementById("email");
-	const passField = document.getElementById("password");
-	emailField.classList.add("is-invalid");
-	passField.classList.add("is-invalid");
-	emailField.classList.remove("is-valid");
-	passField.classList.remove("is-valid");
+	const form = document.getElementById("form");
+	const fields = form.getElementsByTagName("input");
+	for (let i = 0; i < fields.length; i++) {
+		if (fields[i].type === "submit") {
+			continue;
+		}
+		fields[i].value = "";
+		fields[i].classList.add("is-invalid");
+		fields[i].classList.remove("is-valid");
+	}
 }
 function validLogin() {
-	const emailField = document.getElementById("email");
-	const passField = document.getElementById("password");
-	emailField.classList.add("is-valid");
-	passField.classList.add("is-valid");
-	emailField.classList.remove("is-invalid");
-	passField.classList.remove("is-invalid");
+	const form = document.getElementById("form");
+	const fields = form.getElementsByTagName("input");
+	for (let i = 0; i < fields.length; i++) {
+		if (fields[i].type === "submit") {
+			continue;
+		}
+		fields[i].value = "";
+		fields[i].classList.add("is-valid");
+		fields[i].classList.remove("is-invalid");
+	}
 }
