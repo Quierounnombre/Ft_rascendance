@@ -1,0 +1,15 @@
+# django
+Django>=5.0
+
+# Postgres adapter
+psycopg
+
+# File manipulation in Pyhton
+pillow>=11.1.0
+
+# REST framework
+djangorestframework>=3.15.2
+
+daphne
+channels
+channels_redis

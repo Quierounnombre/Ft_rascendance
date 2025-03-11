@@ -1,63 +1,51 @@
-"use strict";
-
-let token;
-function changeLayout() {
-	var loc = window.location.hash;
-	if (loc == "") {
-		loc = "#home"
-	}
-
-	if (loc === "#home") {
-		loadHome();
-	} else {
-		loadProfile();
+async function getUsers(token) {
+	try {
+		const response = await fetch("https://" + window.location.hostname + ":7000/profile/me/", {
+			method: "GET",
+			headers: {
+				"Authorization": "Token " + token,
+			}
+		});
+		const data = await response.json();
+		return data;
+	} catch (e) {
+		console.error(e);
 	}
 }
 
-const home = document.createElement("div");
-home.innerHTML = `
-<h1>Welcome to Rascendance</h1>
-<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.hash=\'\#profile\'\">See your profile</button>
-`;
+function formatTable(jsonData) {
+	console.log(jsonData)
 
-const profile = document.createElement("div");
+	var table = "<h2>Hi, " + jsonData["username"] + 
+	"<img src=\"" + jsonData["avatar"] + "\" class=\"img-thumbnail\" style=\"max-width:100px\" />\
+	</h2>\
+	<form id=\"profile\">";
 
-const login_page = document.createElement("div");
-login_page.innerHTML = `
-<h1>Log in to see your profile</h1>
-<div id="buttons">
-<button class="btn btn-secondary" type="button" id="log_button" onclick="toggleForm('login')">Log in</button>
-<button class="btn btn-primary" type="button" id="singup_button" onclick="toggleForm('signup')">Don't have an account? Sign Up!</button>
-</div>
-<div id="form_div"></div>
-`
-
-function loadHome() {
-	const root = document.getElementById("root");
-	root.replaceChildren(home);
+	for (let i in jsonData) {
+		if (i !== "email" && i !== "username" && i !== "font" && i !== "language") { continue; };
+		table += `<div class="mb-3 row">
+    	<label for="` + i + 
+		`" class="col-sm-2 col-form-label">`+ i + 
+		`</label><div class="col-sm-10"><input type="text" readonly class="form-control-plaintext" id="`+ i + `" name="` + i +
+		`" value="` + jsonData[i] +
+		`"></div></div>`;
+	}
+	table += "</form>";
+	return table;
 }
 
-async function loadProfile() {
-	const root = document.getElementById("root");
-	if (token) {
-		profile.innerHTML = await displayProfile(token);
-		profile.innerHTML += `
-		<button class="btn btn-primary" type="button" id="backhome_button" onclick=\"window.location.hash=\'\#home\'\">Back to home</button>
-		<button class="btn btn-danger" type="button" id="logout_button" onclick="logOut()">Log out</button>
-		<button class="btn btn-secondary" type="button" id="edit_button" onclick="editProfile()">Edit Profile</button>
-		`;
-		root.replaceChildren(profile);
-	} else {
-		root.replaceChildren(login_page);
-	}
+async function displayProfile(token) {
+	const user = await getUsers(token);
+	return (formatTable(user));
 }
 
 function saveChanges() {
 	const form = document.getElementById("profile");
 	const formData = new FormData(form);
+	const token = localStorage.getItem("token")
 	formData.values().forEach(x => console.log(x));
 	try {
-		fetch("http://localhost:8080/profile/me/", {
+		fetch("https://" + window.location.hostname + ":7000/profile/me/", {
 			method: "PUT",
 			headers: {
 				"Authorization": "Token " + token,
@@ -94,16 +82,15 @@ function editProfile() {
 }
 
 async function logOut() {
-	const formData = new FormData();
-	formData.append("token", token)
+	const token = localStorage.getItem("token");
 	try {
-		const response = await fetch("http://localhost:8080/profile/logout/", {
+		const response = await fetch("https://" + window.location.hostname + ":7000/profile/logout/", {
 			method: "POST",
 			headers: {
 				"Authorization": "Token " + token,
 			},
 		});
-		token = "";
+		localStorage.removeItem("token");
 		var event = new Event('hashchange');
 		window.dispatchEvent(event);
 	} catch (e) {
@@ -115,13 +102,13 @@ async function logIn(form) {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("http://localhost:8080/profile/login/", {
+		const response = await fetch("https://" + window.location.hostname + ":7000/profile/login/", {
 			method: "POST",
 			body: formData,
 		});
 		const data = await response.json();
-		token = data.token;
-		if (token) {
+		localStorage.setItem("token", data.token);
+		if (data.token) {
 			validLogin();
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
@@ -137,13 +124,13 @@ async function signUp(form) {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("http://localhost:8080/profile/singup/", {
+		const response = await fetch("https://" + window.location.hostname + ":7000/profile/singup/", {
 			method: "POST",
 			body: formData,
 		});
 		const data = await response.json();
-		token = data.token;
-		if (token) {
+		localStorage.setItem("token", data.token);
+		if (data.token) {
 			validLogin();
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
@@ -171,8 +158,3 @@ function validLogin() {
 	emailField.classList.remove("is-invalid");
 	passField.classList.remove("is-invalid");
 }
-
-
-window.addEventListener("hashchange", changeLayout);
-
-changeLayout();

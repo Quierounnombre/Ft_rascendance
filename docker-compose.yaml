@@ -26,16 +26,20 @@ services:
   #    - db
 
   nginx:
-    image: nginx:latest 
+    build:
+      context: nginx-files 
     container_name: ${NGINX_CONTAINER_NAME}
     env_file:
       - .env
     depends_on:
       - db
     volumes:
-      - ./nginx-files://usr/share/nginx/html
+      - ./nginx-files/static-files:/etc/nginx/html
     ports:
-      - 7000:80
+      - 7000:443
+    networks:
+      - websocket-network
+      - rascendance-network
 
   db:
     restart: always
@@ -58,8 +62,8 @@ services:
       context: ./UserMng
       dockerfile: Dockerfile
     container_name: UserMng
-    ports:
-      - ${BACKEND_PORT}:${BACKEND_PORT}
+    expose:
+      - ${BACKEND_PORT}
     volumes:
       - ./UserMng/code:/UserMng/code
     depends_on:
@@ -81,10 +85,56 @@ services:
     networks:
       - rascendance-network
 
+# websocket
+
+  websocket: 
+    build:
+      context: websocket
+    container_name: ${WEBSOCKET_NAME}
+    env_file:
+      - .env
+    depends_on:
+      - web-db
+    networks:
+      - websocket-network
+    expose:
+      - ${WEBSOCKET_PORT}
+    volumes:
+      - ./websocket/code:/code
+    command: python /code/manage.py runserver 0.0.0.0:${WEBSOCKET_PORT}
+
+  redis:
+    image: redis
+    command: --port ${WS_REDIS_PORT}
+    container_name: redis
+    expose:
+      -  ${WS_REDIS_PORT}
+    networks:
+      - websocket-network
+
+  web-db:
+    restart: always
+    image: postgres:latest
+    container_name: ${WS_DATABASE_NAME}
+    volumes:
+      - websocket_data:/var/lib/postgresql/data
+    expose:
+      - ${WS_DATABASE_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - websocket-network
+
 volumes:
   postgres_data:
     name: postgres_data
+  websocket_data:
+    name: websocket_data
 
 networks:
   rascendance-network:
+    driver: bridge
+  websocket-network:
     driver: bridge
