@@ -1,7 +1,7 @@
-# chat/consumers.py
 import json
 
 from channels.generic.websocket import WebsocketConsumer
+from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 # TODO: la clase Game(SyncConsumer) tiene que crearse al iniciar sala, 
@@ -17,7 +17,7 @@ from asgiref.sync import async_to_sync
 # funcion de lo que le pase el server, renderizar y luego destruir
 
 class PongConsumer(WebsocketConsumer):
-    async def connect(self):
+    def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"pong_{self.room_name}"
 
@@ -25,32 +25,74 @@ class PongConsumer(WebsocketConsumer):
         # TODO: hay dos casos, que alguien este creando una sala o que se este uniendo
 
         # Join room group
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name, self.channel_name
+        )
 
-        await self.accept()
+        self.accept()
 
-    # TODO: seguro?
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+    def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name, self.channel_name
+        )
 
-    async def game_update(self, event):
+    def game_update(self, event):
         # TODO: el front tendra que enviar el cambio pertinente (state)
         # send message to websocket
         state = event["state"]
-        await self.send(json.dumps(state))
+        self.send(json.dumps(state))
 
-    async def receive(self, text_data):
+    def receive(self, text_data):
         content = json.loads(text_data)
         message_type = content["type"]
         message = content["message"]
 
         if message_type == "direction":
-            return await self.direction(message)
+            return self.direction(message)
         elif message_type == "join":
-            return await self.join(message)
+            return self.join(message)
 
-    class GameEngine(threading.Thread):
-        def run(self):
-            while True:
-                self.broadcast_state(self.state)
-                time.sleep(0.05)
+
+class GameEngine(threading.Thread):
+    def run(self):
+        while True:
+            self.state = # TODO: calculos del estado de la partida
+            self.broadcast_state(self.state)
+            time.sleep(0.05)
+    
+    def broadcast_state(self, state):
+        state_json = state.render()
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            self.room_group_name, {
+                "type": "game_update",
+                "state": state_json
+            }
+        )
+    async def direction(self, message):
+        await self.channel_layer.send(
+            "game_engine",
+            {
+                "type": "player.dirY", # TODO: nope, habria que ver que se anda pasando, probablemente el estado de la partida
+                "player": self.username,
+                "dirY": message["dirY"]
+            },
+        )
+
+
+class GameConsumer(SyncConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_group_name = f"pong_{self.room_name}"
+        self.engine = GameEngine(self.room_group_name)
+
+        self.engine.start()
+    
+    def player_new(self, event):
+        self.engine.join_queue(envent["player"])
+
+    def player_direction(self, event):
+        dirY = event.get("dirY")
+        self.engine.set_player_direction(event[player], dirY)
