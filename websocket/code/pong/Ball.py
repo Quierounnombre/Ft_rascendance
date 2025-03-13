@@ -4,29 +4,30 @@ from CanvasObject import CanvasObject
 class Ball(CanvasObject):
     def __init__(self, obj):
         super().__init__(obj)
+        self.radius = obj['radius']
         self.width = self.radius * 2
         self.heigth = self.radius * 2
         self.recalculateHitbox()
 
     def keepInsideCanvas(self):
         if self.point_x1 < 0:
-            self.moveTo(self.canvas.width / 2, self.canvas.height / 2)
+            self.moveTo(self.canvas_width / 2, self.canvas_height / 2)
             self.counter.player2_score += 1
             self.dirY = -1
             self.dirX = -1
             self.speed = 4
-        elif self.point_x2 > self.canvas.width:
-            self.moveTo(self.canvas.width / 2, self.canvas.height / 2)
+        elif self.point_x2 > self.canvas_width:
+            self.moveTo(self.canvas_width / 2, self.canvas_height / 2)
             self.dirY = 1
             self.dirX = 1
             self.speed = 4
             self.counter.player1_score += 1 # TODO: revisar esto
 
-        if self.point_y1 < self.canvas.height / 8:
-            self.moveTo(self.x, (self.canvas.height / 8) + ((self.point_y3 - self.point_y1) / 2))
+        if self.point_y1 < self.canvas_height / 8:
+            self.moveTo(self.x, (self.canvas_height / 8) + ((self.point_y3 - self.point_y1) / 2))
             self.dirY = -self.dirY
-        elif self.point_y3 > self.canvas.height:
-            self.moveTo(self.x, self.canvas.height - (self.point_y3 - self.point_y1) / 2)
+        elif self.point_y3 > self.canvas_height:
+            self.moveTo(self.x, self.canvas_height - (self.point_y3 - self.point_y1) / 2)
             self.dirY = -self.dirY
             
     def resolveHit(self, canvas_object):

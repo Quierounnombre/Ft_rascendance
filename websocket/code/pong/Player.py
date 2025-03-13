@@ -6,11 +6,10 @@ class Player(CanvasObject):
     
     def slide(self, dirX, dirY):
         self.y += self.speed * dirY
-        if (!self.is_moving) {
-            if (self.dirY > 0)
+        if not self.is_moving:
+            if self.dirY > 0:
                 self.dirY -= 1
-            else if (self.dirY < 0)
+            elif self.dirY < 0:
                 self.dirY += 1
-        }
         self.recalculateHitbox()
         self.keepInsideCanvas()

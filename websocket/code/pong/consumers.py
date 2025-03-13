@@ -1,8 +1,13 @@
 import json
+import time
 
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+
+from Game import Game
+
+game = Game
 
 # TODO: la clase Game(SyncConsumer) tiene que crearse al iniciar sala, 
 # es decir, en cada partida habra mas de dos consumers, dos asociados

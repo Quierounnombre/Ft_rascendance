@@ -14,9 +14,35 @@ class CanvasObject:
         self.is_moving = False
         self.width = 0
         self.height = 0
+        self.canvas_width = 800
+        self.canvas_height = 400
 
-        for i in obj:
-            self[i] = obj[i]
+        if 'color' in obj:
+            self.color = obj['color']
+        if 'id' in obj:
+            self.id = obj['id']
+        if 'type' in obj:
+            self.type = obj['type']
+        if 'x' in obj:
+            self.x = obj['x']
+        if 'y' in obj:
+            self.y = obj['y']
+        if 'dirX' in obj:
+            self.dirX = obj['dirX']
+        if 'dirY' in obj:
+            self.dirY = obj['dirY']
+        if 'speed' in obj:
+            self.speed = obj['speed']
+        if 'is_moving' in obj:
+            self.is_moving = obj['is_moving']
+        if 'width' in obj:
+            self.width = obj['width']
+        if 'height' in obj:
+            self.height = obj['height']
+        if 'canvas_width' in obj:
+            self.height = obj['canvas_width']
+        if 'canvas_height' in obj:
+            self.height = obj['canvas_height']
 
         # xy1---------xy2
         # |            |
@@ -35,6 +61,20 @@ class CanvasObject:
 
         self.point_x4 = self.x + self.width / 2
         self.point_y4 = self.y + self.height / 2
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'type': self.type,
+
+            'x': self.x,
+            'y': self.y,
+            
+            'width': self.width,
+            'heigth': self.height,
+
+            'color': self.color,
+        }
 
     def objectHits(self, object):
         horizontal_check = True
@@ -80,9 +120,9 @@ class CanvasObject:
 
     def update(self, canvas_objects):
         self.slide(self.dirX, self.dirY)
-        for i in canvas_objects:
-            if canvas_objects[i] != self and self.objectHits(canvas_objects[i]):
-                self.resolveHit(canvas_objects[i])
+        for obj in canvas_objects:
+            if obj != self and self.objectHits(obj):
+                self.resolveHit(obj);
     
     def recalculateHitbox(self):
         self.point_x1 = self.x - self.width / 2;
@@ -101,10 +141,10 @@ class CanvasObject:
         # TODO: el canvas como te lo van a pasar, solo necesitas el tamano, pero tendra que pasarse en el json del constructor
         if self.point_x1 < 0:
             self.moveTo((self.point_x2 - self.point_x1) / 2, self.y)
-        elif self.point_x2 > self.canvas.width:
-            self.moveTo(self.canvas.width - (self.point_x2 - self.point_x1) / 2, self.y)
+        elif self.point_x2 > self.canvas_width:
+            self.moveTo(self.canvas_width - (self.point_x2 - self.point_x1) / 2, self.y)
 
-        if self.point_y1 < self.canvas.height / 8:
-            self.moveTo(self.x, (self.canvas.height / 8) + ((self.point_y3 - self.point_y1) / 2));
-        elif self.point_y3 > self.canvas.height:
-            self.moveTo(self.x, self.canvas.height - ((self.point_y3 - self.point_y1) / 2));
+        if self.point_y1 < self.canvas_height / 8:
+            self.moveTo(self.x, (self.canvas_height / 8) + ((self.point_y3 - self.point_y1) / 2));
+        elif self.point_y3 > self.canvas_height:
+            self.moveTo(self.x, self.canvas_height - ((self.point_y3 - self.point_y1) / 2));
