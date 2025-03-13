@@ -16,7 +16,10 @@ from asgiref.sync import async_to_sync
 # de tener todos los objetos con sus metodos, tenga que ir generando el array en 
 # funcion de lo que le pase el server, renderizar y luego destruir
 
-class PongConsumer(WebsocketConsumer):
+class PongConsumer(JsonWebsocketConsumer):
+    http_user = True
+    strict_ordering = True
+
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"pong_{self.room_name}"
@@ -81,6 +84,8 @@ class GameEngine(threading.Thread):
 
 
 class GameConsumer(SyncConsumer):
+    strict_ordering = True
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
