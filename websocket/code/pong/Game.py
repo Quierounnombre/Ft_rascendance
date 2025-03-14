@@ -60,20 +60,15 @@ class Game:
         return False
     
     def gameLoop(self):
-        while True:
-            if self.isEnd():
-                print("End game") # TODO: borrar
-                break;
-
-            # TODO: leer la actualizacion
-
+        while not self.isEnd():
             for obj in self.game_objects:
-                # print(json.dumps(obj.serialize()))
                 print(obj.serialize())
                 obj.update(self.game_objects)
             
             # TODO: comunicar al resto
             time.sleep(0.01)
+
+        print("End game") # TODO: borrar
 
 # TODO: prueba que habra que borrar
 game = Game('[{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"},{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100},{"id":"ball","type":"ball","x":400,"y":200,"dirX":-1,"dirY":0,"is_moving":true,"radius":10}]')
