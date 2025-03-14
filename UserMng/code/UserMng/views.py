@@ -6,10 +6,12 @@ from rest_framework.authtoken.models import Token
 from UserMng.models import User
 
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
+from rest_framework import filters
 
 from .serializers import UserSingUpSerializer
 from .serializers import UserLoginSerializer
@@ -99,3 +101,9 @@ class ProfileView(viewsets.ModelViewSet):
 			serializer.save()
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	
+class UserListView(ListAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'email']
