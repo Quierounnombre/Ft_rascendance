@@ -1,4 +1,5 @@
 import time 
+import json
 
 from datetime import datetime
 from CanvasObject import CanvasObject
@@ -22,7 +23,7 @@ class Counter(CanvasObject):
         self.start_time = time.time() # TODO: seguro? esto es en segundos
     
     def serialize(self):
-        return {
+        return json.dumps ({
             'id': self.id,
             'type': self.type,
 
@@ -39,7 +40,7 @@ class Counter(CanvasObject):
             'start_time': self.start_time,
             'player1_score': self.player1_score,
             'player2_score': self.player2_score,
-        }
+        })
 
     def setStartTime(self, time):
         self.start_time = time

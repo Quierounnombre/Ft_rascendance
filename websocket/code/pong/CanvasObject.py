@@ -1,4 +1,5 @@
 import math
+import json
 
 class CanvasObject:
     def __init__(self, obj):
@@ -63,7 +64,7 @@ class CanvasObject:
         self.point_y4 = self.y + self.height / 2
     
     def serialize(self):
-        return {
+        return json.dumps({
             'id': self.id,
             'type': self.type,
 
@@ -74,7 +75,7 @@ class CanvasObject:
             'heigth': self.height,
 
             'color': self.color,
-        }
+        }) 
 
     def objectHits(self, object):
         horizontal_check = True
