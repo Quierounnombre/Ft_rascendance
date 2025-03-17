@@ -9,17 +9,19 @@ from CanvasObject import CanvasObject
 
 class Game:
     def __init__(self, data):
-        self.game_objects = [];
+        self.game_objects = []
 
         self.background_color = "back"
         self.object_color = "white"
 
         self.timeout = 60 # TODO: esta en segundos, mirar como deberia ser
         self.max_score = 5
+    
+        self.daemon = None
         
-        tmp = json.loads(data)
+        data = json.loads(data)
 
-        for obj in tmp:
+        for obj in data:
             if obj["type"] == "config":
                 if 'background_color' in obj:
                     self.background_color = obj['background_color']
@@ -51,7 +53,9 @@ class Game:
                 
                 break
     
-    def isEnd(self):
+    # TODO: setPlayer1/1 unsetPlayer1/2
+    
+    def isEnd(self) -> bool:
         if self.counter.time_passed >= self.timeout:
             return True
 
@@ -60,7 +64,7 @@ class Game:
 
         return False
 
-    def serialize(self):
+    def serialize(self) -> str:
             tmp = '['
             for obj in self.game_objects:
                 tmp += obj.serialize() + ','
@@ -68,14 +72,28 @@ class Game:
 
             return tmp
     
-    def gameLoop(self):
+    def getGameState(self) -> str:
+        message = self.serialize()
+        
+        return {
+            "type": "game.state",
+            "message": message
+        }
+
+    def sendToChannel(self, room, data):
+        self.channel_layer.group_send(
+            room,
+            data
+        )
+    
+    def gameLoop(self) -> None:
         while not self.isEnd():
             for obj in self.game_objects:
                 obj.update(self.game_objects)
             
-            # TODO: comunicar al resto
+            # self.sendToChannel(self.room_group_name, self.getGameState())
             print(self.serialize())
-            time.sleep(5.01)
+            time.sleep(0.01)
 
         print("End game") # TODO: borrar
 
@@ -84,5 +102,5 @@ game = Game('[{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial
 daemon = threading.Thread(target=game.gameLoop, daemon=True)
 daemon.start()
 
-while True:
+while not game.isEnd():
     i = 0
