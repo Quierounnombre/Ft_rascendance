@@ -19,6 +19,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			"font",
 			"avatar",
 			"language",
+			"following"
 		]
 
 class UserLoginSerializer(serializers.ModelSerializer):

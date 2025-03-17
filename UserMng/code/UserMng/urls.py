@@ -4,6 +4,7 @@ from .views import UserSingUpAPIView
 from .views import UserLogoutAPIView
 from .views import ProfileView
 from .views import UserListView
+from .views import add_friend
 
 from rest_framework import permissions
 from rest_framework import authentication
@@ -19,4 +20,5 @@ urlpatterns = [
 		authentication_classes = [authentication.TokenAuthentication],
 		), name="profile"),
     path('users/', UserListView.as_view(), name="user_list"),
+	path('friend/', add_friend, name="add_friend"),
 ]

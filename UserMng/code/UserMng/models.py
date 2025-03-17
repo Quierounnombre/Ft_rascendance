@@ -28,6 +28,7 @@ class User(AbstractUser):
 		]
 	)
 	email = models.EmailField(unique=True)
+	following = models.ManyToManyField("self", symmetrical=False)
 
 	USERNAME_FIELD = 'email'
 	EMAIL_FIELD = 'email'

@@ -122,7 +122,7 @@ async function logIn(form) {
 		const data = await response.json();
 		if (data.token) {
 			localStorage.setItem("token", data.token);
-			validLogin();
+			// validLogin();
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
 		} else {
@@ -144,7 +144,7 @@ async function signUp(form) {
 		const data = await response.json();
 		if (data.token) {
 			localStorage.setItem("token", data.token);
-			validLogin();
+			// validLogin();
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
 		} else {

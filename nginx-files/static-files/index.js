@@ -2,6 +2,7 @@ import loadHome from "./loadHome.js";
 import loadGame from "./loadGame.js";
 import loadProfile from "./loadProfile.js";
 import loadChat from "./loadChat.js";
+import loadSearch from "./loadSearch.js";
 "use strict";
 
 function changeLayout() {
@@ -16,7 +17,10 @@ function changeLayout() {
 		loadProfile();
 	} else if (loc === "#chat") {
 		loadChat();
-	} else {
+	} else if (loc === "#search") {
+		loadSearch();
+	}
+	else {
 		loadGame();
 	}
 }

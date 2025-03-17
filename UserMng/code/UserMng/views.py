@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
 
 from rest_framework.exceptions import ValidationError
+from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 from UserMng.models import User
 
@@ -107,3 +108,9 @@ class UserListView(ListAPIView):
     serializer_class = UserProfileSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'email']
+
+@api_view(["PUT"])
+def add_friend(request):
+	user = get_object_or_404(get_user_model(), pk=request.user.id)
+	user.following.add(request.data["friendID"])
+	return Response(status=status.HTTP_204_NO_CONTENT)
