@@ -1,26 +1,34 @@
-import loadHome from "./loadHome.js";
-import loadGame from "./loadGame.js";
-import loadProfile from "./loadProfile.js";
-import loadChat from "./loadChat.js";
-import loadSearch from "./loadSearch.js";
+// hay token y funciona ? cargar home : cargar login
+
 "use strict";
+import loadAnonHeader from "./loadAnonHeader.js";
+import loadAnonMenu from "./loadAnonMenu.js";
+import loadLogin from "./loadLogin.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
+
+	const token = localStorage.getItem("token");
+	
+	if (!token && !loc.startsWith("#anon-")) {
+		loc = "#anon-menu"
+	} //comprobar que es valido
+				
 	if (loc == "") {
-		loc = "#home"
+		loc = "#game"
 	}
 
-	if (loc === "#home") {
-		loadHome();
-	} else if (loc === "#profile") {
-		loadProfile();
-	} else if (loc === "#chat") {
-		loadChat();
-	} else if (loc === "#search") {
-		loadSearch();
-	}
-	else {
+	if (loc.startsWith("#anon-")) {
+		loadAnonHeader();
+		if (loc === "#anon-login") {
+			loadLogin();
+		} else if (loc === "#anon-register") {
+			loadRegister();
+		} else {
+			loadAnonMenu();
+		}
+		// else error
+	} else {
 		loadGame();
 	}
 }
