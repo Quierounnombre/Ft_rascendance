@@ -115,13 +115,15 @@ class OAuthLoginAPIView(APIView):
 		params = {
 			'client_id' : settings.API_UID,
 			'redirect_uri': redirect_uri,
-			'scope': 'public'
+			'scope': 'public',
+			
+			'response_type' : 'code',
 		}
 		auth_url = 'https://api.intra.42.fr/v2/oauth/authorize'
 		query_string = self.load_query_string(params)
 		final_auth_url = f"{auth_url}?{query_string}"
 
-		return (Response({'authorization_url': final_auth_url}))
+		return (redirect(final_auth_url))
 
 class OAuthCallbackAPIView(APIView):
 	def	get(self, request):
@@ -130,13 +132,14 @@ class OAuthCallbackAPIView(APIView):
 		if not code:
 			return (Response({'error':'Auth code not recived'}, status=bad_request))
 	
-		redirecct_uri = request.build_absolute_uri(reverse('auth_callback'))
+		redirect_uri = request.build_absolute_uri(reverse('auth_callback'))
 		token_url = 'https://api.intra.42.fr/v2/oauth/token'
 		data = {
 			'client_id' : settings.API_UID,
 			'client_secret' : settings.API_SECRET,
 			'redirect_uri' : redirect_uri,
 			'code' : code,
+			'grant_type' : 'client_credentials',
 		}
 
 		token_response = request.get(token_url, params=data)
