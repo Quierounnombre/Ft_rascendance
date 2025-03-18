@@ -81,16 +81,19 @@ class PongConsumer(WebsocketConsumer):
     #         la info del formulario para generar la sala
     #     }
     def createRoom(self, message):
-        rooms[self.room_name] = Game(message)
-        rooms[self.room_name].setPlayer1(self.user_id)
+        i = 0
+        # TODO: old
+        # rooms[self.room_name] = Game(message)
+        # rooms[self.room_name].setPlayer1(self.user_id)
 
     #     "type": "join_room",
     #     "message": str, pero ignorable
     def joinRoom(self, message):
-        rooms[self.room_name].setPlayer2(self.user_id)
+        # rooms[self.room_name].setPlayer2(self.user_id)
         # rooms[self.room_name].daemon = threading.Thread(target=rooms[self.room_name].gameLoop, daemon=True)
-        # crear el GameConsumer
 
+        # TODO: crear el GameConsumer
+        # TODO: mensaje a el Game consumer para que comience
         self.send(json.dumps({
             "type": "room.ready",
             "message": ""

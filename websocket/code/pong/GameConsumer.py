@@ -13,6 +13,7 @@ class GameConsumer(SyncConsumer):
         self.room_name = f"pong_game_{self.scope["url_route"]["kwargs"]["room_name"]}"
         self.game = Game() # TODO: que llegue la info del juego aqui
 
+    def start(self):
         # Runs the engine in a new thread
         self.game.start()
     
@@ -23,3 +24,10 @@ class GameConsumer(SyncConsumer):
         player_id = message.keys()[0]
 
         self.game.setPlayerDir(player_id, message[player_id])
+    
+    def set_player(self, event):
+        # "type": "set.player",
+        # "message": {
+        #     "playerN": str with the id
+        # }
+        # TODO:
