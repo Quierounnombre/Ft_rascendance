@@ -20,7 +20,7 @@ async function getUsers(token) {
 function formatTable(jsonData) {
 
 	var table = `<div class="cropped-image">
-	<img src="` + jsonData["avatar"] + `" />
+	<img src="` + jsonData["avatar"] + `" alt="` + jsonData["username"] + `'s profile picture" />
 	</div><h2>Hi, ` + jsonData["username"] + 
 	`</h2>
 	<form id="profile">`;

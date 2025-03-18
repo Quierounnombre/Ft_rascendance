@@ -27,10 +27,22 @@ function loadUsers(users, root, myUser) {
     page.setAttribute("class", "container");
     users.forEach(user => {
 		if (myUser["id"] !== user["id"]) {
+			var logged_span;
+			if (user["is_logged"] === false)
+				logged_span = `<span class="position-absolute translate-middle p-2 bg-danger border border-light rounded-circle">
+  									<span class="visually-hidden">Not logged</span>
+  								</span>`;
+			else 
+			logged_span = `<span class="position-absolute translate-middle p-2 bg-success border border-light rounded-circle">
+								<span class="visually-hidden">Logged</span>
+							</span>`;
 			page.innerHTML += `
 		<div class="card flex-row flex-wrap">
 		<div class="card-header border-0">
-           <img style="max-width:100px" src="`+ user["avatar"] + `" alt="profile picture" />
+			<div class="cropped-image">
+				<img src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" />
+				`+ logged_span +`
+			</div>
 		</div>
 		<div class="card-block px-2">
            <h4 class="card-title">`+ user["username"] +`</h4>

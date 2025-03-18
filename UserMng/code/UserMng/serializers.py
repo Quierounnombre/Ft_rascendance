@@ -6,6 +6,7 @@ from rest_framework import status
 
 class UserProfileSerializer(serializers.ModelSerializer):
 	following = serializers.PrimaryKeyRelatedField(many=True, required=False, read_only=True)
+	is_logged = serializers.SerializerMethodField()
 
 	class Meta:
 		model = User
@@ -16,8 +17,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			"font",
 			"avatar",
 			"language",
-			"following"
+			"following",
+			"is_logged",
 		]
+
+	def get_is_logged(self, user):
+		if Token.objects.filter(user=user):
+			return True
+		return False
 
 	def to_representation(self, instance):
 		response = super(UserProfileSerializer, self).to_representation(instance)
