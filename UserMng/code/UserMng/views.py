@@ -97,7 +97,7 @@ class ProfileView(viewsets.ModelViewSet):
 	def update(self, request, *args, **kwargs):
 		User = get_user_model()
 		self.object = get_object_or_404(User, pk=request.user.id)
-		serializer = self.get_serializer(self.object, data=request.data)
+		serializer = self.get_serializer(self.object, data=request.data,context={'request': request})
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data)

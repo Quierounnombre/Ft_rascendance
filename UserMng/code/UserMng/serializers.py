@@ -5,10 +5,7 @@ from rest_framework import serializers
 from rest_framework import status
 
 class UserProfileSerializer(serializers.ModelSerializer):
-	avatar = serializers.SerializerMethodField()
-
-	def get_avatar(self, obj):
-		return obj.avatar.path.replace("/UserMng/code/", "")
+	following = serializers.PrimaryKeyRelatedField(many=True, required=False, read_only=True)
 
 	class Meta:
 		model = User
@@ -21,6 +18,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			"language",
 			"following"
 		]
+
+	def to_representation(self, instance):
+		response = super(UserProfileSerializer, self).to_representation(instance)
+		if instance.avatar:
+			response['avatar'] = instance.avatar.url
+		return response
 
 class UserLoginSerializer(serializers.ModelSerializer):
 	id = serializers.PrimaryKeyRelatedField(read_only=True)
