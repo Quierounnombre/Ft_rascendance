@@ -26,8 +26,7 @@ class PongConsumer(WebsocketConsumer):
     strict_ordering = True
 
     def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        self.room_group_name = f"pong_{self.room_name}"
+        self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
         self.player_id = None
 
         # TODO: trasladar lo de js aqui, para la seleccion de user
@@ -35,15 +34,14 @@ class PongConsumer(WebsocketConsumer):
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name, self.channel_name
+            self.room_name, self.channel_name
         )
 
         self.accept()
 
     def disconnect(self, close_code):
-        if ()
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name, self.channel_name
+            self.room_name, self.channel_name
         )
 
     def receive(self, text_data):
@@ -52,19 +50,23 @@ class PongConsumer(WebsocketConsumer):
         message = content["message"]
 
         if message_type == "identify":
-            identify(message)
+            self.identify(message)
 
-        elif message_type == "create_room":
-            if self.room_group_name not in rooms:
-                createRoom(message)
+        elif message_type == "create.room":
+            if self.room_name not in rooms:
+                self.createRoom(message)
             # else # esa sala ya existe
 
-        elif message_type == "join_room":
-            if self.room_group_name in rooms:
-                joinRoom(message)
+        elif message_type == "join.room":
+            if self.room_name in rooms:
+                self.joinRoom(message)
             # else # la sala no existe
         
-        elif message_type == "room_ready":
+        elif message_type == "room.ready":
+            self.send(json.dumps({
+                "type": "room.ready",
+                "message": ""
+            }))
 
 
     #     "type": "identify",
@@ -79,18 +81,28 @@ class PongConsumer(WebsocketConsumer):
     #         la info del formulario para generar la sala
     #     }
     def createRoom(self, message):
-        rooms[self.room_group_name] = Game(message)
-        rooms[self.room_group_name].setPlayer1(self.user_id)
+        rooms[self.room_name] = Game(message)
+        rooms[self.room_name].setPlayer1(self.user_id)
 
     #     "type": "join_room",
     #     "message": str, pero ignorable
     def joinRoom(self, message):
-        rooms[self.room_group_name].setPlayer2(self.user_id)
-        rooms[self.room_group_name].daemon = threading.Thread(target=rooms[self.room_group_name].gameLoop, daemon=True)
+        rooms[self.room_name].setPlayer2(self.user_id)
+        # rooms[self.room_name].daemon = threading.Thread(target=rooms[self.room_name].gameLoop, daemon=True)
+        # crear el GameConsumer
 
         self.send(json.dumps({
-            "type": "room_ready",
-            "message": "room_ready"
+            "type": "room.ready",
+            "message": ""
         }))
 
-        rooms[self.room_group_name].daemon.start()
+        rooms[self.room_name].daemon.start()
+
+    def room_ready(self, event):
+        # TODO: comenzar
+
+    def direction(self, dir):
+        # TODO: funcion para enviar al resto el movimiento del judagor leido del socket
+        async_to_sync(channel_layer.group_send)(
+            self.room_name, self.getGameState()
+        )
