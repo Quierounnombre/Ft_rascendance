@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from rest_framework.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
@@ -113,11 +114,13 @@ oauth.register(
 
 class OAuthLoginAPIView(APIView):
 	def get(self, request):
-		redirect_uri = request.build_absolute_uri('/auth/callback')
+		redirect_uri = request.build_absolute_uri(reverse('auth'))
 		return (oauth.ft.authorize_redirect(request, redirect_uri))
 
-class OAuthCallbackAPIView(APIView):
+class OAuthAPIView(APIView):
 	def	get(self, request, *args):
+		print("AUTH")
 		token = oauth.ft.authorize_access_token(request)
-		user_info  = oauth.ft.parse_id_token(request, token)
+		print(token)
+		request.session['user'] = token['userinfo']
 		return (redirect('/'))

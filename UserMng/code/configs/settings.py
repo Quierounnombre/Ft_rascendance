@@ -18,7 +18,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+• The use of libraries or tools that provide an immediate
+complete solution for a global feature or a module is
+prohibited.
+• Any direct instruction about the usage (can, must, can’t) of a
+third party library or tool must be followed.
+• The use of a small library or tool that solve a simple and
+unique task, representing a subcomponent of a global feature or
+module, is allowed.
+• During the evaluation, the team will justify any usage of
+library or tool that is not explicitly approved by the subject.
+• During the evaluation, the evaluator will take her/his
+responsibility and define if the usage of a specific library
+or tool is legit (and allowed) or almost solving an entire
+feature or module (and prohibited).# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
@@ -143,6 +156,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/UserMng/code/media'
+
+REDIRECT_URI = os.environ.get('REDIRECT_URI')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

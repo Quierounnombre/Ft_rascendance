@@ -1,5 +1,8 @@
 #!/bin/sh
 
+#WAIT FOR THE DB
+sleep 5
+
 python3 /UserMng/code/manage.py	makemigrations
 python3 /UserMng/code/manage.py	migrate
 
