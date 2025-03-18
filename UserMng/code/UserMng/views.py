@@ -20,10 +20,6 @@ from .serializers import UserProfileSerializer
 
 from django.conf import settings
 
-from authlib.integrations.django_client import OAuth
-
-oauth = OAuth()
-
 class	UserLoginAPIView(APIView):
 
 	def login_empty_user_response(self):
@@ -100,27 +96,63 @@ class ProfileView(viewsets.ModelViewSet):
 		serializer = self.get_serializer(self.object)
 		return (Response(serializer.data))
 
-oauth.register(
-	name = 'ft',
-	client_id = settings.API_UID,
-	client_secret = settings.API_SECRET,
-	access_token_url = 'https://api.intra.42.fr/v2/oauth/token',
-	access_token_params = None,
-	authorize_url = 'https://api.intra.42.fr/v2/oauth/authorize',
-	authorize_params= None,
-	api_base_url = 'https://api.intra.42.fr/v2/',
-	client_kwargs = {},
-)
+# register(
+#access_token_url = 'https://api.intra.42.fr/v2/oauth/token',
+#authorize_url = 'https://api.intra.42.fr/v2/oauth/authorize',
+#api_base_url = 'https://api.intra.42.fr/v2/',
 
 class OAuthLoginAPIView(APIView):
-	def get(self, request):
-		redirect_uri = request.build_absolute_uri(reverse('auth'))
-		return (oauth.ft.authorize_redirect(request, redirect_uri))
+	def load_query_string(self, params):
+		q_str = ""
 
-class OAuthAPIView(APIView):
-	def	get(self, request, *args):
-		print("AUTH")
-		token = oauth.ft.authorize_access_token(request)
-		print(token)
-		request.session['user'] = token['userinfo']
-		return (redirect('/'))
+		for key, value in params.items():
+			tmp_str = "&{0}={1}".format(key, value)
+			q_str = q_str + tmp_str
+		return (q_str)
+
+	def get(self, request):
+		redirect_uri = request.build_absolute_uri(reverse('auth_callback'))
+		params = {
+			'client_id' : settings.API_UID,
+			'redirect_uri': redirect_uri,
+			'scope': 'public'
+		}
+		auth_url = 'https://api.intra.42.fr/v2/oauth/authorize'
+		query_string = self.load_query_string(params)
+		final_auth_url = f"{auth_url}?{query_string}"
+
+		return (Response({'authorization_url': final_auth_url}))
+
+class OAuthCallbackAPIView(APIView):
+	def	get(self, request):
+		bad_request = status.HTTP_400_BAD_REQUEST
+		code = request.GET.get('code')
+		if not code:
+			return (Response({'error':'Auth code not recived'}, status=bad_request))
+	
+		redirecct_uri = request.build_absolute_uri(reverse('auth_callback'))
+		token_url = 'https://api.intra.42.fr/v2/oauth/token'
+		data = {
+			'client_id' : settings.API_UID,
+			'client_secret' : settings.API_SECRET,
+			'redirect_uri' : redirect_uri,
+			'code' : code,
+		}
+
+		token_response = request.get(token_url, params=data)
+		token_json = token_response.json()
+		access_token = token_json.get('access_token')
+
+		if not access_token:
+			return (Response({'error':'Access token not obtained.'}, status=bad_request))
+
+		user_info_url = 'https://api.intra.42.fr/v2/'
+		user_params = {
+			'access_token' : access_token,
+			'fields' : 'id,name,email'
+		}
+
+		user_info_response = request.get(user_info_url, params=user_params)
+		user_info = user_info_response.json()
+
+		return (Response({'user' : user_info}))
