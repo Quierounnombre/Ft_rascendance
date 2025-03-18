@@ -1,0 +1,13 @@
+.cropped-image {
+	width: 100px;
+	height: 100px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+  }
+  
+.cropped-image img {
+	max-width: 100px;
+	min-height: 100%;
+	min-width: 100%;
+  }

@@ -19,10 +19,11 @@ async function getUsers(token) {
 
 function formatTable(jsonData) {
 
-	var table = "<h2>Hi, " + jsonData["username"] + 
-	"<img src=\"" + jsonData["avatar"] + "\" class=\"img-thumbnail\" style=\"max-width:100px\" />\
-	</h2>\
-	<form id=\"profile\">";
+	var table = `<div class="cropped-image">
+	<img src="` + jsonData["avatar"] + `" />
+	</div><h2>Hi, ` + jsonData["username"] + 
+	`</h2>
+	<form id="profile">`;
 
 	for (let i in jsonData) {
 		if (i !== "email" && i !== "username" && i !== "font" && i !== "language") { continue; };
@@ -72,7 +73,7 @@ button.setAttribute("id", "submit");
 const avatar_field = document.createElement("div");
 avatar_field.setAttribute("class", "mb-3 row");
 avatar_field.innerHTML = `<label for="avtar" class="col-sm-2 col-form-label">Change Avatar:</label>
-		<div class="col-sm-10"><input type="file" class="form-control" id="avtar" name="avatar"</div>`
+		<div class="col-sm-10"><input type="file" accept=".jpg,.gif,.png,.webp" class="form-control" id="avtar" name="avatar"</div>`
 
 function editProfile() {
 	const form = document.getElementById("profile");
