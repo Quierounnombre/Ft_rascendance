@@ -33,7 +33,8 @@ class	UserLoginAPIView(APIView):
 			'success': True,
 			'username': user.username,
 			'email': user.email,
-			'token':token.key
+			'token':token.key,
+			'font':user.font,
 		}
 		return (response)
 

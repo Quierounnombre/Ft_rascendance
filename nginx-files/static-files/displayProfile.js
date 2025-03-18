@@ -49,6 +49,7 @@ function saveChanges() {
 	const form = document.getElementById("profile");
 	const formData = new FormData(form);
 	const token = localStorage.getItem("token");
+	cleanElement(form);
 	try {
 		fetch("https://" + window.location.hostname + ":7000/profile/me/", {
 			method: "PUT",
@@ -57,6 +58,9 @@ function saveChanges() {
 			},
 			body: formData,
 		}).then((response) => {
+			response.json().then((data) => {
+				document.getElementsByTagName("html")[0].style["font-size"] = data.font + "px";
+			});
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
 		})
@@ -85,7 +89,7 @@ function editProfile() {
 	});
 
 	[...fields].forEach(field => {
-		if (field.name !== "email") {
+		if (field.name !== "email" && field.id !== "submit") {
 			field.setAttribute("class", "form-control");
 			field.removeAttribute("readonly");
 		}
@@ -104,6 +108,7 @@ async function logOut() {
 				"Authorization": "Token " + token,
 			},
 		});
+		document.getElementsByTagName( "html" )[0].style[ "font-size" ] = "16px";
 		localStorage.removeItem("token");
 		var event = new Event('hashchange');
 		window.dispatchEvent(event);
@@ -122,10 +127,7 @@ async function logIn(form) {
 		});
 		const data = await response.json();
 		if (data.token) {
-			localStorage.setItem("token", data.token);
-			// validLogin();
-			var event = new Event('hashchange');
-			window.dispatchEvent(event);
+			validLogin(data.token, data.font);
 		} else {
 			invalidLogin();
 		}
@@ -144,10 +146,7 @@ async function signUp(form) {
 		});
 		const data = await response.json();
 		if (data.token) {
-			localStorage.setItem("token", data.token);
-			// validLogin();
-			var event = new Event('hashchange');
-			window.dispatchEvent(event);
+			validLogin(data.token, data.font);
 		} else {
 			invalidLogin();
 		}
@@ -168,15 +167,19 @@ function invalidLogin() {
 		fields[i].classList.remove("is-valid");
 	}
 }
-function validLogin() {
-	const form = document.getElementById("form");
-	const fields = form.getElementsByTagName("input");
-	for (let i = 0; i < fields.length; i++) {
-		if (fields[i].type === "submit") {
-			continue;
-		}
-		fields[i].value = "";
-		fields[i].classList.add("is-valid");
-		fields[i].classList.remove("is-invalid");
-	}
+function validLogin(token, font) {
+	// const form = document.getElementById("form");
+	// const fields = form.getElementsByTagName("input");
+	// for (let i = 0; i < fields.length; i++) {
+	// 	if (fields[i].type === "submit") {
+	// 		continue;
+	// 	}
+	// 	fields[i].value = "";
+	// 	fields[i].classList.add("is-valid");
+	// 	fields[i].classList.remove("is-invalid");
+	// }
+	localStorage.setItem("token", token);
+	var event = new Event('hashchange');
+	window.dispatchEvent(event);
+	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = font + "px";
 }
