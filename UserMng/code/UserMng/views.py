@@ -17,6 +17,7 @@ from rest_framework import filters
 from .serializers import UserSingUpSerializer
 from .serializers import UserLoginSerializer
 from .serializers import UserProfileSerializer
+from .serializers import FriendsSerializer
 
 class	UserLoginAPIView(APIView):
 
@@ -103,7 +104,14 @@ class ProfileView(viewsets.ModelViewSet):
 			serializer.save()
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def friends(self, request, *args, **kwargs):
+		User = get_user_model()
+		self.object = get_object_or_404(User, pk=request.user.id)
+		serializer = FriendsSerializer(self.object)
+		return Response(serializer.data)
 	
+
 class UserListView(ListAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = UserProfileSerializer

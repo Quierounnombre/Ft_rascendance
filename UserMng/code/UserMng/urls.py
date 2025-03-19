@@ -20,5 +20,10 @@ urlpatterns = [
 		authentication_classes = [authentication.TokenAuthentication],
 		), name="profile"),
     path('users/', UserListView.as_view(), name="user_list"),
-	path('friend/', add_friend, name="add_friend"),
+	path('friends/', ProfileView.as_view(
+		{'get':'friends'},
+		permission_classes = [permissions.IsAuthenticated], 
+		authentication_classes = [authentication.TokenAuthentication],
+		), name="profile"),
+	# path('friend/', add_friend, name="add_friend"),
 ]

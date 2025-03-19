@@ -5,7 +5,6 @@ from rest_framework import serializers
 from rest_framework import status
 
 class UserProfileSerializer(serializers.ModelSerializer):
-	following = serializers.PrimaryKeyRelatedField(many=True, required=False, read_only=True)
 	is_logged = serializers.SerializerMethodField()
 
 	class Meta:
@@ -17,7 +16,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			"font",
 			"avatar",
 			"language",
-			"following",
 			"is_logged",
 		]
 
@@ -31,6 +29,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
 		if instance.avatar:
 			response['avatar'] = instance.avatar.url
 		return response
+
+class FriendsSerializer(serializers.ModelSerializer):
+	following = UserProfileSerializer(many=True, read_only=True)
+	class Meta:
+		model = User
+		fields = [
+			"following"
+		]	
 
 class UserLoginSerializer(serializers.ModelSerializer):
 	id = serializers.PrimaryKeyRelatedField(read_only=True)
