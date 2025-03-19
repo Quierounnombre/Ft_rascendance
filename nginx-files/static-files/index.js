@@ -4,6 +4,9 @@
 import loadAnonHeader from "./loadAnonHeader.js";
 import loadAnonMenu from "./loadAnonMenu.js";
 import loadLogin from "./loadLogin.js";
+import loadRegister from "./loadRegister.js";
+import loadNavBar from "./loadNavBar.js";
+import loadSocial from "./loadSocial.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -29,7 +32,11 @@ function changeLayout() {
 		}
 		// else error
 	} else {
-		loadGame();
+		loadNavBar(loc);
+		if (loc === "#social") {
+			loadSocial();
+		}
+		// loadGame();
 	}
 }
 

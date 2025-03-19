@@ -7,13 +7,14 @@ export default function loadLogin() {
 	form.innerHTML = `
 	<div class="mb-3">
 		<label for="email" class="form-label">Email:</label>
-		<input type="email" id="email" name="email" class="form-control" required>
+		<input type="email" id="email" name="email" class="form-control" required />
 	</div>
 	<div class="mb-3">
 		<label for="password" class="form-label">Password:</label>
-		<input type="password" id="password" name="password" class="form-control" required>
+		<input type="password" id="password" name="password" class="form-control" required />
 	</div>
-	<input type="submit" value="Login" id="submit">`
+	<input type="submit" value="Login" id="submit" />
+	<button onclick="window.location.hash='\#anon-menu'">Go back</button>`;
 
 	form.addEventListener("submit", (event) => {
 		event.preventDefault();
@@ -57,7 +58,6 @@ function invalidLogin() {
 
 function validLogin(token, font) {
 	localStorage.setItem("token", token);
-	var event = new Event('hashchange');
-	window.dispatchEvent(event);
 	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = font + "px";
+	window.location.hash='';
 }
