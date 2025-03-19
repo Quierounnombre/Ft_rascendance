@@ -3,7 +3,7 @@ export default async function loadSearch() {
 	const query = button.value;
 	const users = await searchUsers(query);
 	const root = document.getElementById("root");
-	console.log(users);
+
 	const div = document.createElement("div");
 	div.innerHTML = "Esto no esta implementado todavia";
 	root.replaceChildren(div);
