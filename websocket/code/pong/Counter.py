@@ -2,7 +2,7 @@ import time
 import json
 
 from datetime import datetime
-from CanvasObject import CanvasObject
+from pong.CanvasObject import CanvasObject
 
 class Counter(CanvasObject):
     def __init__(self, obj):

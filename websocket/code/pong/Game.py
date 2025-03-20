@@ -2,10 +2,10 @@ import json
 import time
 import threading
 
-from Ball import Ball
-from Player import Player
-from Counter import Counter
-from CanvasObject import CanvasObject
+from pong.Ball import Ball
+from pong.Player import Player
+from pong.Counter import Counter
+from pong.CanvasObject import CanvasObject
 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync

@@ -1,4 +1,4 @@
-from CanvasObject import CanvasObject
+from pong.CanvasObject import CanvasObject
 
 class Player(CanvasObject):
     def __init__(self, obj):

@@ -4,7 +4,7 @@ from channels.consumer import SyncConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from Game import Game
+from pong.Game import Game
 
 game_rooms = {}
 

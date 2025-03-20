@@ -1,5 +1,5 @@
 import math
-from CanvasObject import CanvasObject
+from pong.CanvasObject import CanvasObject
 
 class Ball(CanvasObject):
     def __init__(self, obj):
