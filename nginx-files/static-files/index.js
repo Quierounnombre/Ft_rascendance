@@ -7,6 +7,7 @@ import loadLogin from "./loadLogin.js";
 import loadRegister from "./loadRegister.js";
 import loadNavBar from "./loadNavBar.js";
 import loadSocial from "./loadSocial.js";
+import loadFooter from "./loadFooter.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -38,6 +39,7 @@ function changeLayout() {
 		}
 		// loadGame();
 	}
+    loadFooter();
 }
 
 window.addEventListener("hashchange", changeLayout);
