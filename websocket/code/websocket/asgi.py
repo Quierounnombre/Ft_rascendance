@@ -29,6 +29,6 @@ application = ProtocolTypeRouter(
         "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns_pong)),
         "channel": ChannelNameRouter({
             "game_engine": GameConsumer.as_asgi(),
-        }),
+        }), # TODO: no se si hace falta
     }
 )
