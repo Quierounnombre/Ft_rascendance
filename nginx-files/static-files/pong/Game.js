@@ -195,13 +195,11 @@ isEnd() {
 gameLoop() {
 	let animation;
 
-	// TODO: esto no funciona con multiples mapas
 	const player1 = this.game_objects.find((obj) => obj.id === 'player1'); 
 	const player2 = this.game_objects.find((obj) => obj.id === 'player2'); 
 	const ball = this.game_objects.find((obj) => obj.id === 'ball'); 
 	let message;
 
-	// TODO: dos funciones, una para player1 y otra para player2
 	if (this.user_id === player1.pk) {
 		message = `"player1_dirY":${player1.dirY},`;
 		message += `"player1_x":${player1.x},`;
@@ -271,3 +269,18 @@ toJSON() {
 }
 
 export {Game}
+
+	// getUsers(localStorage.getItem("token")).then(user => {}) // TODO: para setear las salas
+function tmp_for_message_from_server(event) {
+	const data = JSON.parse(event["data"]);
+	let room_id; // TODO: quizas vaya en this
+
+	switch(data["type"]) {
+	case "room.created":
+		room_id = data["message"]["room_id"]
+		break;
+	case "game.start":
+		break;
+	default:
+	}
+}

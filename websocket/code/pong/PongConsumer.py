@@ -31,17 +31,12 @@ class PongConsumer(WebsocketConsumer):
             self.identify(message)
 
         elif message_type == "create.room":
-            room_code = self.createRoom(message)
+            room_id = self.createRoom(message)
 
 
         elif message_type == "join.room":
             # TODO: y si no existe la sala?
             self.joinRoom(message)
-        
-        elif message_type == "room.ready":
-            self.send(json.dumps({
-                "type": "room.ready",
-            }))
         
         elif message_type == "direction"
             self.direction(message)
@@ -56,8 +51,8 @@ class PongConsumer(WebsocketConsumer):
     #         la info del formulario para generar la sala
     #     }
     def createRoom(self, message) -> int:
-        room_code = ''.join(random.sample(string.ascii_letters, 16))
-        self.room_name = f"pong_${room_code}" # TODO: los self definidos luego se mantienen en distintas conexiones?
+        room_id = ''.join(random.sample(string.ascii_letters, 16))
+        self.room_name = f"pong_${room_id}" # TODO: los self definidos luego se mantienen en distintas conexiones?
 
         # join the game room
         async_to_sync(self.channel_layer.group_add)(
@@ -91,11 +86,11 @@ class PongConsumer(WebsocketConsumer):
         self.send(json.dumps({
             "type": "room.created",
             "message": {
-                "room_code": room_code
+                "room_id": room_id
             }
         }))
 
-        return room_code
+        return room_id
 
     #     "type": "join_room",
     #     "message": {"room_id": str}
