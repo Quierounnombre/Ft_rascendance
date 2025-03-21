@@ -81,6 +81,8 @@ class Game(threading.Thread):
             "type": "game.state",
             "message": message
         }
+
+    # TODO: metodo para mandar a todos que ya ha terminado la partida
     
     def broadcastState(self) -> None:
         channel_layer = get_channel_layer()
@@ -102,11 +104,3 @@ class Game(threading.Thread):
             time.sleep(0.01)
 
         print("End game") # TODO: borrar
-
-# TODO: prueba que habra que borrar
-# game = Game('[{"id":"counter","type":"counter","x":400,"y":10,"font":"42px Arial"},{"id":"player1","type":"player","x":10,"y":200,"width":20,"height":100},{"id":"player2","type":"player","x":790,"y":200,"width":20,"height":100},{"id":"ball","type":"ball","x":400,"y":200,"dirX":-1,"dirY":0,"is_moving":true,"radius":10}]')
-# daemon = threading.Thread(target=game.gameLoop, daemon=True)
-# daemon.start()
-
-# while not game.isEnd():
-#     i = 0

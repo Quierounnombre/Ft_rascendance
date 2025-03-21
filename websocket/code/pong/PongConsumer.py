@@ -15,6 +15,12 @@ class PongConsumer(WebsocketConsumer):
     strict_ordering = True
 
     def connect(self) -> None:
+        self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
+
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name, self.channel_name
+        )
+        
         self.accept()
 
     def disconnect(self, close_code) -> None:
