@@ -1,3 +1,5 @@
+import getMyFriends from "./getMyFriends.js";
+
 export default async function loadSocial() {
 	const token = localStorage.getItem("token");
 	const root = document.getElementById("root");
@@ -59,24 +61,4 @@ async function getFriendList(token) {
     `});
 
 	return friendList;
-}
-
-async function getMyFriends(token) {
-	try {
-		const response = await fetch("https://" + window.location.hostname + ":7000/profile/friends/", {
-			method: "GET",
-			headers: {
-				"Authorization": "Token " + token,
-			}
-		});
-		if (response.ok) {
-			const data = await response.json();
-			return data.following;
-		} else {
-			return -1;
-		}
-	} catch (e) {
-		console.error(e);
-		return -1;
-	}
 }

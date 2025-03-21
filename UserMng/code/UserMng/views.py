@@ -111,6 +111,16 @@ class ProfileView(viewsets.ModelViewSet):
 		serializer = FriendsSerializer(self.object)
 		return Response(serializer.data)
 	
+	def add_friend(self, request, *args, **kwargs):
+		self.object = get_object_or_404(get_user_model(), pk=request.user.id)
+		self.object.following.add(request.data["friendID"])
+		return Response(status=status.HTTP_204_NO_CONTENT)
+	
+	def delete_friend(self, request, *args, **kwargs):
+		self.object = get_object_or_404(get_user_model(), pk=request.user.id)
+		self.object.following.remove(request.data["friendID"])
+		return Response(status=status.HTTP_204_NO_CONTENT)
+	
 
 class UserListView(ListAPIView):
     queryset = get_user_model().objects.all()
@@ -118,8 +128,3 @@ class UserListView(ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'email']
 
-@api_view(["PUT"])
-def add_friend(request):
-	user = get_object_or_404(get_user_model(), pk=request.user.id)
-	user.following.add(request.data["friendID"])
-	return Response(status=status.HTTP_204_NO_CONTENT)
