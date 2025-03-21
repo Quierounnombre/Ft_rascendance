@@ -19,6 +19,10 @@ from .serializers import UserLoginSerializer
 from .serializers import UserProfileSerializer
 
 from django.conf import settings
+from django.db import transaction
+
+import requests
+import os
 
 class	UserLoginAPIView(APIView):
 
@@ -45,7 +49,7 @@ class	UserLoginAPIView(APIView):
 			response = self.login_empty_user_response()
 			if User.objects.filter(email=request.data['email']).exists():
 				user = User.objects.get(email=request.data['email'])
-				token, created = Token.objects.get_or_create(user=user)
+				token = Token.objects.get_or_create(user=user)
 				response = self.login_succesfull_response(user, token)
 				return Response(response, status=status.HTTP_200_OK)
 			return Response(response, status=status.HTTP_400_BAD_REQUEST) 
@@ -96,11 +100,6 @@ class ProfileView(viewsets.ModelViewSet):
 		serializer = self.get_serializer(self.object)
 		return (Response(serializer.data))
 
-# register(
-#access_token_url = 'https://api.intra.42.fr/v2/oauth/token',
-#authorize_url = 'https://api.intra.42.fr/v2/oauth/authorize',
-#api_base_url = 'https://api.intra.42.fr/v2/',
-
 class OAuthLoginAPIView(APIView):
 	def load_query_string(self, params):
 		q_str = ""
@@ -111,13 +110,15 @@ class OAuthLoginAPIView(APIView):
 		return (q_str)
 
 	def get(self, request):
+		state_token = os.urandom(16).hex()
+		request.session['oauth_state'] = state_token
 		redirect_uri = request.build_absolute_uri(reverse('auth_callback'))
 		params = {
 			'client_id' : settings.API_UID,
 			'redirect_uri': redirect_uri,
 			'scope': 'public',
-			
 			'response_type' : 'code',
+			'state': state_token,
 		}
 		auth_url = 'https://api.intra.42.fr/v2/oauth/authorize'
 		query_string = self.load_query_string(params)
@@ -128,6 +129,12 @@ class OAuthLoginAPIView(APIView):
 class OAuthCallbackAPIView(APIView):
 	def	get(self, request):
 		bad_request = status.HTTP_400_BAD_REQUEST
+
+		received_state = request.GET.get('state')
+		stored_state = request.session.pop('oauth_state', None)
+		if not stored_state or stored_state != received_state:
+			return (Response({'error': 'Invalid or missing state parameter.'}, status=bad_request))
+
 		code = request.GET.get('code')
 		if not code:
 			return (Response({'error':'Auth code not recived'}, status=bad_request))
@@ -139,23 +146,50 @@ class OAuthCallbackAPIView(APIView):
 			'client_secret' : settings.API_SECRET,
 			'redirect_uri' : redirect_uri,
 			'code' : code,
-			'grant_type' : 'client_credentials',
+			'grant_type' : 'authorization_code',
 		}
 
-		token_response = request.get(token_url, params=data)
+		token_response = requests.post(token_url, data=data)
+		if token_response.status_code != status.HTTP_200_OK:
+			return (Response({'error': 'Failed to obtain access token.'}, status=bad_request))
+
 		token_json = token_response.json()
 		access_token = token_json.get('access_token')
-
 		if not access_token:
 			return (Response({'error':'Access token not obtained.'}, status=bad_request))
 
-		user_info_url = 'https://api.intra.42.fr/v2/'
+		user_info_url = 'https://api.intra.42.fr/v2/me'
 		user_params = {
 			'access_token' : access_token,
 			'fields' : 'id,name,email'
 		}
 
-		user_info_response = request.get(user_info_url, params=user_params)
+		user_info_response = requests.get(user_info_url, params=user_params)
 		user_info = user_info_response.json()
 
-		return (Response({'user' : user_info}))
+		if not User.objects.filter(email=user_info.get('email')).exists():
+			email = user_info.get('email')
+			username = user_info.get('login')
+			first_name = user_info.get('first_name')
+			last_name = user_info.get('last_name')
+			with transaction.atomic():
+				user = User.objects.get_or_create(
+					email = email,
+					defaults = {
+						'username' : username,
+						'first_name' : first_name,
+						'last_name' : last_name,
+					}
+				)
+
+		user = User.objects.get(email=user_info.get('email'))
+		token = Token.objects.get_or_create(user=user)[0]
+		response = { 
+			'success': True,
+			'username': user.username,
+			'email': user.email,
+			'token': token.key
+		}
+
+		return (Response(response, status=status.HTTP_200_OK))
+		#return (Response({'user' : user_info}))
