@@ -20,7 +20,7 @@ class PongConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
         )
-        
+
         self.accept()
 
     def disconnect(self, close_code) -> None:
@@ -51,19 +51,21 @@ class PongConsumer(WebsocketConsumer):
     #         "user_id": int
     #     }
     def identify(self, message) -> None:
+        # TODO: quizas siempre tiene que identificarse
         self.user_id = message["user_id"] # TODO: creo que no funcionaria
 
     #     "message": {
-    #         la info del formulario para generar la sala
+    #         "room_id": str
+    #         "data": la info del formulario para generar la sala
     #     }
     def createRoom(self, message) -> int:
-        room_id = ''.join(random.sample(string.ascii_letters, 16))
-        self.room_name = f"pong_${room_id}" # TODO: los self definidos luego se mantienen en distintas conexiones?
+        # room_id = ''.join(random.sample(string.ascii_letters, 16))
+        # self.room_name = f"pong_${room_id}" # TODO: los self definidos luego se mantienen en distintas conexiones?
 
-        # join the game room
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_name, self.channel_name
-        )
+        # # join the game room
+        # async_to_sync(self.channel_layer.group_add)(
+        #     self.room_name, self.channel_name
+        # )
 
         # send to the GameConsumer the game room name and its config
         async_to_sync(channel_layer.group_send)(
@@ -71,7 +73,7 @@ class PongConsumer(WebsocketConsumer):
                 "type": "game.config",
                 "message": {
                     "room_id": self.room_name,
-                    "data": message
+                    "data": message["data"]
                 }
             }
         )

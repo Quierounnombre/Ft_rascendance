@@ -239,51 +239,63 @@ render(game_state) {
 }
 
 createRoom() {
+// getUsers(localStorage.getItem("token")).then(user => {}) // TODO: para setear las salas
 	self.room_name = self.generateRandomString(16);
 	self.playerN = "player1";
 
-	return new Promise((resolve, reject) => {
-		this.websocket = new WebSocket(
-			'wss://'
-			+ window.location.hostname
-			+ ":7000"
-			+ '/ws/pong/'
-			+ this.room_name
-			+ '/'
-		)
+	this.websocket = new WebSocket(
+		'wss://'
+		+ window.location.hostname
+		+ ":7000"
+		+ '/ws/pong/'
+		+ this.room_name
+		+ '/'
+	)
 
-		this.websocket.onopen = () => {
-			console.log(`WebSocket closed`);
-		}
+	this.websocket.onopen = () => {
+		console.log(`WebSocket closed`);
 
-		this.websocket.onclose = () => {
-			console.log(`WebSocket closed`);
-		}
+		// identificarse
+		this.websocket.send(JSON.stringify({
+			type: "identify",
+			message: {
+				user_id: this.pk
+			}
+		}));
 
-		this.websocket.onmessage = (event) => {
-			const data = JSON.parse(event["data"]);
+		// TODO: crear la sala
+		this.websocket.send(JSON.stringify({
+			type: "create.room",
+			message: {
+				// TODO: la configuracion de la partida donde estaba?
+			}
+		}));
 
-			switch(data["type"]) {
-				case "game.state":
-					self.game_state = data["message"];
-					break;
-			
-				case "room.created":
-					self.room_id = data["message"]["room_id"]
-					alert(`DEBUG: room_id: ${room_id}`)
-					break;
-			
-				case "game.start":
-					alert(`room ${self.room_id} has started`)
-					// TODO: que tendria que hacer?
-					break;
-				}
-		}
+	}
 
-		setTimeout(() => {
-			reject();
-		}, 500000);
-	})
+	this.websocket.onclose = () => {
+		console.log(`WebSocket closed`);
+	}
+
+	this.websocket.onmessage = (event) => {
+		const data = JSON.parse(event["data"]);
+
+		switch(data["type"]) {
+			case "game.state":
+				self.game_state = data["message"];
+				break;
+		
+			case "room.created":
+				self.room_id = data["message"]["room_id"]
+				alert(`DEBUG: room_id: ${room_id}`)
+				break;
+		
+			case "game.start":
+				alert(`room ${self.room_id} has started`)
+				// TODO: que tendria que hacer?
+				break;
+			}
+	}
 }
 
 joinRoom() {}
@@ -324,8 +336,7 @@ generateRandomString(length) {
 
 export {Game}
 
-	// getUsers(localStorage.getItem("token")).then(user => {}) // TODO: para setear las salas
-function tmp_for_message_from_server(event) {
+function event_handler(event) {
 	const data = JSON.parse(event["data"]);
 
 	switch(data["type"]) {
@@ -339,6 +350,8 @@ function tmp_for_message_from_server(event) {
 		break;
 
 	case "game.start":
+		alert(`room ${self.room_id} has started`)
+		// TODO: que tendria que hacer?
 		break;
 	}
 }
