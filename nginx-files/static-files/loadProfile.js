@@ -1,3 +1,5 @@
+import editProfile from "./editProfile.js";
+
 export default async function loadProfile() {
 	const root = document.getElementById("root");
 	const token = localStorage.getItem("token");
@@ -11,12 +13,21 @@ export default async function loadProfile() {
 
 	const logoutButton = document.createElement("button");
 	logoutButton.setAttribute("type", "button");
+	const editButton = logoutButton.cloneNode();
+
+	editButton.setAttribute("class", "btn btn-secondary");
+	editButton.setAttribute("id", "edit_button");
+	editButton.innerHTML = "Edit Profile";
+	editButton.addEventListener("click", editProfile);
+
 	logoutButton.setAttribute("class", "btn btn-danger");
 	logoutButton.innerHTML = "Log Out";
 	logoutButton.addEventListener("click", logOut);
 
+
 	root.replaceChildren(userElement);
 	root.appendChild(logoutButton);
+	root.appendChild(editButton);
 }
 
 async function getUserElement(token) {
@@ -57,9 +68,14 @@ async function getUserElement(token) {
 	fontField.getElementsByTagName("input")[0].setAttribute('value', user["font"]);
 	languageField.getElementsByTagName("input")[0].setAttribute('value', user["language"]);
 
+	const avatar = document.createElement("div");
+	avatar.setAttribute("class", "cropped-image");
+	avatar.innerHTML = `<img src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" />`;
+
 	const form = document.createElement("form");
 	form.setAttribute("id", "profile");
 
+	form.appendChild(avatar);
 	form.appendChild(emailField);
 	form.appendChild(usernameField);
 	form.appendChild(fontField);

@@ -26,3 +26,5 @@ export default function loadNavBar(loc) {
 	});
 
 }
+
+// hacer una llamada para poner el perfil y coger el tamaño de letra
