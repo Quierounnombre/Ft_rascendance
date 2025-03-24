@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 
 from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import api_view
@@ -28,6 +28,12 @@ class	UserLoginAPIView(APIView):
 			}
 		}
 		return (response)
+
+	def login_wrong_credentials_response(self):
+		response = {
+			"error": "Wrong email and/or password"
+		}
+		return (response)
 	
 	def login_succesfull_response(self, user, token):
 		response = { 
@@ -44,10 +50,12 @@ class	UserLoginAPIView(APIView):
 		if serializer.is_valid():
 			response = self.login_empty_user_response()
 			if User.objects.filter(email=request.data['email']).exists():
-				user = User.objects.get(email=request.data['email'])
-				token, created = Token.objects.get_or_create(user=user)
-				response = self.login_succesfull_response(user, token)
-				return Response(response, status=status.HTTP_200_OK)
+				if authenticate(email=request.data["email"], password=request.data["password"]):
+					user = User.objects.get(email=request.data['email'])
+					token, created = Token.objects.get_or_create(user=user)
+					response = self.login_succesfull_response(user, token)
+					return Response(response, status=status.HTTP_200_OK)
+				return Response(self.login_wrong_credentials_response(), status=status.HTTP_400_BAD_REQUEST)
 			return Response(response, status=status.HTTP_400_BAD_REQUEST) 
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
