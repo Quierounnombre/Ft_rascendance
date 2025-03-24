@@ -123,8 +123,10 @@ class ProfileView(viewsets.ModelViewSet):
 	
 
 class UserListView(ListAPIView):
-    queryset = get_user_model().objects.all()
     serializer_class = UserProfileSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'email']
+
+    def get_queryset(self):
+        return get_user_model().objects.exclude(id=self.request.user.id)
 

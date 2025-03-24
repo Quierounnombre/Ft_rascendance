@@ -1,13 +1,18 @@
 import getMyFriends from "./getMyFriends.js";
 
 export default async function loadSearch() {
-	const button = document.getElementById("search-button");
+	const button = document.getElementById("search-box");
 	if (!button) {
 		window.location.hash = "#social";
 		return ;
 	}
 	const query = button.value;
-	const users = await searchUsers(query);
+	const token = localStorage.getItem("token");
+	if (!token) {
+		window.location.hash = "#anon-menu";
+		return ;
+	}
+	const users = await searchUsers(query, token);
 	const userList = await usersList(users);
 	if (userList === -1) {
 		return ;
@@ -17,9 +22,12 @@ export default async function loadSearch() {
 	root.replaceChildren(userList);
 }
 
-async function searchUsers(query) {
+async function searchUsers(query, token) {
   	const response = await fetch("https://" + window.location.hostname + ":7000/profile/users?search=" + query, {
         method: "GET",
+		headers: {
+			"Authorization": "Token " + token,
+		}
     });
 	const data = await response.json();
 	return data;

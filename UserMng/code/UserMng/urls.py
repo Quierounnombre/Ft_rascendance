@@ -18,7 +18,10 @@ urlpatterns = [
 		permission_classes = [permissions.IsAuthenticated], 
 		authentication_classes = [authentication.TokenAuthentication],
 		), name="profile"),
-    path('users/', UserListView.as_view(), name="user_list"),
+    path('users/', UserListView.as_view(
+		permission_classes = [permissions.IsAuthenticated], 
+		authentication_classes = [authentication.TokenAuthentication],
+	), name="user_list"),
 	path('friends/', ProfileView.as_view(
 		{'get':'friends',
    		'put': 'add_friend',
