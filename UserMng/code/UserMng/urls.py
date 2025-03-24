@@ -25,5 +25,5 @@ urlpatterns = [
         'delete': 'delete_friend'},
 		permission_classes = [permissions.IsAuthenticated], 
 		authentication_classes = [authentication.TokenAuthentication],
-		), name="profile"),
+		), name="friends"),
 ]
