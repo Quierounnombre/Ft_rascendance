@@ -1,18 +1,17 @@
 export default function loadNavBar(loc) {
 	const header = document.getElementById("header");
 	header.innerHTML = `
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand">Rascendance</a>
+<nav class="navbar navbar-expand-lg fixed-topnavbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand light"><h2>Rascendance</h2></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="#game">Game</a>
-        <a class="nav-link" href="#social">Social</a>
-        <a class="nav-link" href="#history">History</a>
-		<a class="nav-link" href="#profile">Profile (this should be different)></a>
+    <div class="collapse navbar-collapse offcanvas-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav mr-auto">
+        <a class="nav-link light" href="#game"><h2>Game</h2></a>
+        <a class="nav-link light" href="#social"><h2>Friends</h2></a>
+		<a class="nav-link light" href="#profile"><h2>Profile</h2></a>
       </div>
     </div>
   </div>
