@@ -16,6 +16,7 @@ export default async function loadSocial() {
 </div>
 `;
 	searchBar.getElementsByTagName("button")[0].addEventListener("click", (event) => {
+		localStorage.setItem("query", searchBar.getElementsByTagName("input")[0].value);
 		window.location.hash = "#search";
 	});
 	root.replaceChildren(searchBar);

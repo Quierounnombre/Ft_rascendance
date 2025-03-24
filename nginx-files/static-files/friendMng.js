@@ -33,3 +33,8 @@ function deleteFriend(id, button) {
 	button.innerHTML = "Add Friend";
 	button.setAttribute("onclick", "addFriend("+ id +", this)");
 }
+
+function seeProfile(id) {
+	localStorage.setItem("user_id", id);
+	window.location.hash = "#user"
+}

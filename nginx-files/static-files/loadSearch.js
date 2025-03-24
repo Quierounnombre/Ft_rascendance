@@ -1,12 +1,12 @@
 import getMyFriends from "./getMyFriends.js";
+import searchUsers from "./searchUsers.js";
 
 export default async function loadSearch() {
-	const button = document.getElementById("search-box");
-	if (!button) {
+	if (! "query" in localStorage) {
 		window.location.hash = "#social";
 		return ;
 	}
-	const query = button.value;
+	const query = localStorage.getItem("query");
 	const token = localStorage.getItem("token");
 	if (!token) {
 		window.location.hash = "#anon-menu";
@@ -20,17 +20,6 @@ export default async function loadSearch() {
     
 	const root = document.getElementById("root");
 	root.replaceChildren(userList);
-}
-
-async function searchUsers(query, token) {
-  	const response = await fetch("https://" + window.location.hostname + ":7000/profile/users?search=" + query, {
-        method: "GET",
-		headers: {
-			"Authorization": "Token " + token,
-		}
-    });
-	const data = await response.json();
-	return data;
 }
 
 async function usersList(users) {
@@ -57,6 +46,7 @@ async function usersList(users) {
            <h4 class="card-title">`+ user["username"] +`</h4>
            <p class="card-text">`+ user['email'] +`</p>
             ` + friendButton(user["id"], friends) + `
+			<button type="button> class="btn btn-primary" onclick="seeProfile(`+user["id"]+`)">See Profile</button>
 		</div>
 		<div class="w-100"></div>
 		</div>

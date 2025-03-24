@@ -11,6 +11,7 @@ import loadSearch from "./loadSearch.js";
 import loadGame from "./loadGame.js";
 import loadHistory from "./loadHistory.js";
 import loadProfile from "./loadProfile.js";
+import loadUser from "./loadUser.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -45,6 +46,8 @@ function changeLayout() {
 			loadHistory();
 		} else if (loc === "#profile") {
 			loadProfile();
+		} else if (loc === "#user") {
+			loadUser();
 		} else {
 			loadGame();
 		}
