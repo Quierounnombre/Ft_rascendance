@@ -16,7 +16,7 @@ class Ball(CanvasObject):
             self.dirY = -1
             self.dirX = -1
             self.speed = 4
-        elif self.point_x2 > self.canvas_width:
+        elif self.point_x2 > self.canvas_width: # TODO: mirar como hacer si dos tienen tamanos diferentes
             self.moveTo(self.canvas_width / 2, self.canvas_height / 2)
             self.dirY = 1
             self.dirX = 1

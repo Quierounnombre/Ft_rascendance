@@ -63,6 +63,7 @@ gameCreator.innerHTML = `
 	</form>
 `;
 
+// TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
 export default function loadGame() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
