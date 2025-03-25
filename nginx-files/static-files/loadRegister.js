@@ -3,7 +3,7 @@ export default function loadRegister() {
 
 	const form = document.createElement("form");
 	form.setAttribute("class", "container-xl");
-	form.setAttribute("id", "login_form");
+	form.setAttribute("id", "signup_form");
 	form.innerHTML = `
 	<div class="mb-3">
 		<label for="email" class="form-label">Email:</label>
@@ -61,7 +61,7 @@ async function signUp(form) {
 }
 
 function invalidLogin() {
-	const form = document.getElementById("form");
+	const form = document.getElementById("signup_form");
 	const fields = form.getElementsByTagName("input");
 	for (let i = 0; i < fields.length; i++) {
 		if (fields[i].type === "submit") {
