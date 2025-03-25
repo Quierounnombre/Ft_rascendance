@@ -1,9 +1,11 @@
 import { Game } from "./Game.js";
 
-export default async function pong(config) {
-	// TODO: diferenciar entre el que esta creando y el que esta jugando
-	const game = new Game(config);
-	// await game.setWebSocket();
-	// game.setStartTime(Date.now())
-	// game.gameLoop();
+export default async function pong(type, data) {
+	// TODO: quizas deberian ser dos funciones o algo asi
+	const game = new Game();
+	if (type === "create_room") {
+		game.createRoom(data)
+	} else {
+		game.joinRoom(data)
+	}
 }

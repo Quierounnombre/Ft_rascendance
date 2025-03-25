@@ -4,6 +4,7 @@ const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
+<h2>Create room</h2>
 <form id="dataForm" class="container">
 		<div class="form-floating">
 			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
@@ -53,14 +54,17 @@ gameCreator.innerHTML = `
 			<label class="form-check-label" for="flexSwitchCheckDefault">Power Ups</label>
 			<input name="power-up" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
 		</div> -->
-
-		<div class="form-floating">
-			<input required name="room_name" id="room_name" type="text" class="form-control" size="100">
-			<label class="form-label" for="room_name">Pong room</label>
-		</div>
-
 		<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
+
+<h2>Join room</h2>
+<form id="dataForm2" class="container">
+	<div class="form-floating">
+		<input required name="room_name2" id="room_name2" type="text" class="form-control" size="100">
+		<label class="form-label" for="room_name2">Join pong room</label>
+	</div>
+	<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+</form>
 `;
 
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
@@ -68,6 +72,7 @@ export default function loadGame() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
+	const form2 = document.getElementById("dataForm2");
 
 
 	form.addEventListener("submit", (event) => {
@@ -96,7 +101,14 @@ export default function loadGame() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		pong(jsonData);
+		pong("create_room", jsonData);
+	});
+
+	form2.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const room_name = document.getElementById("room_name2").value;
+
+		pong("join_room", room_name);
 	});
 }
 

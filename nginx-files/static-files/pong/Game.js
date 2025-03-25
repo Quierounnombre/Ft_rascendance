@@ -9,13 +9,17 @@ class Game {
 /**
  * @param {JSON string} config string with the JSON config
  */
-constructor(config) {	
+constructor() {	
 	// TODO: sacar de la base de datos los colores preferidos por el jugador
-	objs = JSON.parse(config);
+	// objs = JSON.parse(config);
+	this.canvas = document.createElement("canvas");
 
-	this.game_config = config;
+	// TODO: que al crear la partida se genere el canvas
+	this.canvas.setAttribute("id", "pong");
+	this.canvas.setAttribute("width", "800");
+	this.canvas.setAttribute("height", "400");
+	this.canvas.setAttribute("style", "border: 2px solid black"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
 
-	this.canvas = document.getElementById("pong");
 	this.context = this.canvas.getContext("2d");
 
 	// TODO: todo esto lo puede terner el user en su configuracion, por lo que la configuracion propia de los colores iria aqui
@@ -63,11 +67,11 @@ gameLoop() {
 	let animation;
 
 	this.websocket.send(JSON.stringify({
-		type: "direction",
-		message: {
-			room_name: this.room_name,
-			player: this.playerN,
-			dir: this.dir
+		"type": "direction",
+		"message": {
+			"room_name": this.room_name,
+			"player": this.playerN,
+			"dir": this.dir
 		}
 	}));
 
@@ -107,9 +111,10 @@ render(game_state) {
 	}
 }
 
-createRoom() {
-	this.room_name = generateRandomString(16);
+createRoom(game_config) {
+	this.room_name = generateRandomString(8);
 	this.playerN = "player1";
+	// this.game_config = game_config; // TODO: quizas no  haga falta
 
 	this.websocket = new WebSocket(
 		'wss://'
@@ -127,18 +132,18 @@ createRoom() {
 
 			// identificarse
 			this.websocket.send(JSON.stringify({
-				type: "identify",
-				message: {
-					user_id: this.user_id
+				"type": "identify",
+				"message": {
+					"user_id": this.user_id
 				}
 			}));
 
 			// crear la sala
 			this.websocket.send(JSON.stringify({
-				type: "create.room",
-				message: {
+				"type": "create.room",
+				"message": {
 					"room_name": this.room_name,
-					"data": self.game_config
+					"data": game_config
 				}
 			}));
 		});
@@ -171,16 +176,16 @@ joinRoom(room_name) {
 
 			// identificarse
 			this.websocket.send(JSON.stringify({
-				type: "identify",
-				message: {
-					user_id: this.user_id
+				"type": "identify",
+				"message": {
+					"user_id": this.user_id
 				}
 			}));
 
 			// unirse a la sala
 			this.websocket.send(JSON.stringify({
-				type: "join.room",
-				message: {
+				"type": "join.room",
+				"message": {
 					"room_name": this.room_name
 				}
 			}));
@@ -240,7 +245,8 @@ function websocket_close() {
 
 function generateRandomString(length) {
 	let result = '';
-	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	// const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 	const charactersLength = characters.length;
 

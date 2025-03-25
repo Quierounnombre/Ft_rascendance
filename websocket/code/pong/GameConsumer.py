@@ -39,7 +39,7 @@ class GameConsumer(SyncConsumer):
 
         for obj in game_rooms[message["room_name"]].game_objects:
             if obj.id == message["player"]:
-                obj.pk = message["player_id"]
+                obj.pk = message["id"]
     
     # message: {
     #     "room_name": str,
@@ -48,9 +48,9 @@ class GameConsumer(SyncConsumer):
     def game_config(self, event) -> None:
         message = event["message"]
 
-        game_rooms[message["room_name"]] = Game(message["data"])
+        self.room_name = message["room_name"]
+        game_rooms[message["room_name"]] = Game(room_name=self.room_name, data=message["data"])
 
-        self.room_name = f"pong_${message["room_name"]}"
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(

@@ -11,7 +11,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 class Game(threading.Thread):
-    def __init__(self, data, *args, **kwargs) -> None:
+    def __init__(self, room_name, data, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.game_objects = []
@@ -22,7 +22,8 @@ class Game(threading.Thread):
         self.timeout = 60 # TODO: esta en segundos, mirar como deberia ser
         self.max_score = 5
     
-        self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
+        self.room_name = room_name
+
         data = json.loads(data)
 
         for obj in data:

@@ -18,7 +18,7 @@ class PongConsumer(WebsocketConsumer):
         self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
 
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name, self.channel_name
+            self.room_name, self.channel_name
         )
 
         self.accept()
@@ -44,7 +44,7 @@ class PongConsumer(WebsocketConsumer):
             # TODO: y si no existe la sala?
             self.joinRoom(message)
         
-        elif message_type == "direction"
+        elif message_type == "direction":
             self.direction(message)
 
     #     "message": {
@@ -60,8 +60,8 @@ class PongConsumer(WebsocketConsumer):
     #     }
     def createRoom(self, message) -> int:
         # send to the GameConsumer the game room name and its config
-        async_to_sync(channel_layer.group_send)(
-            game_engine, {
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
                 "type": "game.config",
                 "message": {
                     "room_name": self.room_name,
@@ -71,13 +71,13 @@ class PongConsumer(WebsocketConsumer):
         )
 
         # send to the GameConsumer the pk of the player1
-        async_to_sync(channel_layer.group_send)(
-            game_engine, {
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
                 "type": "set.player",
                 "message": {
                     "room_name": self.room_name,
                     "player": "player1",
-                    "id": self.player_id
+                    "id": self.user_id
                 }
             }
         )
@@ -86,16 +86,14 @@ class PongConsumer(WebsocketConsumer):
         self.send(json.dumps({
             "type": "room.created",
             "message": {
-                "room_name": room_name
+                "room_name": self.room_name[5:]
             }
         }))
 
-        return room_name
-
     #     "type": "join_room",
     #     "message": {"room_name": str}
-    def joinRoom(self, event) -> None:
-        self.room_name = event["message"]["room_name"]
+    def joinRoom(self, message) -> None:
+        self.room_name = message["room_name"]
 
         # TODO: si la sala ya tiene a dos jugadores?
         # TODO: si no existe la sala?
@@ -106,23 +104,23 @@ class PongConsumer(WebsocketConsumer):
         )
 
         # send to the GameConsumer the pk of the player2
-        async_to_sync(channel_layer.group_send)(
-            game_engine, {
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
                 "type": "set.player",
                 "message": {
                     "room_name": self.room_name,
                     "player": "player2",
-                    "id": self.player_id
+                    "id": self.user_id
                 }
             }
         )
 
         # send to the GameConsumer the instruction to start the game
-        async_to_sync(channel_layer.group_send)(
-            game_engine, {
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
                 "type": "game.start",
                 "message": {
-                    "room_name": event["room_name"]
+                    "room_name": message["room_name"]
                 }
             }
         )
@@ -131,8 +129,8 @@ class PongConsumer(WebsocketConsumer):
     #     "player": str
     #     "dir": int
     def direction(self, message) -> None:
-        async_to_sync(channel_layer.group_send)(
-            game_engine, {
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
                 "type": "player.direction",
                 "message": message
             }
