@@ -9,7 +9,6 @@ import loadNavBar from "./loadNavBar.js";
 import loadSocial from "./loadSocial.js";
 import loadFooter from "./loadFooter.js";
 import loadProfile from "./loadProfile.js";
-import loadGame from "./loadGame.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -42,8 +41,7 @@ function changeLayout() {
         if (loc === "#profile") {
 			loadProfile();
 		}
-        else
-		loadGame();
+  
 	}
     loadFooter();
 }
