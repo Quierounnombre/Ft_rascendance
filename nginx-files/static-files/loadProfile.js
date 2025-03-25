@@ -11,11 +11,23 @@ export default async function loadProfile() {
 
 	const logoutButton = document.createElement("button");
 	logoutButton.setAttribute("type", "button");
-	logoutButton.setAttribute("class", "btn btn-danger");
+	logoutButton.setAttribute("class", "btn btn-lg btn-danger");
 	logoutButton.innerHTML = "Log Out";
 	logoutButton.addEventListener("click", logOut);
 
+    const editButton = document.createElement("button");
+	editButton.setAttribute("type", "button");
+	editButton.setAttribute("class", "btn btn-lg btn-success me-2");
+	editButton.innerHTML = "Edit";
+
+    const historyButton = document.createElement("button");
+	historyButton.setAttribute("type", "button");
+	historyButton.setAttribute("class", "btn btn-lg btn-primary me-2");
+	historyButton.innerHTML = "History";
+
 	root.replaceChildren(userElement);
+    root.appendChild(editButton);
+    root.appendChild(historyButton);
 	root.appendChild(logoutButton);
 }
 
