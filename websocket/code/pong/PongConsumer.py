@@ -139,7 +139,7 @@ class PongConsumer(WebsocketConsumer):
 
     def game_started(self, event) -> None:
         self.send(json.dumps({
-            "type": "game.start",
+            "type": "game.started",
             "message": {
                 "room_name": self.room_name,
             }

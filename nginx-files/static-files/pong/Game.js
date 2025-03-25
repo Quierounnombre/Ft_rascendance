@@ -164,7 +164,7 @@ joinRoom(room_name) {
 		'wss://'
 		+ window.location.hostname
 		+ ':7000/ws/pong/'
-		+ this.room_name
+		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
 		+ '/'
 	)
 
@@ -224,18 +224,21 @@ function server_msg(event) {
 
 	switch(data["type"]) {
 	case "game.state":
-		self.game_state = data["message"]["game_state"];
+		this.game_state = data["message"]["game_state"];
 		break;
 
 	case "room.created":
-		self.room_name = data["message"]["room_name"]
-		alert(`DEBUG: room_name: ${room_name}`)
+		this.room_name = data["message"]["room_name"]
+		// TODO: debug temporal
+		const tmp = document.createElement("div");
+		tmp.innerHTML = `${this.room_name}`
+		document.getElementById("root").replaceChildren(tmp);
 		break;
 
 	case "game.started":
-		self.room_name = data["message"]["room_name"]
-		alert(`room ${self.room_name} has started`)
+		this.room_name = data["message"]["room_name"]
 		// TODO: que tendria que hacer?
+		document.getElementById("root").replaceChildren(this.canvas);
 		break;
 	}
 }

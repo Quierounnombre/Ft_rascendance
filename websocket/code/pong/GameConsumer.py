@@ -14,7 +14,7 @@ class GameConsumer(SyncConsumer):
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(
-            self.room_name, {
+            event["message"]["room_name"], {
                 "type": "game.started",
                 "message": {
                     "room_name": event["message"]["room_name"]
