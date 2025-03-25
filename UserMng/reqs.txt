@@ -12,3 +12,6 @@ djangorestframework>=3.15.2
 
 # CORS headers
 django-cors-headers>=4.7
+
+# Request lib
+requests>=2.32.3

@@ -48,21 +48,20 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': [
 		'rest_framework.authentication.TokenAuthentication',
-	]
+	],
 }
 
 AUTH_USER_MODEL = 'UserMng.User'
-LOGIN_REDIRECT_URL = "/loguser/"
-LOGIN_REDIRECT_URL = "/loguser/"
+LOGIN_REDIRECT_URL = "/"
 
 MIDDLEWARE = [
+	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
-	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -122,6 +121,8 @@ AUTH_PASSWORD_VALIDATORS = [
 	},
 ]
 
+API_UID = os.environ.get('API_UID')
+API_SECRET = os.environ.get('API_SECRET')
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -141,6 +142,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/UserMng/code/media'
+
+REDIRECT_URI = os.environ.get('REDIRECT_URI')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

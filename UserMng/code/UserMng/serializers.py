@@ -50,6 +50,10 @@ class UserLoginSerializer(serializers.ModelSerializer):
 			"email",
 			"password"
 		]
+	
+	def validate(self, instance):
+		if not instance['password']:
+			raise ValidationError(detail="Empty password")
 
 class UserSingUpSerializer(serializers.ModelSerializer):
 	id = serializers.PrimaryKeyRelatedField(read_only=True)
