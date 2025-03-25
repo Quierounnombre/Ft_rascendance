@@ -86,7 +86,7 @@ class PongConsumer(WebsocketConsumer):
         self.send(json.dumps({
             "type": "room.created",
             "message": {
-                "room_name": self.room_name[5:]
+                "room_name": self.room_name
             }
         }))
 
@@ -120,6 +120,7 @@ class PongConsumer(WebsocketConsumer):
             "game_engine", {
                 "type": "game.start",
                 "message": {
+                    "user_id": self.user_id,
                     "room_name": message["room_name"]
                 }
             }
@@ -136,7 +137,19 @@ class PongConsumer(WebsocketConsumer):
             }
         )
 
-    def game_start(self, event) -> None:
+    def game_started(self, event) -> None:
         self.send(json.dumps({
             "type": "game.start",
+            "message": {
+                "room_name": self.room_name,
+            }
+        }))
+    
+    def game_state(self, event) -> None:
+        self.send(json.dumps({
+            "type": "game.state",
+            "message": {
+                "room_name": self.room_name,
+                "game_state": event[message]
+            }
         }))

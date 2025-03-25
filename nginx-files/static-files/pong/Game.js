@@ -224,7 +224,7 @@ function server_msg(event) {
 
 	switch(data["type"]) {
 	case "game.state":
-		self.game_state = data["message"];
+		self.game_state = data["message"]["game_state"];
 		break;
 
 	case "room.created":
@@ -232,7 +232,8 @@ function server_msg(event) {
 		alert(`DEBUG: room_name: ${room_name}`)
 		break;
 
-	case "game.start":
+	case "game.started":
+		self.room_name = data["message"]["room_name"]
 		alert(`room ${self.room_name} has started`)
 		// TODO: que tendria que hacer?
 		break;

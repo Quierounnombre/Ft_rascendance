@@ -11,13 +11,24 @@ game_rooms = {}
 class GameConsumer(SyncConsumer):
     # message: {"room_name: string"}
     def game_start(self, event) -> None:
+        channel_layer = get_channel_layer()
+
         async_to_sync(channel_layer.group_send)(
             self.room_name, {
-                "type": "game.start",
+                "type": "game.started",
+                "message": {
+                    "room_name": event["message"]["room_name"]
+                }
             }
         )
 
         game_rooms[event["message"]["room_name"]].start()
+    
+    def game_started(self, event) -> None:
+        pass
+    
+    def game_state(self, event) -> None:
+        pass
     
     # message: {
     #     "room_name": str,
@@ -40,7 +51,7 @@ class GameConsumer(SyncConsumer):
         for obj in game_rooms[message["room_name"]].game_objects:
             if obj.id == message["player"]:
                 obj.pk = message["id"]
-    
+        
     # message: {
     #     "room_name": str,
     #     "data": json converted to string with the config
