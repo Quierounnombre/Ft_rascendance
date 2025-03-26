@@ -25,13 +25,14 @@ export default async function loadProfile() {
 
     const editButton = document.createElement("button");
 	editButton.setAttribute("type", "button");
+    editButton.setAttribute("id", "edit_button");
 	editButton.setAttribute("class", "btn btn-lg btn-success me-2");
 	editButton.innerHTML = "Edit";
     editButton.addEventListener("click", editProfile);
 
     const historyButton = document.createElement("button");
 	historyButton.setAttribute("type", "button");
-	historyButton.setAttribute("class", "btn btn-lg btn-primary me-2");
+	historyButton.setAttribute("class", "btn btn-lg btn-info me-2");
 	historyButton.innerHTML = "History";
 
 	root.replaceChildren(userElement);

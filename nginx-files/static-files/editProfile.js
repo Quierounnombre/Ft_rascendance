@@ -2,7 +2,7 @@ export default function editProfile() {
     const submitButton = document.createElement("input");
 submitButton.setAttribute("type", "submit");
 submitButton.setAttribute("value", "Save Changes");
-submitButton.setAttribute("class", "btn btn-primary")
+submitButton.setAttribute("class", "btn btn-lg btn-primary mb-2")
 submitButton.setAttribute("id", "submit");
     const avatar_field = document.createElement("div");
 avatar_field.setAttribute("class", "mb-3 row");
