@@ -46,7 +46,7 @@ async function usersList(users) {
            <h4 class="card-title">`+ user["username"] +`</h4>
            <p class="card-text">`+ user['email'] +`</p>
             ` + friendButton(user["id"], friends) + `
-			<button type="button> class="btn btn-primary" onclick="seeProfile(`+user["id"]+`)">See Profile</button>
+			<button type="button" class="btn btn-lg btn-warning" onclick="seeProfile(`+user["id"]+`)">See Profile</button>
 		</div>
 		<div class="w-100"></div>
 		</div>
@@ -63,5 +63,5 @@ function friendButton(id, friends) {
 		if (friends[friend].id == id)
 			return `<button type="button" class="btn btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
 	}
-	return `<button type="button" class="btn btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
+	return `<button type="button" class="btn btn-lg me-2 btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
 }

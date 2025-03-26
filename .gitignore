@@ -1,3 +1,5 @@
 .vscode/
 .env
 .secrets
+media/
+__pycache__/
