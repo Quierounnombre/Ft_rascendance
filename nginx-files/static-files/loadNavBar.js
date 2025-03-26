@@ -1,4 +1,11 @@
-export default function loadNavBar(loc) {
+import getUser from "./getUser.js";
+
+export default async function loadNavBar(loc) {
+    const profile = await profileButton();
+	if (profile === -1) {
+		window.location.hash = "#anon-menu";
+        return ;
+    }
 	const header = document.getElementById("header");
 	header.innerHTML = `
 <nav class="navbar navbar-expand-lg fixed-topnavbar navbar-dark bg-dark">
@@ -8,7 +15,7 @@ export default function loadNavBar(loc) {
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse col-lg-auto navbar-collapse justify-content-center offcanvas-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav mr-auto">
+      <div class="navbar-nav mr-auto" id="links">
         <a class="nav-link light" href="#game"><h2>Game</h2></a>
         <a class="nav-link light" href="#social"><h2>Social</h2></a>
 		<a class="nav-link light" href="#profile"><h2>Profile</h2></a>
@@ -23,5 +30,31 @@ export default function loadNavBar(loc) {
 			link.setAttribute("class", "nav-link active");
 		}
 	});
+    const bar = document.getElementById("links");
+	bar.appendChild(profile);
+}
 
+
+async function profileButton() {
+	const token = localStorage.getItem("token");
+	if (!token) {
+		return -1;
+	}
+
+	const user = await getUser(token);
+	if (user === -1) {
+		return -1;
+	}
+
+	document.getElementsByTagName("html")[0].style["font-size"] = user.font + "px";
+
+	const profile = document.createElement("span");
+	profile.setAttribute("class", "badge bg-secondary");
+	profile.innerHTML = `
+<div class="mini-cropped-image"><img class="rounded-circle me-1" width="32" height="32" src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" /> Hi `+ user["username"] +` !</div>`;
+
+	profile.addEventListener("click", 
+		() => {window.location.hash = "#profile"});
+
+	return profile;
 }

@@ -1,7 +1,9 @@
-export default function loadSocial() {
+import getMyFriends from "./getMyFriends.js";
+
+export default async function loadSocial() {
 	const token = localStorage.getItem("token");
 	const root = document.getElementById("root");
-	const friends = getFriendList(token);
+	const friends = await getFriendList(token);
 	if (friends === -1) {
 		return ;
 	}
@@ -10,25 +12,26 @@ export default function loadSocial() {
 	searchBar.innerHTML = `
 <div class="search-container input-group">
 <input type="text" id="search-box" class="form-control search-input" placeholder="Search other users">
-<button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
+<button class="btn btn-outline-secondary" id="search-button"><i class="bi bi-search"></i></button>
 </div>
 `;
 	searchBar.getElementsByTagName("button")[0].addEventListener("click", (event) => {
-		search(this);
+		localStorage.setItem("query", searchBar.getElementsByTagName("input")[0].value);
+		window.location.hash = "#search";
 	});
 	root.replaceChildren(searchBar);
 	root.appendChild(friends);
 }
 
-function getFriendList(token) {
-	const friends = getMyFriends(token);
+async function getFriendList(token) {
+	const friends = await getMyFriends(token);
 	if (friends === -1) {
 		localStorage.removeItem("token");
 		window.location.hash = "#anon-menu";
 		return -1;
 	}
 	const friendList = document.createElement("div");
-	if (!friends) {
+	if (friends.length === 0) {
 		friendList.innerHTML = "Seems like you don't have any friends...";
 		return friendList;
 	}
@@ -59,24 +62,4 @@ function getFriendList(token) {
     `});
 
 	return friendList;
-}
-
-function getMyFriends(token) {
-	try {
-		fetch("https://" + window.location.hostname + ":7000/profile/friends/", {
-			method: "GET",
-			headers: {
-				"Authorization": "Token " + token,
-			}
-		}).then((response) => {
-		if (response.ok) {
-			response.json().then((data) => {return data.following});
-		} else {
-			return -1;
-		}
-		})
-	} catch (e) {
-		console.error(e);
-		return -1;
-	}
 }

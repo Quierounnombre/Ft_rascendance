@@ -33,18 +33,18 @@ async function logIn(form) {
 			body: formData,
 		});
 		const data = await response.json();
-		if (data.token) {
-			validLogin(data.token, data.font);
+		if (!response.ok) {
+			invalidLogin(data);
 		} else {
-			invalidLogin();
+			validLogin(data.token, data.font);
 		}
 	} catch (e) {
 		console.error(e);
 	}
 }
 
-function invalidLogin() {
-	const form = document.getElementById("form");
+function invalidLogin(data) {
+	const form = document.getElementById("login_form");
 	const fields = form.getElementsByTagName("input");
 	for (let i = 0; i < fields.length; i++) {
 		if (fields[i].type === "submit") {
@@ -54,6 +54,16 @@ function invalidLogin() {
 		fields[i].classList.add("is-invalid");
 		fields[i].classList.remove("is-valid");
 	}
+	
+	const alert = document.createElement("div");
+	alert.setAttribute("class", "alert alert-danger alert-dismissible fade show");
+	alert.setAttribute("role", "alert");
+	alert.innerHTML= `
+<strong>Error: </strong>`+ data.error +`
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	`
+	const root = document.getElementById("root");
+	root.insertAdjacentElement("afterbegin", alert);
 }
 
 function validLogin(token, font) {

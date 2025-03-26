@@ -7,8 +7,12 @@ import loadLogin from "./loadLogin.js";
 import loadRegister from "./loadRegister.js";
 import loadNavBar from "./loadNavBar.js";
 import loadSocial from "./loadSocial.js";
-import loadFooter from "./loadFooter.js";
+import loadSearch from "./loadSearch.js";
+import loadGame from "./loadGame.js";
+import loadHistory from "./loadHistory.js";
 import loadProfile from "./loadProfile.js";
+import loadUser from "./loadUser.js";
+import loadFooter from "./loadFooter.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -37,9 +41,17 @@ function changeLayout() {
 		loadNavBar(loc);
 		if (loc === "#social") {
 			loadSocial();
-		}
-        if (loc === "#profile") {
+		} else if (loc === "#search") {
+			loadSearch();
+		} else if (loc === "#history") {
+			loadHistory();
+        }
+        else if (loc === "#profile") {
 			loadProfile();
+		} else if (loc === "#user") {
+			loadUser();
+		} else {
+			loadGame();
 		}
   
 	}
