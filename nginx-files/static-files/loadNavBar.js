@@ -3,7 +3,7 @@ export default function loadNavBar(loc) {
 	header.innerHTML = `
 <nav class="navbar navbar-expand-lg fixed-topnavbar navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand light"><h2>Rascendance 🏓</h2></a>
+    <a class="navbar-brand light"><h1>Rascendance🏓</h1></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
