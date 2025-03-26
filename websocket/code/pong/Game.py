@@ -75,21 +75,21 @@ class Game(threading.Thread):
 
         return tmp
     
-    def getGameState(self) -> dict:
+    def getGameState(self, msg_type) -> dict:
         message = self.serialize()
         
         return {
-            "type": "game.state",
+            "type": msg_type,
             "message": message
         }
-
+    
     # TODO: metodo para mandar a todos que ya ha terminado la partida
     
-    def broadcastState(self) -> None:
+    def broadcastState(self, msg_type) -> None:
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(
-            self.room_name, self.getGameState()
+            self.room_name, self.getGameState(msg_type)
         )
 
     def setPlayerDir(self, playerN, dirY) -> None:
@@ -101,7 +101,8 @@ class Game(threading.Thread):
         while not self.isEnd():
             for obj in self.game_objects:
                 obj.update(self.game_objects)
-            self.broadcastState()
+            self.broadcastState("game.state")
             time.sleep(0.01)
 
+        self.broadcastState("game.end")
         print("End game") # TODO: borrar

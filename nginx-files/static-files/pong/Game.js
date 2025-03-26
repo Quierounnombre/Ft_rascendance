@@ -22,29 +22,12 @@ constructor() {
 
 	this.context = this.canvas.getContext("2d");
 
+
 	// TODO: todo esto lo puede terner el user en su configuracion, por lo que la configuracion propia de los colores iria aqui
 	this.background_color = "black";
 	this.object_color = "white";
-}
 
-/**
- * @brief clears all the canvas to get only the background
- */
-drawBackground() {
-	// Clear the canvas
-	this.context.fillStyle = this.background_color;
-	this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-	// Draw the center line
-	this.context.beginPath();
-	this.context.strokeStyle = this.counter.color;
-	this.context.lineWidth = "2";
-	this.context.moveTo(this.canvas.width / 2, this.canvas.height / 8);
-	this.context.lineTo(this.canvas.width / 2, this.canvas.height);
-	this.context.moveTo(0, this.canvas.height / 8);
-	this.context.lineTo(this.canvas.width, this.canvas.height / 8);
-	this.context.closePath();
-	this.context.stroke();
+	this.dir = 0;
 }
 
 /**
@@ -64,7 +47,7 @@ isEnd() {
  * @brief game loop
  */
 gameLoop() {
-	let animation;
+	document.getElementById("root").replaceChildren(this.canvas);
 
 	this.websocket.send(JSON.stringify({
 		"type": "direction",
@@ -75,21 +58,18 @@ gameLoop() {
 		}
 	}));
 
-	this.render(this.game_state);
-
-	if (!this.isEnd())// TODO: que sea el server quien mande que la partida ha terminado
-		animation = window.requestAnimationFrame(this.gameLoop.bind(this));
-	else {
-		this.websocket.close();
-		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
-		window.cancelAnimationFrame(animation);
-	}
+	this.render();
+	this.animation = window.requestAnimationFrame(this.gameLoop.bind(this));
 }
 
-render(game_state) {
-	const objs = JSON.parse(game_state);
+render() {
+	if (!this.game_state)
+		return;
 
-	this.drawBackground();
+	console.log(this.game_state); // TODO: debug
+	const objs = JSON.parse(this.game_state);
+
+	this.drawBackground(); // TODO: retocar esto
 	for (let i in objs) {
 		// TODO: poner en el metodo render de los objetos el color
 		switch (objs[i].type) {
@@ -109,6 +89,26 @@ render(game_state) {
 			(new CanvasObject(objs[i], this.canvas, this.context)).render();
 		}
 	}
+}
+
+/**
+ * @brief clears all the canvas to get only the background
+ */
+drawBackground() {
+	// Clear the canvas
+	this.context.fillStyle = this.background_color;
+	this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+	// Draw the center line
+	this.context.beginPath();
+	this.context.strokeStyle = "black"; // TODO: personalizacion?
+	this.context.lineWidth = "2";
+	this.context.moveTo(this.canvas.width / 2, this.canvas.height / 8);
+	this.context.lineTo(this.canvas.width / 2, this.canvas.height);
+	this.context.moveTo(0, this.canvas.height / 8);
+	this.context.lineTo(this.canvas.width, this.canvas.height / 8);
+	this.context.closePath();
+	this.context.stroke();
 }
 
 createRoom(game_config) {
@@ -150,7 +150,7 @@ createRoom(game_config) {
 	}
 
 	this.websocket.onclose = websocket_close;
-	this.websocket.onmessage = server_msg;
+	this.websocket.onmessage = server_msg.bind(this);
 
 	return this.room_name;
 }
@@ -193,7 +193,7 @@ joinRoom(room_name) {
 	}
 
 	this.websocket.onclose = websocket_close;
-	this.websocket.onmessage = server_msg;
+	this.websocket.onmessage = server_msg.bind(this);
 }
 
 setStartTime(time) {
@@ -224,21 +224,31 @@ function server_msg(event) {
 
 	switch(data["type"]) {
 	case "game.state":
+		// console.log(`DEBUG: ${data["message"]["game_state"]}`);
 		this.game_state = data["message"]["game_state"];
 		break;
 
 	case "room.created":
 		this.room_name = data["message"]["room_name"]
+
 		// TODO: debug temporal
 		const tmp = document.createElement("div");
 		tmp.innerHTML = `${this.room_name}`
 		document.getElementById("root").replaceChildren(tmp);
+
 		break;
 
 	case "game.started":
 		this.room_name = data["message"]["room_name"]
 		// TODO: que tendria que hacer?
 		document.getElementById("root").replaceChildren(this.canvas);
+		this.gameLoop();
+		break;
+	
+	case "game.end":
+		this.websocket.close();
+		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
+		window.cancelAnimationFrame(this.animation);
 		break;
 	}
 }

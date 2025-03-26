@@ -150,6 +150,6 @@ class PongConsumer(WebsocketConsumer):
             "type": "game.state",
             "message": {
                 "room_name": self.room_name,
-                "game_state": event[message]
+                "game_state": event["message"]
             }
         }))

@@ -30,6 +30,9 @@ class GameConsumer(SyncConsumer):
     def game_state(self, event) -> None:
         pass
     
+    def game_end(self, event) -> None:
+        game_rooms[event["message"]["room_name"]].stop()
+    
     # message: {
     #     "room_name": str,
     #     "player": str
@@ -38,6 +41,7 @@ class GameConsumer(SyncConsumer):
     def player_direction(self, event) -> None:
         message = event["message"]
 
+        print(message, flush=True)
         game_rooms[message["room_name"]].setPlayerDir(message["player"], message["dir"])
     
     # message: {
