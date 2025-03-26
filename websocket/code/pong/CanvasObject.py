@@ -72,7 +72,7 @@ class CanvasObject:
             'y': self.y,
             
             'width': self.width,
-            'heigth': self.height,
+            'height': self.height,
 
             'color': self.color,
         }) 

@@ -1,4 +1,5 @@
 from pong.CanvasObject import CanvasObject
+import json
 
 class Player(CanvasObject):
     def __init__(self, obj):
@@ -13,3 +14,18 @@ class Player(CanvasObject):
                 self.dirY += 1
         self.recalculateHitbox()
         self.keepInsideCanvas()
+
+    def serialize(self):
+        return json.dumps({
+            'id': self.id,
+            'pk': self.pk,
+            'type': self.type,
+
+            'x': self.x,
+            'y': self.y,
+            
+            'width': self.width,
+            'height': self.height,
+
+            'color': self.color,
+        })

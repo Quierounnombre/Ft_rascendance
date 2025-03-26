@@ -1,4 +1,6 @@
 import math
+import json
+
 from pong.CanvasObject import CanvasObject
 
 class Ball(CanvasObject):
@@ -6,7 +8,7 @@ class Ball(CanvasObject):
         super().__init__(obj)
         self.radius = obj['radius']
         self.width = self.radius * 2
-        self.heigth = self.radius * 2
+        self.height = self.radius * 2
         self.recalculateHitbox()
 
     def keepInsideCanvas(self):
@@ -61,3 +63,16 @@ class Ball(CanvasObject):
         self.speed = old_speed;
         self.dirX = old_dirX;
         self.dirY = old_dirY;
+
+    def serialize(self):
+        return json.dumps({
+            'id': self.id,
+            'type': self.type,
+
+            'x': self.x,
+            'y': self.y,
+            
+            'radius': self.radius,
+
+            'color': self.color,
+        }) 

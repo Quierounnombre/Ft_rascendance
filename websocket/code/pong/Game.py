@@ -76,11 +76,14 @@ class Game(threading.Thread):
         return tmp
     
     def getGameState(self, msg_type) -> dict:
-        message = self.serialize()
+        data = self.serialize()
         
         return {
             "type": msg_type,
-            "message": message
+            "message": {
+                "room_name": self.room_name,
+                "data": data
+            }
         }
     
     # TODO: metodo para mandar a todos que ya ha terminado la partida
@@ -98,11 +101,11 @@ class Game(threading.Thread):
                 obj.dirY = dirY
     
     def run(self) -> None:
-        while not self.isEnd():
+        while not self.isEnd(): # TODO: no esta terminando
             for obj in self.game_objects:
                 obj.update(self.game_objects)
             self.broadcastState("game.state")
             time.sleep(0.01)
 
-        self.broadcastState("game.end")
+        self.broadcastState("game.end")# TODO: el metodo requiere el game room
         print("End game") # TODO: borrar

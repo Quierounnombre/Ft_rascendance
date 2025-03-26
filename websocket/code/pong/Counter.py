@@ -27,12 +27,6 @@ class Counter(CanvasObject):
             'id': self.id,
             'type': self.type,
 
-            'x': self.x,
-            'y': self.y,
-            
-            'width': self.width,
-            'heigth': self.height,
-
             'color': self.color,
 
             'timeout': self.timeout,
@@ -40,6 +34,11 @@ class Counter(CanvasObject):
             'start_time': self.start_time,
             'player1_score': self.player1_score,
             'player2_score': self.player2_score,
+
+            "x": -1,
+            "y": -1,
+            "width": 0,
+            "height": 0
         })
 
     def setStartTime(self, time):

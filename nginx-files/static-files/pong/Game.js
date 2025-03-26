@@ -28,6 +28,7 @@ constructor() {
 	this.object_color = "white";
 
 	this.dir = 0;
+	this.game_running = false;
 }
 
 /**
@@ -47,6 +48,9 @@ isEnd() {
  * @brief game loop
  */
 gameLoop() {
+	if (!this.game_running)
+		return;
+
 	document.getElementById("root").replaceChildren(this.canvas);
 
 	this.websocket.send(JSON.stringify({
@@ -66,7 +70,6 @@ render() {
 	if (!this.game_state)
 		return;
 
-	console.log(this.game_state); // TODO: debug
 	const objs = JSON.parse(this.game_state);
 
 	this.drawBackground(); // TODO: retocar esto
@@ -74,19 +77,23 @@ render() {
 		// TODO: poner en el metodo render de los objetos el color
 		switch (objs[i].type) {
 		case "player":
-			(new Player(objs[i], this.canvas, this.context)).render();
+			const player = new Player(objs[i], this.canvas, this.context);
+			player.render();
 			break;
 
 		case "ball":
-			(new Ball(objs[i], this.canvas, this.context)).render();
+			const ball = new Ball(objs[i], this.canvas, this.context);
+			ball.render();
 			break;
 
 		case "counter":
-			(new Counter(objs[i], this.canvas, this.context)).render();
+			const counter = new Counter(objs[i], this.canvas, this.context);
+			counter.render();
 			break;
 
 		default:
-			(new CanvasObject(objs[i], this.canvas, this.context)).render();
+			const canvas_object = new CanvasObject(objs[i], this.canvas, this.context);
+			canvas_object.render();
 		}
 	}
 }
@@ -149,7 +156,7 @@ createRoom(game_config) {
 		});
 	}
 
-	this.websocket.onclose = websocket_close;
+	this.websocket.onclose = websocket_close.bind(this);
 	this.websocket.onmessage = server_msg.bind(this);
 
 	return this.room_name;
@@ -192,7 +199,7 @@ joinRoom(room_name) {
 		});
 	}
 
-	this.websocket.onclose = websocket_close;
+	this.websocket.onclose = websocket_close.bind(this);
 	this.websocket.onmessage = server_msg.bind(this);
 }
 
@@ -205,14 +212,16 @@ toJSON() {
 	// TODO: definir bien el JSON que posteriormente se serializara
 	// TODO: id del torneo
 	// TODO: bool de si esta dentro de un torneo
+	const game_objects = JSON.parse(this.game_state);
+
 	return {
-		player1_pk: this.game_objects.find((obj) => obj.id === "player1").pk,
-		player1_score: this.counter.player1_score,
+		player1_pk: game_objects.find((obj) => obj.id === "player1").pk,
+		player1_score:game_objects.find((obj) => obj.id === "counter").player1_score,
 
-		player2_pk: this.game_objects.find((obj) => obj.id === "player2").pk,
-		player2_score: this.counter.player2_score,
+		player2_pk: game_objects.find((obj) => obj.id === "player2").pk,
+		player2_score: game_objects.find((obj) => obj.id === "counter").player2_score,
 
-		game_time: this.counter.time_passed
+		game_time:game_objects.find((obj) => obj.id === "counter").time_passed
 	}
 }
 
@@ -222,6 +231,7 @@ toJSON() {
 function server_msg(event) {
 	const data = JSON.parse(event["data"]);
 
+	console.log(`DEBUG: server_msg.type: ${data["type"]}`)
 	switch(data["type"]) {
 	case "game.state":
 		// console.log(`DEBUG: ${data["message"]["game_state"]}`);
@@ -242,11 +252,13 @@ function server_msg(event) {
 		this.room_name = data["message"]["room_name"]
 		// TODO: que tendria que hacer?
 		document.getElementById("root").replaceChildren(this.canvas);
+		this.game_running = true;
 		this.gameLoop();
 		break;
 	
 	case "game.end":
 		this.websocket.close();
+		this.game_running = false;
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		window.cancelAnimationFrame(this.animation);
 		break;
@@ -255,6 +267,7 @@ function server_msg(event) {
 
 function websocket_close() {
 	console.log(`WebSocket closed`);
+	this.game_running = false;
 }
 
 function generateRandomString(length) {
