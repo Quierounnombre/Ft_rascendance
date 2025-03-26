@@ -34,6 +34,7 @@ services:
     depends_on:
       - websocket
       - usermng
+      - history
     volumes:
       - ./nginx-files/static-files:/etc/nginx/html
     ports:
@@ -93,6 +94,55 @@ services:
     networks:
       - rascendance-network
 
+# match history
+  history:
+    restart: always
+    build:
+      context: ./history
+      dockerfile: Dockerfile
+    container_name: history
+    expose:
+      - ${BACKEND_PORT}
+    volumes:
+      - ./history/code:/history/code
+    depends_on:
+      history-db:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_HISTORY}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_HOST: ${DB_HISTORY_HOST}
+      BACKEND_PORT: ${HISTORY_PORT}
+    networks:
+      - rascendance-network
+
+  history-db:
+    restart: always
+    image: postgres:latest
+    container_name: ${DB_HISTORY_HOST}
+    volumes:
+      - history_data:/var/lib/postgresql/data
+    expose:
+      - ${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      PGUSER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_HISTORY}
+    networks:
+      - rascendance-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB_HISTORY}"]
+      retries: 10
+      timeout: 3s
+      interval: 1s
+
 # websocket
 
   websocket: 
@@ -147,6 +197,8 @@ volumes:
     name: postgres_data
   websocket_data:
     name: websocket_data
+  history_data:
+    name: history_data
 
 networks:
   rascendance-network:
