@@ -21,13 +21,16 @@ class AddMatch(APIView):
 		serializer = MatchSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save()
-			return Response(data, status=status.HTTP_200_OK)
+			return Response(serializer.data, status=status.HTTP_200_OK)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserHistory(APIView):
 	def get(self, request, pk):
-		matches = Match.object.filter(winner_id=pk) | Match.object.filter(loser_id=pk)
-		serializer = MatchSerializer(matches)
+		matches = Match.objects.filter(winner_id=pk) | Match.objects.filter(loser_id=pk)
+		# print(matches);
+		# if (len(matches) == 0):
+		# 	return Response(status=status.HTTP_204_NO_CONTENT)
+		serializer = MatchSerializer(matches, many=True)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
