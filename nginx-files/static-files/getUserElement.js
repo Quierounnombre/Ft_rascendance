@@ -1,33 +1,42 @@
 export default function getUserElement(user) {
 	const emailField = document.createElement("div");
 	emailField.setAttribute("class", "mb-3 row");
-	emailField.innerHTML = `<label for="" class="col-sm-2 col-form-label">Email: </label>
+	emailField.innerHTML = `<label for="" class="col-sm-2 form-label col-form-label">Email: </label>
 		<div class="col-sm-10">
 		<input type="text" readonly class="form-control-plaintext" id="email" name="email" value="`+ user["email"] +`">`;
 
 	const usernameField = emailField.cloneNode(true);
 	const fontField = emailField.cloneNode(true);
-	const languageField = emailField.cloneNode(true);
+	const languageField = document.createElement("div");
+	languageField.setAttribute("class", "mb-3 row");
+	languageField.innerHTML = `<label for="language" class="col-sm-2 form-label col-form-label">Language: </label>
+		<div class="col-sm-10">
+		<select disabled id="language" name="language">
+            <option value="ENG">ENG</option>
+            <option value="ESP">ESP</option>
+            <option value="CAT">CAT</option>
+        </select>`;
 
 	usernameField.getElementsByTagName("label")[0].setAttribute('for', "username");
 	fontField.getElementsByTagName("label")[0].setAttribute('for', "font");
-	languageField.getElementsByTagName("label")[0].setAttribute('for', "language");
 
 	usernameField.getElementsByTagName("label")[0].innerHTML="Username: ";
 	fontField.getElementsByTagName("label")[0].innerHTML="Font size:";
-	languageField.getElementsByTagName("label")[0].innerHTML="Language: ";
 
 	usernameField.getElementsByTagName("input")[0].setAttribute('id', "username");
 	fontField.getElementsByTagName("input")[0].setAttribute('id', "font");
-	languageField.getElementsByTagName("input")[0].setAttribute('id', "language");
 
 	usernameField.getElementsByTagName("input")[0].setAttribute('name', "username");
 	fontField.getElementsByTagName("input")[0].setAttribute('name', "font");
-	languageField.getElementsByTagName("input")[0].setAttribute('name', "language");
 	
 	usernameField.getElementsByTagName("input")[0].setAttribute('value', user["username"]);
 	fontField.getElementsByTagName("input")[0].setAttribute('value', user["font"]);
-	languageField.getElementsByTagName("input")[0].setAttribute('value', user["language"]);
+    if (user["language"]==="ENG")
+	languageField.getElementsByTagName("option")[0].setAttribute('selected', "");
+    if (user["language"]==="ESP")
+        languageField.getElementsByTagName("option")[1].setAttribute('selected', "");
+    if (user["language"]==="CAT")
+        languageField.getElementsByTagName("option")[2].setAttribute('selected', "");
 
 	const avatar = document.createElement("div");
 	avatar.setAttribute("class", "cropped-image");
