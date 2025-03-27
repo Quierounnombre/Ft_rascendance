@@ -35,6 +35,8 @@ class Counter(CanvasObject):
             'player1_score': self.player1_score,
             'player2_score': self.player2_score,
 
+            "font": self.font,
+
             "x": -1,
             "y": -1,
             "width": 0,

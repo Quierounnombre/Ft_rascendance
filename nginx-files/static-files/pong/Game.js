@@ -108,7 +108,7 @@ drawBackground() {
 
 	// Draw the center line
 	this.context.beginPath();
-	this.context.strokeStyle = "black"; // TODO: personalizacion?
+	this.context.strokeStyle = "white"; // TODO: personalizacion?
 	this.context.lineWidth = "2";
 	this.context.moveTo(this.canvas.width / 2, this.canvas.height / 8);
 	this.context.lineTo(this.canvas.width / 2, this.canvas.height);

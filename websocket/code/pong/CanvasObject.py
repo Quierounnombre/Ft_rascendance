@@ -18,32 +18,48 @@ class CanvasObject:
         self.canvas_width = 800
         self.canvas_height = 400
 
-        if 'color' in obj:
-            self.color = obj['color']
-        if 'id' in obj:
-            self.id = obj['id']
-        if 'type' in obj:
-            self.type = obj['type']
-        if 'x' in obj:
-            self.x = obj['x']
-        if 'y' in obj:
-            self.y = obj['y']
-        if 'dirX' in obj:
-            self.dirX = obj['dirX']
-        if 'dirY' in obj:
-            self.dirY = obj['dirY']
-        if 'speed' in obj:
-            self.speed = obj['speed']
-        if 'is_moving' in obj:
-            self.is_moving = obj['is_moving']
-        if 'width' in obj:
-            self.width = obj['width']
-        if 'height' in obj:
-            self.height = obj['height']
-        if 'canvas_width' in obj:
-            self.height = obj['canvas_width']
-        if 'canvas_height' in obj:
-            self.height = obj['canvas_height']
+        if 'color' in obj:          self.color = str(obj['color'])
+        else:                       self.color = "white"
+
+        if 'id' in obj:             self.id = str(obj['id'])
+        else:                       self.id = "generic"
+
+        if 'type' in obj:           self.type = str(obj['type'])
+        else:                       self.type = "generic"
+
+        if 'x' in obj:              self.x = float(obj['x'])
+        else:                       self.x = 0
+
+        if 'y' in obj:              self.y = float(obj['y'])
+        else:                       self.y = 0
+
+        if 'dirX' in obj:           self.dirX = float(obj['dirX'])
+        else:                       self.dirX = 0
+
+        if 'dirY' in obj:           self.dirY = float(obj['dirY'])
+        else:                       self.dirY = 0
+
+        if 'speed' in obj:          self.speed = float(obj['speed'])
+        else:                       self.speed = 4
+
+        if 'is_moving' in obj:      self.is_moving = obj['is_moving']
+        else:                       self.is_moving = False
+
+        if 'width' in obj:          self.width = float(obj['width'])
+        else:                       self.width = 0
+
+        if 'height' in obj:         self.height = float(obj['height'])
+        else:                       self.height = 0
+
+        if 'canvas_width' in obj:   self.canvas_width = float(obj['canvas_width'])
+        else:                       self.canvas_width = 800
+
+        if 'canvas_height' in obj:  self.canvas_height = float(obj['canvas_height'])
+        else:                       self.canvas_height = 400
+
+        if 'font' in obj:           self.font = str(obj['font'])
+        else:                       self.font = "42px Arial"
+
 
         # xy1---------xy2
         # |            |
