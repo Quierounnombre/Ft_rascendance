@@ -101,6 +101,10 @@ class Game(threading.Thread):
                 obj.dirY = dirY
     
     def run(self) -> None:
+        for obj in self.game_objects:
+            if obj.id == "counter":
+                obj.start_time.append(time.time())
+
         while not self.isEnd(): # TODO: no esta terminando
             for obj in self.game_objects:
                 obj.update(self.game_objects)

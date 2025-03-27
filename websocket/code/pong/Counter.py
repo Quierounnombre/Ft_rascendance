@@ -20,7 +20,7 @@ class Counter(CanvasObject):
         self.recalculateHitbox()
 
         self.time_passed = 0
-        self.start_time = time.time() # TODO: seguro? esto es en segundos
+        self.start_time = []
     
     def serialize(self):
         return json.dumps ({
@@ -31,7 +31,7 @@ class Counter(CanvasObject):
 
             'timeout': self.timeout,
             'time_passed': self.time_passed,
-            'start_time': self.start_time,
+            'start_time': self.start_time[0],
             'player1_score': self.player1_score,
             'player2_score': self.player2_score,
 
@@ -47,7 +47,7 @@ class Counter(CanvasObject):
         self.start_time = time
 
     def update(self, canvas_object):
-        self.time_passed = time.time() - self.start_time
+        self.time_passed = time.time() - self.start_time[0]
 
         if self.player1_score > self.player2_score:
             self.highest_score = self.player1_score
