@@ -10,20 +10,21 @@ class Ball(CanvasObject):
         self.width = self.radius * 2
         self.height = self.radius * 2
         self.recalculateHitbox()
+        self.counter = []
 
     def keepInsideCanvas(self):
         if self.point_x1 < 0:
             self.moveTo(self.canvas_width / 2, self.canvas_height / 2)
-            self.counter.player2_score += 1
+            self.counter[0].player2_score += 1
             self.dirY = -1
             self.dirX = -1
             self.speed = 4
         elif self.point_x2 > self.canvas_width: # TODO: mirar como hacer si dos tienen tamanos diferentes
             self.moveTo(self.canvas_width / 2, self.canvas_height / 2)
+            self.counter[0].player1_score += 1
             self.dirY = 1
             self.dirX = 1
             self.speed = 4
-            self.counter.player1_score += 1 # TODO: revisar esto
 
         if self.point_y1 < self.canvas_height / 8:
             self.moveTo(self.x, (self.canvas_height / 8) + ((self.point_y3 - self.point_y1) / 2))

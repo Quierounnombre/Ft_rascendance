@@ -54,7 +54,7 @@ class Game(threading.Thread):
                 
                 for obj2 in self.game_objects:
                     if obj2.type == "ball":
-                        obj2.counter = obj 
+                        obj2.counter.append(obj)
                 
                 break
     

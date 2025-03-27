@@ -234,7 +234,6 @@ function server_msg(event) {
 	// console.log(`DEBUG: server_msg.type: ${data["type"]}`) // TODO: debug
 	switch(data["type"]) {
 	case "game.state":
-		// console.log(`DEBUG: ${data["message"]["game_state"]}`);
 		this.game_state = data["message"]["game_state"];
 		break;
 

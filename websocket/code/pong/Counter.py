@@ -48,4 +48,8 @@ class Counter(CanvasObject):
 
     def update(self, canvas_object):
         self.time_passed = time.time() - self.start_time
-        self.highest_score = self.player1_score if self.player1_score > self.player1_score else self.player2_score
+
+        if self.player1_score > self.player2_score:
+            self.highest_score = self.player1_score
+        else:
+            self.highest_score = self.player2_score
