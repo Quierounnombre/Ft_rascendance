@@ -11,6 +11,7 @@ const translations = {
         "footer-2":"In honor of ",
         "login-pass": "Password",
         "login-out": "Get Out",
+        "login-sub": "Login",
         "reg-usname": "Username:",
         "reg-finame": "First Name:",
         "reg-laname": "Last Name:",
@@ -28,6 +29,7 @@ const translations = {
         "footer-2":"En memoria de ",
         "login-pass": "Contraseña",
         "login-out": "Volver",
+        "login-sub": "Entrar",
         "reg-usname": "Apodo:",
         "reg-finame": "Nombre:",
         "reg-laname": "Apellido:",
@@ -45,6 +47,7 @@ const translations = {
         "footer-2":"Recordant ",
         "login-pass": "Contrasenya",
         "login-out": "Torna",
+        "login-sub": "Entra",
         "reg-usname": "Sobrenom:",
         "reg-finame": "Nom:",
         "reg-laname": "Cognom:",
@@ -69,8 +72,13 @@ async function setLocale(newLocale) {
 document.addEventListener("DOMContentLoaded", () => {
   setLocale(defaultLocale);
   bindLocaleSwitcher(defaultLocale);
-
 });
+
+window.addEventListener("hashchange", () => {
+    translatePage();
+    bindLocaleSwitcher(defaultLocale);
+  });
+
 // ...
 // Whenever the user selects a new locale, we
 // load the locale's translations and update
@@ -96,8 +104,8 @@ function translatePage() {
   function translateElement(element) {
     const key = element.getAttribute("data-i18n-key");
     const translation = translations[locale][key];
-    if (key==="reg-sub")
-    element.setAttribute("value", translation);
+    if (key==="reg-sub" || key=== "login-sub")
+     element.setAttribute("value", translation);
     else
     element.innerText = translation;
   }
