@@ -10,11 +10,11 @@ export default function loadLogin() {
 		<input type="email" id="email" name="email" class="form-control" required />
 	</div>
 	<div class="mb-3">
-		<label for="password" class="form-label">Password:</label>
+		<label for="password" data-i18n-key="login-pass" class="form-label">Password:</label>
 		<input type="password" id="password" name="password" class="form-control" required />
 	</div>
-	<input type="submit" value="Login" id="submit" />
-	<button onclick="window.location.hash='\#anon-menu'">Go back</button>`;
+	<input type="submit"  value="Login" id="submit" />
+	<button data-i18n-key="login-out" onclick="window.location.hash='\#anon-menu'">Go back</button>`;
 
 	form.addEventListener("submit", (event) => {
 		event.preventDefault();

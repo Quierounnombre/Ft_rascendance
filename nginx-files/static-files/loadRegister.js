@@ -10,27 +10,27 @@ export default function loadRegister() {
 		<input type="email" id="email" name="email" class="form-control" required/>
 	</div>
 	<div class="mb-3">
-		<label for="username" class="form-label">Username:</label>
+		<label for="username" data-i18n-key="reg-usname" class="form-label">Username:</label>
 		<input type="text" id="username" name="username" class="form-control" required/>
 	</div>
 	<div class="mb-3">
-		<label for="first_name" class="form-label">First Name:</label>
+		<label for="first_name" data-i18n-key="reg-finame" class="form-label">First Name:</label>
 		<input type="text" id="first_name" name="first_name" class="form-control" required/>
 	</div>
 	<div class="mb-3">
-		<label for="last_name" class="form-label">Last Name:</label>
+		<label for="last_name" data-i18n-key="reg-laname" class="form-label">Last Name:</label>
 		<input type="text" id="last_name" name="last_name" class="form-control" required/>
 	</div>
 	<div class="mb-3">
-		<label for="password" class="form-label">Password:</label>
+		<label for="password" data-i18n-key="reg-pass" class="form-label">Password:</label>
 		<input type="password" id="password" name="password" class="form-control" required/>
 	</div>
 	<div class="mb-3">
-		<label for="password2" class="form-label">Repeat Password:</label>
+		<label for="password2" data-i18n-key="reg-pass2" class="form-label">Repeat Password:</label>
 		<input type="password" id="password2" name="password2" class="form-control" required/>
 	</div>
-	<input type="submit" value="Sign Up" id="submit"/>
-	<button onclick="window.location.hash='\#anon-menu'">Go back</button>
+	<input type="submit" data-i18n-key="reg-sub" value="Sign Up" id="submit"/>
+	<button  data-i18n-key="login-out" onclick="window.location.hash='\#anon-menu'">Go back</button>
 	`;
 
 	form.addEventListener("submit", (event) => {

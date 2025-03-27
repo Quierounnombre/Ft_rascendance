@@ -11,11 +11,14 @@ export default  function loadAnonMenu() {
 
 	loginButton.setAttribute("class", "btn btn-primary col-3");
     loginButton.setAttribute("style", "--bs-btn-font-size: 42px");
+    loginButton.setAttribute("data-i18n-key", "log-button");
 	registerButton.setAttribute("class", "btn btn-light btn-lg col-3");
     registerButton.setAttribute("style", "--bs-btn-font-size: 42px");
+    registerButton.setAttribute("data-i18n-key", "reg-button");
 	OAuthButton.setAttribute("class", "btn btn-dark btn-lg col-3");
 	OAuthButton.setAttribute("disabled", "");
     OAuthButton.setAttribute("style", "--bs-btn-font-size: 42px");
+    OAuthButton.setAttribute("data-i18n-key", "oauth-button");
 
 	loginButton.innerHTML = "Log In";
 	registerButton.innerHTML = "Register";
