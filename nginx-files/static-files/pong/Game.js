@@ -30,6 +30,7 @@ constructor() {
 
 	this.dir = 0;
 	this.game_running = false;
+	this.is_moving = false;
 
 	// TODO: esto habria que comprobar que los clientes no pueden mover a otros 
 	document.addEventListener("keydown", (event) => {
@@ -43,8 +44,10 @@ constructor() {
 	});
 
 	document.addEventListener("keyup", (event) => {
-		if (event.key == this.move_up || event.key == this.move_down)
+		if (event.key == "ArrowUp" || event.key == "ArrowDown" ) {
 			this.is_moving = false;
+			this.dir = 0
+		}
 	});
 }
 
@@ -69,6 +72,16 @@ gameLoop() {
 		return;
 
 	document.getElementById("root").replaceChildren(this.canvas);
+
+	console.log(JSON.stringify({
+		"type": "direction",
+		"message": {
+			"room_name": this.room_name,
+			"player": this.playerN,
+			"dir": this.dir,
+			"is_moving": this.is_moving
+		}
+	}))
 
 	this.websocket.send(JSON.stringify({
 		"type": "direction",

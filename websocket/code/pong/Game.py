@@ -98,8 +98,11 @@ class Game(threading.Thread):
     def setPlayerDir(self, playerN, dirY, is_moving) -> None:
         for obj in self.game_objects:
             if obj.id == playerN:
-                obj.dirY = dirY
-                obj.is_moving = is_moving
+                if (is_moving):
+                    obj.dirY = dirY
+                    obj.is_moving = is_moving
+                else:
+                    obj.is_moving = False
     
     def run(self) -> None:
         for obj in self.game_objects:
