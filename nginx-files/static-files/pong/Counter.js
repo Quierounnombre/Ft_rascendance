@@ -30,8 +30,8 @@ update(canvas_objects) {
  */
 render() {
 	const time = this.timeout - this.time_passed;
-	const minutes = Math.trunc((time / 60000) % 60);
-	const seconds = Math.trunc((time / 1000) % 60);
+	const minutes = Math.trunc((time / 60) % 60);
+	const seconds = Math.trunc(time % 60);
 
 	this.context.font = this.font;
 	this.context.fillStyle = this.color;

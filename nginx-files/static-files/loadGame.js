@@ -81,7 +81,7 @@ export default function loadGame() {
 		let data_to_send = [];
 
 		(new FormData(form)).forEach((value, key) => config[key] = value);
-		config.timeout = parseInt(config.timeout) * 1000;
+		config.timeout = parseInt(config.timeout);
 		config.max_score = parseInt(config.max_score);
 		config.type = "config";
 

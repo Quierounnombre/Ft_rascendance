@@ -231,7 +231,7 @@ toJSON() {
 function server_msg(event) {
 	const data = JSON.parse(event["data"]);
 
-	console.log(`DEBUG: server_msg.type: ${data["type"]}`)
+	// console.log(`DEBUG: server_msg.type: ${data["type"]}`) // TODO: debug
 	switch(data["type"]) {
 	case "game.state":
 		// console.log(`DEBUG: ${data["message"]["game_state"]}`);
