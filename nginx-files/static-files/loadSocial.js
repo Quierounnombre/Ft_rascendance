@@ -15,7 +15,16 @@ export default async function loadSocial() {
 <button class="btn btn-outline-secondary" id="search-button"><i class="bi bi-search"></i></button>
 </div>
 `;
-	searchBar.getElementsByTagName("button")[0].addEventListener("click", (event) => {
+
+searchBar.getElementsByTagName("input")[0].addEventListener('keydown', (event) => {
+    if (event.key === 'Enter')
+    {
+        localStorage.setItem("query", searchBar.getElementsByTagName("input")[0].value);
+        window.location.hash = "#search";
+    }
+});
+
+searchBar.getElementsByTagName("button")[0].addEventListener("click", (event) => {
 		localStorage.setItem("query", searchBar.getElementsByTagName("input")[0].value);
 		window.location.hash = "#search";
 	});
