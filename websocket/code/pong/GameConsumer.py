@@ -12,12 +12,14 @@ class GameConsumer(SyncConsumer):
     # message: {"room_name: string"}
     def game_start(self, event) -> None:
         channel_layer = get_channel_layer()
+        message = event["message"]
 
         async_to_sync(channel_layer.group_send)(
-            event["message"]["room_name"], {
+            message["room_name"], {
                 "type": "game.started",
                 "message": {
-                    "room_name": event["message"]["room_name"]
+                    "room_name": message["room_name"],
+                    "data": game_rooms[message["room_name"]].serialize()
                 }
             }
         )
@@ -39,15 +41,16 @@ class GameConsumer(SyncConsumer):
     #     "room_name": str,
     #     "player": str
     #     "dir": int
+    #     "is_moving": bool
     # }
     def player_direction(self, event) -> None:
         message = event["message"]
 
-        game_rooms[message["room_name"]].setPlayerDir(message["player"], message["dir"])
+        game_rooms[message["room_name"]].setPlayerDir(message["player"], message["dir"], message["is_moving"])
     
     # message: {
     #     "room_name": str,
-    #     "player": str
+    #     "player": stetPlayerDir(message["player"], message["dir"], message["is_moving"])r
     #     "id": int
     # }
     def set_player(self, event) -> None:
@@ -66,7 +69,6 @@ class GameConsumer(SyncConsumer):
 
         self.room_name = message["room_name"]
         game_rooms[message["room_name"]] = Game(room_name=self.room_name, data=message["data"])
-
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(

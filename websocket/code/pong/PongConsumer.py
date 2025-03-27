@@ -129,6 +129,7 @@ class PongConsumer(WebsocketConsumer):
     #     "room_name": str,
     #     "player": str
     #     "dir": int
+    #     "is_moving": bool
     def direction(self, message) -> None:
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
@@ -140,9 +141,7 @@ class PongConsumer(WebsocketConsumer):
     def game_started(self, event) -> None:
         self.send(json.dumps({
             "type": "game.started",
-            "message": {
-                "room_name": self.room_name,
-            }
+            "message": event["message"]
         }))
     
     def game_state(self, event) -> None:

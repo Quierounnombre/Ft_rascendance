@@ -95,15 +95,16 @@ class Game(threading.Thread):
             self.room_name, self.getGameState(msg_type)
         )
 
-    def setPlayerDir(self, playerN, dirY) -> None:
+    def setPlayerDir(self, playerN, dirY, is_moving) -> None:
         for obj in self.game_objects:
             if obj.id == playerN:
                 obj.dirY = dirY
+                obj.is_moving = is_moving
     
     def run(self) -> None:
         for obj in self.game_objects:
             if obj.id == "counter":
-                obj.start_time.append(time.time())
+                obj.start_time[0] = time.time()
 
         while not self.isEnd(): # TODO: no esta terminando
             for obj in self.game_objects:

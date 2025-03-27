@@ -22,6 +22,7 @@ constructor() {
 
 	this.context = this.canvas.getContext("2d");
 
+	this.game_objects = new Map()
 
 	// TODO: todo esto lo puede terner el user en su configuracion, por lo que la configuracion propia de los colores iria aqui
 	this.background_color = "black";
@@ -74,7 +75,8 @@ gameLoop() {
 		"message": {
 			"room_name": this.room_name,
 			"player": this.playerN,
-			"dir": this.dir
+			"dir": this.dir,
+			"is_moving": this.is_moving
 		}
 	}));
 
@@ -265,7 +267,27 @@ function server_msg(event) {
 
 	case "game.started":
 		this.room_name = data["message"]["room_name"]
-		// TODO: que tendria que hacer?
+
+		const tmp2 = JSON.parse(data["message"]["data"])
+		for (let i in tmp2) {
+			switch (tmp2[i].type) {
+			case "player":
+				this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.canvas, this.context)));
+				break;
+
+			case "ball":
+				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.canvas, this.context)));
+				break;
+
+			case "counter":
+				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.canvas, this.context)));
+				break;
+
+			default:
+				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.canvas, this.context)));
+			}
+		}
+
 		document.getElementById("root").replaceChildren(this.canvas);
 		this.game_running = true;
 		this.gameLoop();
@@ -288,7 +310,7 @@ function websocket_close() {
 function generateRandomString(length) {
 	let result = '';
 	// const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 	const charactersLength = characters.length;
 

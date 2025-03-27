@@ -21,6 +21,7 @@ class Counter(CanvasObject):
 
         self.time_passed = 0
         self.start_time = []
+        self.start_time.append(time.time())
     
     def serialize(self):
         return json.dumps ({
@@ -42,9 +43,6 @@ class Counter(CanvasObject):
             "width": 0,
             "height": 0
         })
-
-    def setStartTime(self, time):
-        self.start_time = time
 
     def update(self, canvas_object):
         self.time_passed = time.time() - self.start_time[0]
