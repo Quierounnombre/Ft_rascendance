@@ -29,6 +29,22 @@ constructor() {
 
 	this.dir = 0;
 	this.game_running = false;
+
+	// TODO: esto habria que comprobar que los clientes no pueden mover a otros 
+	document.addEventListener("keydown", (event) => {
+		if (event.key === 'ArrowUp') {
+			this.dir = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+			this.is_moving = true;
+		} else if (event.key === 'ArrowDown') {
+			this.dir = 4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
+			this.is_moving = true;
+		}
+	});
+
+	document.addEventListener("keyup", (event) => {
+		if (event.key == this.move_up || event.key == this.move_down)
+			this.is_moving = false;
+	});
 }
 
 /**
