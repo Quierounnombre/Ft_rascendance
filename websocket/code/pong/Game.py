@@ -23,6 +23,7 @@ class Game(threading.Thread):
         self.max_score = 5
     
         self.room_name = room_name
+        self.number_players = 0
 
         data = json.loads(data)
 
@@ -95,9 +96,9 @@ class Game(threading.Thread):
             self.room_name, self.getGameState(msg_type)
         )
 
-    def setPlayerDir(self, playerN, dirY, is_moving) -> None:
+    def setPlayerDir(self, player_id, dirY, is_moving) -> None:
         for obj in self.game_objects:
-            if obj.id == playerN:
+            if obj.pk == player_id:
                 if (is_moving):
                     obj.dirY = dirY
                     obj.is_moving = is_moving

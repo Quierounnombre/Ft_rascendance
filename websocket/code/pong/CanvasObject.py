@@ -17,6 +17,7 @@ class CanvasObject:
         self.height = 0
         self.canvas_width = 800
         self.canvas_height = 400
+        self.pk = -42
 
         if 'color' in obj:          self.color = str(obj['color'])
         else:                       self.color = "white"
@@ -139,12 +140,10 @@ class CanvasObject:
         self.keepInsideCanvas()
 
     def update(self, canvas_objects):
-        if self.id == "player2": print(f"{self.dirY}", flush=True) # TODO: debug
         self.slide(self.dirX, self.dirY)
         for obj in canvas_objects:
             if obj != self and self.objectHits(obj):
                 self.resolveHit(obj);
-        if self.id == "player2": print(f"{self.dirY}\n", flush=True) # TODO: debug
     
     def recalculateHitbox(self):
         self.point_x1 = self.x - self.width / 2;

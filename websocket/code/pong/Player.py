@@ -5,6 +5,7 @@ class Player(CanvasObject):
     def __init__(self, obj):
         super().__init__(obj)
         self.is_moving = False
+        self.pk = -1
     
     def slide(self, dirX, dirY):
         self.y += self.speed * dirY

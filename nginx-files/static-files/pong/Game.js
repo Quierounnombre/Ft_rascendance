@@ -73,21 +73,11 @@ gameLoop() {
 
 	document.getElementById("root").replaceChildren(this.canvas);
 
-	console.log(JSON.stringify({
-		"type": "direction",
-		"message": {
-			"room_name": this.room_name,
-			"player": this.playerN,
-			"dir": this.dir,
-			"is_moving": this.is_moving
-		}
-	}))
-
 	this.websocket.send(JSON.stringify({
 		"type": "direction",
 		"message": {
 			"room_name": this.room_name,
-			"player": this.playerN,
+			"player_id": this.user_id,
 			"dir": this.dir,
 			"is_moving": this.is_moving
 		}
