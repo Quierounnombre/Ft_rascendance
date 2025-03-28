@@ -13,7 +13,6 @@ class GameConsumer(SyncConsumer):
     def game_start(self, event) -> None:
         channel_layer = get_channel_layer()
         message = event["message"]
-        # print(f'GameConsumer.game_start(): {message}', flush=True)
 
         async_to_sync(channel_layer.group_send)(
             message["room_name"], {
@@ -25,7 +24,8 @@ class GameConsumer(SyncConsumer):
             }
         )
 
-        game_rooms[event["message"]["room_name"]].start()
+        if not game_rooms[event["message"]["room_name"]].is_running:
+            game_rooms[event["message"]["room_name"]].start()
     
     def game_started(self, event) -> None:
         pass
@@ -46,9 +46,7 @@ class GameConsumer(SyncConsumer):
     # }
     def player_direction(self, event) -> None:
         message = event["message"]
-        # print(f'GameConsumer.player_direction(): {message}', flush=True)
 
-        # TODO: hacer que el mensaje tambien lleve el id, para comprobar que el imput es el correcto
         game_rooms[message["room_name"]].setPlayerDir(message["player_id"], message["dir"], message["is_moving"])
     
     # message: {
@@ -58,7 +56,6 @@ class GameConsumer(SyncConsumer):
     # }
     def set_player(self, event) -> None:
         message = event["message"]
-        # print(f'GameConsumer.set_player(): {message}', flush=True)
 
         if game_rooms[message["room_name"]].number_players == 2:
             return
@@ -75,7 +72,6 @@ class GameConsumer(SyncConsumer):
     # }
     def game_config(self, event) -> None:
         message = event["message"]
-        # print(f'GameConsumer.game_config(): {message}', flush=True)
 
         self.room_name = message["room_name"]
         game_rooms[message["room_name"]] = Game(room_name=self.room_name, data=message["data"])

@@ -25,6 +25,8 @@ class Game(threading.Thread):
         self.room_name = room_name
         self.number_players = 0
 
+        self.is_running = False
+
         data = json.loads(data)
 
         for obj in data:
@@ -110,11 +112,13 @@ class Game(threading.Thread):
             if obj.id == "counter":
                 obj.start_time[0] = time.time()
 
+        self.is_running = True
         while not self.isEnd(): # TODO: no esta terminando
             for obj in self.game_objects:
                 obj.update(self.game_objects)
             self.broadcastState("game.state")
             time.sleep(0.01)
 
+        self.is_running = False
         self.broadcastState("game.end")# TODO: el metodo requiere el game room
         print("End game") # TODO: borrar

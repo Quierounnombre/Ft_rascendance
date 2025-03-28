@@ -95,8 +95,6 @@ class PongConsumer(WebsocketConsumer):
     def joinRoom(self, message) -> None:
         self.room_name = message["room_name"]
 
-        # TODO: si la sala ya tiene a dos jugadores?
-
         # TODO: si no existe la sala?
         # si no existe una instancia de esa sala, el GameConsumer deberia mandar un mensaje de que no existe
 
