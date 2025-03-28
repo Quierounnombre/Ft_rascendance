@@ -3,6 +3,7 @@ import { Counter } from "./Counter.js";
 import { Ball } from "./Ball.js";
 import { Player } from "./Player.js";
 import { Floating } from "./Floating.js";
+import * as THREE from 'three';
 "use strict";
 
 class Game {
@@ -46,6 +47,38 @@ constructor() {
 		if (event.key == this.move_up || event.key == this.move_down)
 			this.is_moving = false;
 	});
+
+ // 3d graphics
+	this.threeCanvas = this.canvas.cloneNode();
+	this.scene = new THREE.Scene();
+	this.scene.background = new THREE.Color(0x262626);
+	const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+	// this.scene.add(ambientLight);
+
+	var FOV = 70;
+	var z = this.threeCanvas.height / (2 * Math.tan(((FOV * Math.PI) / 180)/2))
+	this.camera = new THREE.PerspectiveCamera(FOV, this.threeCanvas.width / this.threeCanvas.height, z, z + 30)
+	this.camera.position.z = z + 11;
+	this.camera.position.x = this.threeCanvas.width / 2;
+	this.camera.position.y = - this.threeCanvas.height / 2;
+	console.log(this.camera.position); 
+	this.scene.add(this.camera);
+	this.renderer = new THREE.WebGLRenderer({
+		canvas: this.threeCanvas
+	})
+	this.renderer.setSize(this.threeCanvas.width, this.threeCanvas.height);
+	this.renderer.setAnimationLoop(this.animate.bind(this));
+}
+
+animate() {
+	if (!this.game_state)
+		return ;
+	const objs = JSON.parse(this.game_state);
+	for (let i in objs) {
+		if (objs[i].type === "player" || objs[i].type === "ball" || objs[i].type === "counter")
+			this.game_objects.get(objs[i].id).animate(objs[i]);
+	}
+	this.renderer.render(this.scene, this.camera)
 }
 
 /**
@@ -69,6 +102,7 @@ gameLoop() {
 		return;
 
 	document.getElementById("root").replaceChildren(this.canvas);
+	document.getElementById("root").appendChild(this.threeCanvas);
 
 	this.websocket.send(JSON.stringify({
 		"type": "direction",
@@ -89,28 +123,29 @@ render() {
 		return;
 
 	const objs = JSON.parse(this.game_state);
+	console.log(objs);
 
 	this.drawBackground(); // TODO: retocar esto
 	for (let i in objs) {
 		// TODO: poner en el metodo render de los objetos el color
 		switch (objs[i].type) {
 		case "player":
-			const player = new Player(objs[i], this.canvas, this.context);
-			player.render();
+			// const player = new Player(objs[i], this.canvas, this.context, this.scene);
+			// player.render();
 			break;
 
 		case "ball":
-			const ball = new Ball(objs[i], this.canvas, this.context);
-			ball.render();
+			// const ball = new Ball(objs[i], this.canvas, this.context, this.scene);
+			// ball.render();
 			break;
 
 		case "counter":
-			const counter = new Counter(objs[i], this.canvas, this.context);
-			counter.render();
+			// const counter = new Counter(objs[i], this.canvas, this.context, this.scene);
+			// counter.render();
 			break;
 
 		default:
-			const canvas_object = new CanvasObject(objs[i], this.canvas, this.context);
+			const canvas_object = new CanvasObject(objs[i], this.canvas, this.context, this.scene);
 			canvas_object.render();
 		}
 	}
@@ -272,23 +307,24 @@ function server_msg(event) {
 		for (let i in tmp2) {
 			switch (tmp2[i].type) {
 			case "player":
-				this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.canvas, this.context)));
+				this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.canvas, this.context, this.scene)));
 				break;
 
 			case "ball":
-				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.canvas, this.context)));
+				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.canvas, this.context, this.scene)));
 				break;
 
 			case "counter":
-				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.canvas, this.context)));
+				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.canvas, this.context, this.scene)));
 				break;
 
 			default:
-				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.canvas, this.context)));
+				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.canvas, this.context, this.scene)));
 			}
 		}
 
 		document.getElementById("root").replaceChildren(this.canvas);
+		document.getElementById("root").appendChild(this.threeCanvas);
 		this.game_running = true;
 		this.gameLoop();
 		break;

@@ -1,5 +1,6 @@
 import { CanvasObject } from "./CanvasObject.js";
 "use strict";
+import * as THREE from 'three';
 
 class Counter extends CanvasObject {
 /**
@@ -7,8 +8,28 @@ class Counter extends CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context) {
-	super(obj, canvas, context);
+constructor(obj, canvas, context, scene) {
+	super(obj, canvas, context, scene);
+	this.canvas =  canvas.cloneNode();
+	this.canvas.setAttribute("height", canvas.height / 8);
+	this.geometry = new THREE.BoxGeometry(this.canvas.width, this.canvas.height, 40);
+	this.texture = new THREE.CanvasTexture(this.canvas);
+	this.texture.needsUpdate = true;
+	this.material = new THREE.MeshPhongMaterial({map: this.texture});
+	this.mesh = new THREE.Mesh(this.geometry, this.material);
+	this.mesh.position.x = this.canvas.width / 2;
+	this.mesh.position.y = - this.canvas.height / 2;
+	this.mesh.position.z = - 10;
+	scene.add(this.mesh);
+}
+
+animate(obj) {
+	this.mesh.position.x = this.canvas.width / 2;
+	this.mesh.position.y = - this.canvas.height / 2;
+	const ctx = this.canvas.getContext("2d");
+	ctx.fillStyle = "red";
+	ctx.fillRect(0, 0, 100, 50);
+	this.texture.needsUpdate = true;
 }
 
 setStartTime(time) {

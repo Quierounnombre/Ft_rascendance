@@ -1,18 +1,37 @@
 import { CanvasObject } from "./CanvasObject.js";
 "use strict";
-
+import * as THREE from 'three';
 class Ball extends CanvasObject {
 /**
  * @param obj individual object of parsed with JSON.parse()
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context) {
-	super(obj, canvas, context);
+constructor(obj, canvas, context, scene) {
+	super(obj, canvas, context, scene);
 	this.width = this.radius * 2;
 	this.height = this.radius * 2;
 	this.recalculateHitbox();
+
+	this.geometry = new THREE.SphereGeometry( this.radius );
+	this.mesh = new THREE.Mesh(this.geometry, this.material);
+	this.mesh.position.x = this.x;
+	this.mesh.position.y = - this.y;
+	this.light = new THREE.PointLight(0xffffff, 300, 0, 1)
+	this.light.position.x = this.mesh.position.x;
+	this.light.position.y = this.mesh.position.y;
+	this.light.position.z = canvas.height / (2 * Math.tan(((70 * Math.PI) / 180)/2));
+	scene.add(this.mesh);
+	scene.add(this.light);
 }
+
+animate(obj) {
+	this.mesh.position.x = obj.x;
+	this.mesh.position.y = - obj.y;
+	this.light.position.x = this.mesh.position.x;
+	this.light.position.y = this.mesh.position.y;
+}
+
 
 render() {
 	this.context.fillStyle = this.color;

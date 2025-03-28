@@ -1,4 +1,5 @@
 "use strict";
+import * as THREE from 'three';
 
 class CanvasObject {
 /**
@@ -6,7 +7,7 @@ class CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context) {
+constructor(obj, canvas, context, scene) {
 	this.canvas = canvas;
 	this.context = context;
 
@@ -43,6 +44,18 @@ constructor(obj, canvas, context) {
 
 	this.point_x4 = this.x + this.width / 2;
 	this.point_y4 = this.y + this.height / 2;
+
+	this.geometry = new THREE.BoxGeometry(this.width, this.height, 20);
+	this.material = new THREE.MeshDepthMaterial()
+	this.mesh = new THREE.Mesh(this.geometry, this.material);
+	this.mesh.position.x = this.x;
+	this.mesh.position.y = - this.y;
+	scene.add(this.mesh);
+}
+
+animate(obj) {
+	this.mesh.position.x = obj.x;
+	this.mesh.position.y = - obj.y;
 }
 
 /**
