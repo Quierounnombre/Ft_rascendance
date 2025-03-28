@@ -2,7 +2,7 @@
 Django>=5.0
 
 # Postgres adapter
-psycopg
+psycopg2-binary==2.9.10
 
 # File manipulation in Pyhton
 pillow>=11.1.0

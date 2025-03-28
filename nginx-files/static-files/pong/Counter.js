@@ -9,23 +9,10 @@ class Counter extends CanvasObject {
  */
 constructor(obj, canvas, context) {
 	super(obj, canvas, context);
-	this.timeout = 60000;
-
-	this.player1_score = 0;
-	this.player2_score = 0;
-	this.highest_score = 0;
-
-	this.x = -1;
-	this.y = -1;
-	this.width = 0;
-	this.height = 0;
-	this.recalculateHitbox();
-
-	this.time_passed = 0;
-	this.start_time = Date.now();
 }
 
 setStartTime(time) {
+	// TODO: deprecated?
 	this.start_time = time;
 }
 
@@ -43,8 +30,8 @@ update(canvas_objects) {
  */
 render() {
 	const time = this.timeout - this.time_passed;
-	const minutes = Math.trunc((time / 60000) % 60);
-	const seconds = Math.trunc((time / 1000) % 60);
+	const minutes = Math.trunc((time / 60) % 60);
+	const seconds = Math.trunc(time % 60);
 
 	this.context.font = this.font;
 	this.context.fillStyle = this.color;
