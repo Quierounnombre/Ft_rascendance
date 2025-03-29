@@ -1,10 +1,8 @@
 #!/bin/sh
 
-#WAIT FOR THE DB
-sleep 5
-
-python3 /UserMng/code/manage.py	makemigrations
-python3 /UserMng/code/manage.py	migrate
+echo "HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa"
+python3 /UserMng/code/manage.py	makemigrations UserMng
+python3 /UserMng/code/manage.py	migrate --verbosity=3
 
 python /UserMng/code/manage.py createsuperuser --noinput --username ${DJANGO_SUPERUSER}
 

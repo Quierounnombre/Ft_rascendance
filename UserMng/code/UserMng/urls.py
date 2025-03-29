@@ -15,7 +15,7 @@ urlpatterns = [
 	path('singup/', UserSingUpAPIView.as_view(), name="user_signup"),
 	path('logout/', UserLogoutAPIView.as_view(), name="user_logout"),
 	path('oauth_login/', OAuthLoginAPIView.as_view(), name='oauth_login'),
-	path('auth_callback/', OAuthCallbackAPIView.as_view(), name='auth_callback')
+	path('auth_callback/', OAuthCallbackAPIView.as_view(), name='auth_callback'),
 	path('me/', ProfileView.as_view(
 		{'get':'me',
 		'put':'update'},

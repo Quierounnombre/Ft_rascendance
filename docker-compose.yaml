@@ -25,6 +25,8 @@ services:
   #  depends_on:
   #    - db
 
+#Nginx
+
   nginx:
     build:
       context: nginx-files 
@@ -34,15 +36,19 @@ services:
     depends_on:
       - websocket
       - usermng
+      - twofactorauth
     volumes:
       - ./nginx-files/static-files:/etc/nginx/html
     ports:
-      - 7000:443
+      - ${NGINX_EXTERNAL_PORT}:${NGINX_INTERNAL_PORT}
     networks:
       - websocket-network
       - rascendance-network
+      - twofactorauth-network
 
-  db:
+#UserMng
+
+  user_db:
     restart: always
     image: postgres:latest
     container_name: ${DB_CONTAINER_NAME}
@@ -74,7 +80,7 @@ services:
     volumes:
       - ./UserMng/code:/UserMng/code
     depends_on:
-      db:
+      user_db:
         condition: service_healthy
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -93,7 +99,7 @@ services:
     networks:
       - rascendance-network
 
-# websocket
+#websocket
 
   websocket: 
     build:
@@ -142,14 +148,71 @@ services:
       timeout: 3s
       interval: 1s
 
+#TwoFactorAuth
+
+  twofactorauth_db:
+    restart: always
+    image: postgres:latest
+    container_name: ${TwoFactorAuth_DB_NAME}
+    volumes:
+      - TwoFactorAuth_data:/var/lib/postgressql/data
+    expose:
+      - ${TwoFactorAuth_DB_PORT}
+    environment:
+      POSTGRES_USER : ${TwoFactorAuth_POSTGRES_USER}
+      PGUSER: ${TwoFactorAuth_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TwoFactorAuth_POSTGRESS_PASSWORD}
+      POSTGRES_DB: ${TwoFactorAuth_DB}
+    networks:
+      - twofactorauth-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${TwoFactorAuth_DB}"]
+      retries: 10
+      timeout: 3s
+      interval: 1s
+
+  twofactorauth:
+    restart: always
+    build:
+      context: ./TwoFactorAuth
+      dockerfile: Dockerfile
+    container_name: TwoFactorAuth
+    expose:
+      - ${TwoFactorAuth_PORT}
+    volumes:
+      - ./TwoFactorAuth/code:/TwoFactorAuth/code
+    depends_on:
+      user_db:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: ${TwoFactorAuth_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TwoFactorAuth_POSTGRESS_PASSWORD}
+      POSTGRES_DB: ${TwoFactorAuth_DB}
+      POSTGRES_PORT: ${TwoFactorAuth_DB_PORT}
+      DJANGO_ALLOWED_HOSTS: ${TwoFactorAuth_ALLOWED_HOSTS}
+      DJANGO_SECRET_KEY: ${TwoFactorAuth_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_HOST: ${TwoFactorAuth_HOST}
+      BACKEND_PORT: ${TwoFactorAuth_PORT}
+      DJANGO_SUPERUSER_PASSWORD: ${TwoFactorAuth_SUPERUSER_PASSWORD}
+      DJANGO_SUPERUSER: ${TwoFactorAuth_SUPERUSER}
+      DJANGO_SUPERUSER_EMAIL: ${TwoFactorAuth_SUPERUSER_EMAIL}
+    networks:
+      - twofactorauth-network
+
 volumes:
   postgres_data:
     name: postgres_data
   websocket_data:
     name: websocket_data
+  TwoFactorAuth_data:
+    name: TwoFactorAuth_data
 
 networks:
   rascendance-network:
     driver: bridge
   websocket-network:
+    driver: bridge
+  twofactorauth-network:
     driver: bridge
