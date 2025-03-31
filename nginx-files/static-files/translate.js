@@ -1,5 +1,5 @@
 const defaultLocale = "ENG";
-let locale;
+localStorage.setItem("language", defaultLocale);
 
 const translations = {
     "ENG": {
@@ -24,6 +24,14 @@ const translations = {
         "badge-hi": "Hi",
         "search-bar":"Search other users",
         "no-friends": "Seems like you don't have any friends...",
+        "log-out": "Log Out",
+        "prof-edit": "Edit",
+        "history": "History",
+        "prof-email": "Email :",
+        "prof-uname": "Username: ",
+        "prof-font": "Font size: ",
+        "prof-lang": "Language: ",
+        "no-find": "Nothing to see here...",
     },
 
     "ESP": {
@@ -48,6 +56,14 @@ const translations = {
         "badge-hi": "Hola",
         "search-bar":"Buscar otros usuarios",
         "no-friends": "Parece que aún no tienes amigos...",
+        "log-out": "Salir",
+        "prof-edit": "Editar",
+        "history": "Historial",
+        "prof-email": "Correo: ",
+        "prof-uname": "Apodo: ",
+        "prof-font": "Tamaño fuente: ",
+        "prof-lang": "Idioma: ",
+        "no-find": "Nada de na..",
     },
 
     "CAT": {
@@ -72,22 +88,27 @@ const translations = {
         "badge-hi": "Bones",
         "search-bar":"Buscar altres usuaris",
         "no-friends": "Aparentment encara no tens amics...",
+        "log-out": "Sortir",
+        "prof-edit": "Cambiar",
+        "history": "Historial",
+        "prof-email": "Correu: ",
+        "prof-uname": "Sobrenom: ",
+        "prof-font": "Mida lletra: ",
+        "prof-lang": "Idioma: ",
+        "no-find": "Res de res...",
     },
 };
 
 function setLocale(newLocale) {
-    if (newLocale === locale) return;
-    locale = newLocale;
+    localStorage.setItem("language", newLocale);
     document.documentElement.lang = newLocale;
     translatePage();
-
   }
   
 
 // ...
 // When the page content is ready...
 document.addEventListener("DOMContentLoaded", () => {
-  setLocale(defaultLocale);
   bindLocaleSwitcher();
 });
 
@@ -101,6 +122,7 @@ window.addEventListener("hashchange", () => {
 // load the locale's translations and update
 // the page
 function bindLocaleSwitcher() {
+    const locale = localStorage.getItem("language");
   const switcher =
     document.querySelector("[data-i18n-switcher]");
   switcher.value = locale;
@@ -110,7 +132,7 @@ function bindLocaleSwitcher() {
   };
 }
 
-function translatePage() {
+export default async function translatePage() {
     document
       .querySelectorAll("[data-i18n-key]")
       .forEach(translateElement);
@@ -119,6 +141,7 @@ function translatePage() {
   // with the translation in the active locale,
   // corresponding to the element's data-i18n-key
   function translateElement(element) {
+    const locale = localStorage.getItem("language");
     const key = element.getAttribute("data-i18n-key");
     const translation = translations[locale][key];
     if (key==="reg-sub" || key=== "login-sub")

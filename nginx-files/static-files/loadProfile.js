@@ -1,6 +1,7 @@
 import editProfile from "./editProfile.js";
 import getUser from "./getUser.js";
 import getUserElement from "./getUserElement.js";
+import translatePage from "./translate.js";
 
 export default async function loadProfile() {
 	const root = document.getElementById("root");
@@ -20,6 +21,7 @@ export default async function loadProfile() {
 	const logoutButton = document.createElement("button");
 	logoutButton.setAttribute("type", "button");
 	logoutButton.setAttribute("class", "btn btn-lg btn-danger");
+    logoutButton.setAttribute("data-i18n-key", "log-out");
 	logoutButton.innerHTML = "Log Out";
 	logoutButton.addEventListener("click", logOut);
 
@@ -27,18 +29,21 @@ export default async function loadProfile() {
 	editButton.setAttribute("type", "button");
     editButton.setAttribute("id", "edit_button");
 	editButton.setAttribute("class", "btn btn-lg btn-success me-2");
+    editButton.setAttribute("data-i18n-key", "prof-edit");
 	editButton.innerHTML = "Edit";
     editButton.addEventListener("click", editProfile);
 
     const historyButton = document.createElement("button");
 	historyButton.setAttribute("type", "button");
 	historyButton.setAttribute("class", "btn btn-lg btn-info me-2");
+    historyButton.setAttribute("data-i18n-key", "history");
 	historyButton.innerHTML = "History";
 
 	root.replaceChildren(userElement);
     root.appendChild(editButton);
     root.appendChild(historyButton);
 	root.appendChild(logoutButton);
+    translatePage();
 }
 
 function logOut() {

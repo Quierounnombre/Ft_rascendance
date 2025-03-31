@@ -1,5 +1,6 @@
 import getMyFriends from "./getMyFriends.js";
 import searchUsers from "./searchUsers.js";
+import translatePage from "./translate.js";
 
 export default async function loadSearch() {
 	if (! "query" in localStorage) {
@@ -31,6 +32,7 @@ async function usersList(users) {
     const friends = await getMyFriends(token)
     const userList = document.createElement("div");
 	if (users.length === 0) {
+        userList.setAttribute("data-i18n-key", "no-find");
 		userList.innerHTML = "Nothing to see here...";
 		return userList;
 	}
@@ -51,7 +53,7 @@ async function usersList(users) {
 		<div class="w-100"></div>
 		</div>
     `});
-
+        translatePage();
 	return userList;
 }
 

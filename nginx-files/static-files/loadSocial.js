@@ -1,4 +1,5 @@
 import getMyFriends from "./getMyFriends.js";
+import translatePage from "./translate.js";
 
 export default async function loadSocial() {
 	const token = localStorage.getItem("token");
@@ -30,6 +31,7 @@ searchBar.getElementsByTagName("button")[0].addEventListener("click", (event) =>
 	});
 	root.replaceChildren(searchBar);
 	root.appendChild(friends);
+    translatePage();
 }
 
 async function getFriendList(token) {
@@ -70,6 +72,7 @@ async function getFriendList(token) {
 		<div class="w-100"></div>
 		</div>
     `});
+  
 
 	return friendList;
 }

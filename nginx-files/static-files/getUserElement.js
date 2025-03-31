@@ -1,7 +1,7 @@
 export default function getUserElement(user) {
 	const emailField = document.createElement("div");
 	emailField.setAttribute("class", "mb-3 row");
-	emailField.innerHTML = `<label for="" class="col-sm-2 form-label col-form-label">Email: </label>
+	emailField.innerHTML = `<label for="" data-i18n-key="prof-email" class="col-sm-2 form-label col-form-label">Email: </label>
 		<div class="col-sm-10">
 		<input type="text" readonly class="form-control-plaintext" id="email" name="email" value="`+ user["email"] +`">`;
 
@@ -9,7 +9,7 @@ export default function getUserElement(user) {
 	const fontField = emailField.cloneNode(true);
 	const languageField = document.createElement("div");
 	languageField.setAttribute("class", "mb-3 row");
-	languageField.innerHTML = `<label for="language" class="col-sm-2 form-label col-form-label">Language: </label>
+	languageField.innerHTML = `<label for="language" data-i18n-key="prof-lang" class="col-sm-2 form-label col-form-label">Language: </label>
 		<div class="col-sm-10">
 		<select disabled id="language" name="language">
             <option value="ENG">ENG</option>
@@ -19,6 +19,9 @@ export default function getUserElement(user) {
 
 	usernameField.getElementsByTagName("label")[0].setAttribute('for', "username");
 	fontField.getElementsByTagName("label")[0].setAttribute('for', "font");
+
+    usernameField.getElementsByTagName("label")[0].setAttribute('data-i18n-key', "prof-uname");
+	fontField.getElementsByTagName("label")[0].setAttribute('data-i18n-key', "prof-font");;
 
 	usernameField.getElementsByTagName("label")[0].innerHTML="Username: ";
 	fontField.getElementsByTagName("label")[0].innerHTML="Font size:";
