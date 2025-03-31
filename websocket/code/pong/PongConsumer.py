@@ -24,6 +24,16 @@ class PongConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code) -> None:
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
+                "type": "game.end",
+                "message": {
+                    "room_name": self.room_name,
+                    "data": ""
+                }
+            }
+        )
+
         async_to_sync(self.channel_layer.group_discard)(
             self.room_name, self.channel_name
         )
