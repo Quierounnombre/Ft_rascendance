@@ -16,9 +16,9 @@ export default async function loadNavBar(loc) {
     </button>
     <div class="collapse col-lg-auto navbar-collapse justify-content-center offcanvas-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav mr-auto" id="links">
-        <a class="nav-link light" href="#game"><h2>Game</h2></a>
-        <a class="nav-link light" href="#social"><h2>Social</h2></a>
-		<a class="nav-link light" href="#profile"><h2>Profile</h2></a>
+        <a class="nav-link light" href="#game"><h2 data-i18n-key="navbar-game">Game</h2></a>
+        <a class="nav-link light"  href="#social"><h2 data-i18n-key="navbar-social">Social</h2></a>
+		<a class="nav-link light"  href="#profile"><h2 data-i18n-key="navbar-profile">Profile</h2></a>
       </div>
     </div>
   </div>
@@ -47,11 +47,10 @@ async function profileButton() {
 	}
 
 	document.getElementsByTagName("html")[0].style["font-size"] = user.font + "px";
-
 	const profile = document.createElement("span");
 	profile.setAttribute("class", "badge bg-secondary");
 	profile.innerHTML = `
-<div class="mini-cropped-image"><img class="rounded-circle me-1" width="32" height="32" src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" /> Hi `+ user["username"] +` !</div>`;
+<div class="mini-cropped-image"><img class="rounded-circle me-1" width="32" height="32" src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" /> <b data-i18n-key="badge-hi">Hi</b> `+ user["username"] +` !</div>`;
 
 	profile.addEventListener("click", 
 		() => {window.location.hash = "#profile"});

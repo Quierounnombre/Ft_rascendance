@@ -11,7 +11,7 @@ export default async function loadSocial() {
 	const searchBar	= document.createElement("div");
 	searchBar.innerHTML = `
 <div class="search-container input-group">
-<input type="text" id="search-box" class="form-control search-input" placeholder="Search other users">
+<input type="text" id="search-box" class="form-control search-input" data-i18n-key="search-bar" placeholder="Search other users">
 <button class="btn btn-outline-secondary" id="search-button"><i class="bi bi-search"></i></button>
 </div>
 `;
@@ -42,6 +42,7 @@ async function getFriendList(token) {
 	const friendList = document.createElement("div");
 	if (friends.length === 0) {
 		friendList.innerHTML = "Seems like you don't have any friends...";
+        friendList.setAttribute("data-i18n-key", "no-friends");
 		return friendList;
 	}
 	friends.forEach(user => {

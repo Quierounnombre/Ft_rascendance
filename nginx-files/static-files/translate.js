@@ -18,6 +18,12 @@ const translations = {
         "reg-pass": "Password:",
         "reg-pass2": "Repeat Password:",
         "reg-sub": "Sign Up",
+        "navbar-profile": "Profile",
+        "navbar-game": "Game",
+        "navbar-social": "Social",
+        "badge-hi": "Hi",
+        "search-bar":"Search other users",
+        "no-friends": "Seems like you don't have any friends...",
     },
 
     "ESP": {
@@ -36,6 +42,12 @@ const translations = {
         "reg-pass": "Contraseña:",
         "reg-pass2": "Repetir Contraseña:",
         "reg-sub": "Registrar",
+        "navbar-profile": "Perfil",
+        "navbar-game": "Juega",
+        "navbar-social": "Amigos",
+        "badge-hi": "Hola",
+        "search-bar":"Buscar otros usuarios",
+        "no-friends": "Parece que aún no tienes amigos...",
     },
 
     "CAT": {
@@ -54,12 +66,17 @@ const translations = {
         "reg-pass": "Contrasenya:",
         "reg-pass2": "Repetir Contrasenya:",
         "reg-sub": "Registrarse",
+        "navbar-profile": "Perfil",
+        "navbar-game": "Juga",
+        "navbar-social": "Amics",
+        "badge-hi": "Bones",
+        "search-bar":"Buscar altres usuaris",
+        "no-friends": "Aparentment encara no tens amics...",
     },
 };
 
-async function setLocale(newLocale) {
+function setLocale(newLocale) {
     if (newLocale === locale) return;
-  
     locale = newLocale;
     document.documentElement.lang = newLocale;
     translatePage();
@@ -71,22 +88,22 @@ async function setLocale(newLocale) {
 // When the page content is ready...
 document.addEventListener("DOMContentLoaded", () => {
   setLocale(defaultLocale);
-  bindLocaleSwitcher(defaultLocale);
+  bindLocaleSwitcher();
 });
 
 window.addEventListener("hashchange", () => {
+    bindLocaleSwitcher();
     translatePage();
-    bindLocaleSwitcher(defaultLocale);
   });
 
 // ...
 // Whenever the user selects a new locale, we
 // load the locale's translations and update
 // the page
-function bindLocaleSwitcher(initialValue) {
+function bindLocaleSwitcher() {
   const switcher =
     document.querySelector("[data-i18n-switcher]");
-  switcher.value = initialValue;
+  switcher.value = locale;
   switcher.onchange = (e) => {
     // Set the locale to the selected option[value]
     setLocale (e.target.value);
@@ -106,6 +123,8 @@ function translatePage() {
     const translation = translations[locale][key];
     if (key==="reg-sub" || key=== "login-sub")
      element.setAttribute("value", translation);
+    else if (key==="search-bar")
+     element.setAttribute("placeholder", translation);
     else
-    element.innerText = translation;
+     element.innerText = translation;
   }
