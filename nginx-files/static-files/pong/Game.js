@@ -40,14 +40,37 @@ constructor() {
 		} else if (event.key === 'ArrowDown') {
 			this.dir = 4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
-		}
+		} else
+			return;
+
+		this.websocket.send(JSON.stringify({
+			"type": "direction",
+			"message": {
+				"room_name": this.room_name,
+				"player_id": this.user_id,
+				"dir": this.dir,
+				"is_moving": this.is_moving
+			}
+		}));
 	});
 
 	document.addEventListener("keyup", (event) => {
 		if (event.key == "ArrowUp" || event.key == "ArrowDown" ) {
 			this.is_moving = false;
 			this.dir = 0
-		}
+		} else
+			return;
+
+		this.websocket.send(JSON.stringify({
+			"type": "direction",
+			"message": {
+				"room_name": this.room_name,
+				"player_id": this.user_id,
+				"dir": this.dir,
+				"is_moving": this.is_moving
+			}
+		}));
+	
 	});
 }
 
@@ -72,16 +95,6 @@ gameLoop() {
 		return;
 
 	document.getElementById("root").replaceChildren(this.canvas);
-
-	this.websocket.send(JSON.stringify({
-		"type": "direction",
-		"message": {
-			"room_name": this.room_name,
-			"player_id": this.user_id,
-			"dir": this.dir,
-			"is_moving": this.is_moving
-		}
-	}));
 
 	this.render();
 	this.animation = window.requestAnimationFrame(this.gameLoop.bind(this));
@@ -142,7 +155,6 @@ drawBackground() {
 createRoom(game_config) {
 	this.room_name = generateRandomString(8);
 	this.playerN = "player1";
-	// this.game_config = game_config; // TODO: quizas no  haga falta
 
 	this.websocket = new WebSocket(
 		'wss://'
