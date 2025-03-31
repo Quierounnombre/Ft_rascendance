@@ -21,6 +21,7 @@ export default async function loadSearch() {
     
 	const root = document.getElementById("root");
 	root.replaceChildren(userList);
+    translatePage();
 }
 
 async function usersList(users) {
@@ -53,7 +54,7 @@ async function usersList(users) {
 		<div class="w-100"></div>
 		</div>
     `});
-        translatePage();
+    translatePage();
 	return userList;
 }
 

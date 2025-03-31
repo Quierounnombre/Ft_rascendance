@@ -121,8 +121,8 @@ window.addEventListener("hashchange", () => {
 // Whenever the user selects a new locale, we
 // load the locale's translations and update
 // the page
-function bindLocaleSwitcher() {
-    const locale = localStorage.getItem("language");
+async function bindLocaleSwitcher() {
+    const locale = await localStorage.getItem("language");
   const switcher =
     document.querySelector("[data-i18n-switcher]");
   switcher.value = locale;
