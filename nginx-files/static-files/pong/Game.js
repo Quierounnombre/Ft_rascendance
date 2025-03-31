@@ -32,7 +32,6 @@ constructor() {
 	this.game_running = false;
 	this.is_moving = false;
 
-	// TODO: esto habria que comprobar que los clientes no pueden mover a otros 
 	document.addEventListener("keydown", (event) => {
 		if (event.key === 'ArrowUp') {
 			this.dir = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
@@ -55,7 +54,7 @@ constructor() {
 	});
 
 	document.addEventListener("keyup", (event) => {
-		if (event.key == "ArrowUp" || event.key == "ArrowDown" ) {
+		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
 			this.is_moving = false;
 			this.dir = 0
 		} else
@@ -153,7 +152,7 @@ drawBackground() {
 }
 
 createRoom(game_config) {
-	this.room_name = generateRandomString(8);
+	this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
 	this.playerN = "player1";
 
 	this.websocket = new WebSocket(
@@ -229,6 +228,134 @@ joinRoom(room_name) {
 					"room_name": this.room_name
 				}
 			}));
+		});
+	}
+
+	this.websocket.onclose = websocket_close.bind(this);
+	this.websocket.onmessage = server_msg.bind(this);
+}
+
+offlineRoom(game_config) {
+	this.room_name = generateRandomString(8);
+
+	this.websocket = new WebSocket(
+		'wss://'
+		+ window.location.hostname
+		+ ':7000/ws/pong/'
+		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
+		+ '/'
+	)
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key === 'ArrowUp') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": -4,
+					"is_moving": true
+				}
+			}));
+		} else if (event.key === "w") {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": -4,
+					"is_moving": true
+				}
+			}));
+		} else if (event.key === 'ArrowDown') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": 4,
+					"is_moving": true
+				}
+			}));
+
+		} else if (event.key === 's') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": 4,
+					"is_moving": true
+				}
+			}));
+		}
+	});
+
+	document.addEventListener("keyup", (event) => {
+		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": 0,
+					"is_moving": false
+				}
+			}));
+
+		} else if (event.key === "w" || event.key === "s") {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": 0,
+					"is_moving": false
+				}
+			}));
+		}
+	});
+
+	this.websocket.onopen = () => {
+		console.log(`WebSocket opened`);
+
+		getUser(localStorage.getItem("token")).then((user) => {
+			this.user_id = user.id;
+
+			// TODO: esta invertido para que no este espejado
+			// identificarse
+			this.websocket.send(JSON.stringify({
+				"type": "identify",
+				"message": {
+					"user_id": -1 // TODO: -1 para anonimos?
+				}
+			}));
+
+			// unirse a la sala
+			this.websocket.send(JSON.stringify({
+				"type": "create.room",
+				"message": {
+					"room_name": this.room_name,
+					"data": game_config
+				}
+			}));
+
+			// identificarse
+			this.websocket.send(JSON.stringify({
+				"type": "identify",
+				"message": {
+					"user_id": this.user_id
+				}
+			}));
+
+			// unirse a la sala
+			this.websocket.send(JSON.stringify({
+				"type": "join.room",
+				"message": {
+					"room_name": "pong_" + this.room_name,
+				}
+			}));
+
 		});
 	}
 
