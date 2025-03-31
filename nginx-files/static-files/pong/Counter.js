@@ -11,11 +11,6 @@ constructor(obj, canvas, context) {
 	super(obj, canvas, context);
 }
 
-setStartTime(time) {
-	// TODO: deprecated?
-	this.start_time = time;
-}
-
 /**
  * @brief updates the time passed since creation and the highest score in the current game
  * @param {CanvasObject[]} canvas_objects in the current canvas

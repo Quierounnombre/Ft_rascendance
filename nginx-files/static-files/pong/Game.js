@@ -224,11 +224,6 @@ joinRoom(room_name) {
 	this.websocket.onmessage = server_msg.bind(this);
 }
 
-setStartTime(time) {
-// TODO: deprecated?
-	this.game_objects.find((obj) => obj.id === "counter").setStartTime(time);
-}
-
 toJSON() {
 	// TODO: definir bien el JSON que posteriormente se serializara
 	// TODO: id del torneo
