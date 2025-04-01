@@ -30,6 +30,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			response['avatar'] = instance.avatar.url
 		return response
 
+class UserColorsSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = [
+			"me_color",
+			"other_color",
+			"ball_color",
+			"counter_color",
+		]
+
 class FriendsSerializer(serializers.ModelSerializer):
 	following = UserProfileSerializer(many=True, read_only=True)
 	class Meta:

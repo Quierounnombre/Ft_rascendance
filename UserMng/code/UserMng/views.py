@@ -22,6 +22,7 @@ from .serializers import UserSingUpSerializer
 from .serializers import UserLoginSerializer
 from .serializers import UserProfileSerializer
 from .serializers import FriendsSerializer
+from .serializers import UserColorsSerializer
 
 from django.conf import settings
 from django.db import transaction
@@ -122,6 +123,11 @@ class ProfileView(viewsets.ModelViewSet):
 			serializer.save()
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def colors(self, request, *args, **kwargs):
+		self.object = get_object_or_404(get_user_model(), pk=request.user.id)
+		serializer = UserColorsSerializer(self.object)
+		return Response(serializer.data);
 
 	def friends(self, request, *args, **kwargs):
 		User = get_user_model()

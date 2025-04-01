@@ -68,13 +68,30 @@ gameCreator.innerHTML = `
 </form>
 `;
 
+async function getColors() {
+	const token = localStorage.getItem("token")
+	const response =  await fetch("https://" + window.location.hostname + ":7000/profile/colors/", {
+		method: "GET",
+		headers: {
+			"Authorization": "Token " + token,
+		}
+	});
+	if (response.ok) {
+		const data = await response.json();
+		return data;
+	} else {
+		return -1;
+	}
+}
+
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
-export default function loadGame() {
+export default async function loadGame() {
 	const div = document.createElement("div");
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
 	const form2 = document.getElementById("dataForm2");
+	const colors = await getColors();
 
 
 	form.addEventListener("submit", (event) => {
