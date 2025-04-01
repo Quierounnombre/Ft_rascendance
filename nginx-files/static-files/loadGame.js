@@ -4,66 +4,66 @@ const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
-<h2>Create room</h2>
+<h2 data-i18n-key="make-room">Create room</h2>
 <form id="dataForm" class="container">
 		<div class="form-floating">
 			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
-			<label for="timeout" class="form-label">Maximum time of the game in seconds</label>
+			<label for="timeout" data-i18n-key="max-time" class="form-label">Maximum time of the game in seconds</label>
 		</div>
 
 		<div class="form-floating">
 			<input required type="number" name="max_score" id="max_score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42" value="3">
-			<label for="max_score" class="form-label">Maximum score for a player</label>
+			<label for="max_score" data-i18n-key="max-score" class="form-label">Maximum score for a player</label>
 		</div>
 		
 		<div class="form-floating">
 			<select class="form-select" name="map" id="map" aria-label="map">
-				<option selected ="default" value="default">Default map</option>
-				<option value="doubleBall">Two balls map</option>
-				<option value="floating">Floating things map</option>
+				<option data-i18n-key="map-default" selected ="default" value="default">Default map</option>
+				<option data-i18n-key="map-two" value="doubleBall">Two balls map</option>
+				<option data-i18n-key="map-float" value="floating">Floating things map</option>
 			</select>
-			<label for="map" class="form-label">Maximum score for a player</label>
+			<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
 		</div>
 
 		<div class="form-floating">
 			<input type="color" class="form-control form-control-color" name="background_color" id="background_color" value="#000000">
-			<label for="background_color" class="form-label">Color picker for backgound color</label>
+			<label for="background_color" class="form-label" data-i18n-key="col-back">Color picker for backgound color</label>
 		</div>
 
 		<div class="form-floating">
 			<input type="color" class="form-control form-control-color" name="player1_color" id="player1_color" value="#FFFFFF">
-			<label for="player1_color" class="form-label">Color picker for player1 color</label>
+			<label for="player1_color" class="form-label" data-i18n-key="col-play1">Color picker for player1 color</label>
 		</div>
 
 		<div class="form-floating">
 			<input type="color" class="form-control form-control-color" name="player2_color" id="player2_color" value="#FFFFFF">
-			<label for="player2_color" class="form-label">Color picker for player2 color</label>
+			<label for="player2_color" class="form-label" data-i18n-key="col-play2">Color picker for player2 color</label>
 		</div>
 
 		<div class="form-floating">
 			<input type="color" class="form-control form-control-color" name="ball_color" id="ball_color" value="#FFFFFF">
-			<label for="ball_color" class="form-label">Color picker for ball color</label>
+			<label for="ball_color" class="form-label" data-i18n-key="col-ball">Color picker for ball color</label>
 		</div>
 
 		<div class="form-floating">
 			<input type="color" class="form-control form-control-color" name="counter_color" id="counter_color" value="#FFFFFF">
-			<label for="counter_color" class="form-label">Color picker for counter color</label>
+			<label for="counter_color" class="form-label" data-i18n-key="col-count">Color picker for counter color</label>
 		</div>
 
 		<!-- <div class="form-check form-switch">
 			<label class="form-check-label" for="flexSwitchCheckDefault">Power Ups</label>
 			<input name="power-up" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
 		</div> -->
-		<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 
-<h2>Join room</h2>
+<h2 data-i18n-key="join-room">Join room</h2>
 <form id="dataForm2" class="container">
 	<div class="form-floating">
 		<input required name="room_name2" id="room_name2" type="text" class="form-control" size="100">
-		<label class="form-label" for="room_name2">Join pong room</label>
+		<label class="form-label" for="room_name2" data-i18n-key="join-form">Join pong room</label>
 	</div>
-	<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
 `;
 
