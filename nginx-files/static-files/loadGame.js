@@ -4,6 +4,7 @@ const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
+<div>
 <h2 data-i18n-key="make-room">Create room</h2>
 <form id="dataForm" class="container">
 		<div class="form-floating">
@@ -56,7 +57,8 @@ gameCreator.innerHTML = `
 		</div> -->
 		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
-
+</div>
+<div>
 <h2 data-i18n-key="join-room">Join room</h2>
 <form id="dataForm2" class="container">
 	<div class="form-floating">
@@ -65,11 +67,11 @@ gameCreator.innerHTML = `
 	</div>
 	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
+</div>
 `;
 
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
 export default function loadGame() {
-	const div = document.createElement("div");
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
