@@ -4,12 +4,12 @@ class Tournament(models.Model):
 	pass
 
 class Match(models.Model):
-	winner_id = models.IntegerField()
-	loser_id = models.IntegerField()
-	winner_goals = models.IntegerField()
-	loser_goals = models.IntegerField()
+	player1_id = models.IntegerField()
+	player2_id = models.IntegerField()
+	player1_score = models.IntegerField()
+	player2_score = models.IntegerField()
 	date = models.DateTimeField(auto_now=True)
-	duration = models.TimeField()
+	duration = models.FloatField()
 	tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches", blank=True, null=True)
  
 

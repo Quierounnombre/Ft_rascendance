@@ -24,8 +24,10 @@ from rest_framework import permissions
 from rest_framework import authentication
 from django.views.generic.base import TemplateView
 from rest_framework.authtoken import views as token_views
+from history.views import AddMatch
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('history/', include('history.urls')),
+	path('add/', AddMatch.as_view())
 ]
