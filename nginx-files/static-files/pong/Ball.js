@@ -7,8 +7,8 @@ class Ball extends CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context, scene) {
-	super(obj, canvas, context, scene);
+constructor(obj, canvas, scene) {
+	super(obj, canvas, scene);
 	this.width = this.radius * 2;
 	this.height = this.radius * 2;
 	this.recalculateHitbox();
@@ -30,15 +30,6 @@ animate(obj) {
 	this.mesh.position.y = - obj.y;
 	this.light.position.x = this.mesh.position.x;
 	this.light.position.y = this.mesh.position.y;
-}
-
-
-render() {
-	this.context.fillStyle = this.color;
-	this.context.beginPath();
-	this.context.roundRect(this.point_x1, this.point_y1, this.width, this.height, 100);
-	this.context.closePath();
-	this.context.fill();
 }
 
 /**

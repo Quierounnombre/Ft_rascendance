@@ -7,9 +7,8 @@ class CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context, scene) {
+constructor(obj, canvas, scene) {
 	this.canvas = canvas;
-	this.context = context;
 
 	this.color = "white";
 	this.id = "generic";
@@ -46,7 +45,7 @@ constructor(obj, canvas, context, scene) {
 	this.point_y4 = this.y + this.height / 2;
 
 	this.geometry = new THREE.BoxGeometry(this.width, this.height, 20);
-	this.material = new THREE.MeshDepthMaterial()
+	this.material = new THREE.MeshPhongMaterial()
 	this.mesh = new THREE.Mesh(this.geometry, this.material);
 	this.mesh.position.x = this.x;
 	this.mesh.position.y = - this.y;
@@ -56,14 +55,6 @@ constructor(obj, canvas, context, scene) {
 animate(obj) {
 	this.mesh.position.x = obj.x;
 	this.mesh.position.y = - obj.y;
-}
-
-/**
- * @brief puts itself in the canvas
- */
-render() {
-	this.context.fillStyle = this.color;
-	this.context.fillRect(this.point_x1, this.point_y1, this.width, this.height);
 }
 
 /**

@@ -12,16 +12,8 @@ class Game {
  */
 constructor() {	
 	// TODO: sacar de la base de datos los colores preferidos por el jugador
-	// objs = JSON.parse(config);
-	this.canvas = document.createElement("canvas");
 
 	// TODO: que al crear la partida se genere el canvas
-	this.canvas.setAttribute("id", "pong");
-	this.canvas.setAttribute("width", "800");
-	this.canvas.setAttribute("height", "400");
-	this.canvas.setAttribute("style", "border: 2px solid black"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
-
-	this.context = this.canvas.getContext("2d");
 
 	this.game_objects = new Map()
 
@@ -31,9 +23,11 @@ constructor() {
 
 	this.dir = 0;
 	this.game_running = false;
+	this.is_moving = false;
 
 	// TODO: esto habria que comprobar que los clientes no pueden mover a otros 
 	document.addEventListener("keydown", (event) => {
+		console.log("A");
 		if (event.key === 'ArrowUp') {
 			this.dir = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
@@ -49,11 +43,13 @@ constructor() {
 	});
 
  // 3d graphics
-	this.threeCanvas = this.canvas.cloneNode();
+	this.threeCanvas = document.createElement("canvas");
+	this.threeCanvas.setAttribute("id", "pong");
+	this.threeCanvas.setAttribute("width", "800");
+	this.threeCanvas.setAttribute("height", "400");
+	this.threeCanvas.setAttribute("style", "border: 2px solid black"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
 	this.scene = new THREE.Scene();
 	this.scene.background = new THREE.Color(0x262626);
-	const ambientLight = new THREE.AmbientLight(0xffffff, 1)
-	// this.scene.add(ambientLight);
 
 	var FOV = 70;
 	var z = this.threeCanvas.height / (2 * Math.tan(((FOV * Math.PI) / 180)/2))
@@ -61,7 +57,6 @@ constructor() {
 	this.camera.position.z = z + 11;
 	this.camera.position.x = this.threeCanvas.width / 2;
 	this.camera.position.y = - this.threeCanvas.height / 2;
-	console.log(this.camera.position); 
 	this.scene.add(this.camera);
 	this.renderer = new THREE.WebGLRenderer({
 		canvas: this.threeCanvas
@@ -75,8 +70,7 @@ animate() {
 		return ;
 	const objs = JSON.parse(this.game_state);
 	for (let i in objs) {
-		if (objs[i].type === "player" || objs[i].type === "ball" || objs[i].type === "counter")
-			this.game_objects.get(objs[i].id).animate(objs[i]);
+		this.game_objects.get(objs[i].id).animate(objs[i]);
 	}
 	this.renderer.render(this.scene, this.camera)
 }
@@ -98,12 +92,12 @@ isEnd() {
  * @brief game loop
  */
 gameLoop() {
+	console.log("prelog")
 	if (!this.game_running)
 		return;
 
-	document.getElementById("root").replaceChildren(this.canvas);
-	document.getElementById("root").appendChild(this.threeCanvas);
-
+	// document.getElementById("root").appendChild(this.threeCanvas);
+	console.log("loop");
 	this.websocket.send(JSON.stringify({
 		"type": "direction",
 		"message": {
@@ -114,61 +108,7 @@ gameLoop() {
 		}
 	}));
 
-	this.render();
-	this.animation = window.requestAnimationFrame(this.gameLoop.bind(this));
-}
-
-render() {
-	if (!this.game_state)
-		return;
-
-	const objs = JSON.parse(this.game_state);
-	console.log(objs);
-
-	this.drawBackground(); // TODO: retocar esto
-	for (let i in objs) {
-		// TODO: poner en el metodo render de los objetos el color
-		switch (objs[i].type) {
-		case "player":
-			// const player = new Player(objs[i], this.canvas, this.context, this.scene);
-			// player.render();
-			break;
-
-		case "ball":
-			// const ball = new Ball(objs[i], this.canvas, this.context, this.scene);
-			// ball.render();
-			break;
-
-		case "counter":
-			// const counter = new Counter(objs[i], this.canvas, this.context, this.scene);
-			// counter.render();
-			break;
-
-		default:
-			const canvas_object = new CanvasObject(objs[i], this.canvas, this.context, this.scene);
-			canvas_object.render();
-		}
-	}
-}
-
-/**
- * @brief clears all the canvas to get only the background
- */
-drawBackground() {
-	// Clear the canvas
-	this.context.fillStyle = this.background_color;
-	this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-	// Draw the center line
-	this.context.beginPath();
-	this.context.strokeStyle = "white"; // TODO: personalizacion?
-	this.context.lineWidth = "2";
-	this.context.moveTo(this.canvas.width / 2, this.canvas.height / 8);
-	this.context.lineTo(this.canvas.width / 2, this.canvas.height);
-	this.context.moveTo(0, this.canvas.height / 8);
-	this.context.lineTo(this.canvas.width, this.canvas.height / 8);
-	this.context.closePath();
-	this.context.stroke();
+	this.gameLoop();
 }
 
 createRoom(game_config) {
@@ -307,24 +247,23 @@ function server_msg(event) {
 		for (let i in tmp2) {
 			switch (tmp2[i].type) {
 			case "player":
-				this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.canvas, this.context, this.scene)));
+				this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.threeCanvas, this.scene)));
 				break;
 
 			case "ball":
-				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.canvas, this.context, this.scene)));
+				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.threeCanvas, this.scene)));
 				break;
 
 			case "counter":
-				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.canvas, this.context, this.scene)));
+				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.threeCanvas, this.scene)));
 				break;
 
 			default:
-				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.canvas, this.context, this.scene)));
+				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.threeCanvas, this.scene)));
 			}
 		}
 
-		document.getElementById("root").replaceChildren(this.canvas);
-		document.getElementById("root").appendChild(this.threeCanvas);
+		document.getElementById("root").replaceChildren(this.threeCanvas);
 		this.game_running = true;
 		this.gameLoop();
 		break;
