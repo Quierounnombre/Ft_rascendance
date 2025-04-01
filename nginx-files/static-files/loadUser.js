@@ -1,0 +1,18 @@
+import getUserElement from "./getUserElement.js";
+import searchUsers from "./searchUsers.js";
+
+export default async function loadUser() {
+	const id = localStorage.getItem("user_id");
+	const token = localStorage.getItem("token");
+	if (!id || !token) {
+		window.location.hash = "#social";
+		return ;
+	}
+	
+	const users = await searchUsers("", token);
+	const user = users.filter((element) => element.id == id);
+
+	const userElement = getUserElement(user[0]);
+	const root = document.getElementById("root");
+	root.replaceChildren(userElement);
+}

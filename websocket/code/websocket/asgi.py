@@ -18,14 +18,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'websocket.settings')
 
 application = get_asgi_application()
 
-from chat.routing import websocket_urlpatterns
 from pong.routing import websocket_urlpatterns_pong
 from pong.GameConsumer import GameConsumer
 
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
         "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns_pong)),
         "channel": ChannelNameRouter({
             "game_engine": GameConsumer.as_asgi(),

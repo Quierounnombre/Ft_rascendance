@@ -14,7 +14,7 @@ LANGUAGES = [
 ]
 
 class User(AbstractUser):
-	avatar = models.ImageField(upload_to='media', default="default_user_img.png")
+	avatar = models.ImageField(default="default_user_img.png")
 	language = models.CharField(
 		max_length = 3,
 		choices = LANGUAGES,
@@ -28,6 +28,7 @@ class User(AbstractUser):
 		]
 	)
 	email = models.EmailField(unique=True)
+	following = models.ManyToManyField("self", symmetrical=False)
 
 	USERNAME_FIELD = 'email'
 	EMAIL_FIELD = 'email'

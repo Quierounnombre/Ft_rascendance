@@ -17,6 +17,7 @@ class CanvasObject:
         self.height = 0
         self.canvas_width = 800
         self.canvas_height = 400
+        self.pk = -42
 
         if 'color' in obj:          self.color = str(obj['color'])
         else:                       self.color = "white"
@@ -112,6 +113,9 @@ class CanvasObject:
             vertical_check = False
 
         return horizontal_check and vertical_check
+
+    def resolveHit(self, canvas_object):
+        pass
 
     def slide(self, dirX, dirY):
         length = math.hypot(dirX, dirY)

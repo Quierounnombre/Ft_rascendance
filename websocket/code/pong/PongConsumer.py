@@ -24,6 +24,16 @@ class PongConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code) -> None:
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
+                "type": "game.end",
+                "message": {
+                    "room_name": self.room_name,
+                    "data": ""
+                }
+            }
+        )
+
         async_to_sync(self.channel_layer.group_discard)(
             self.room_name, self.channel_name
         )
@@ -95,13 +105,17 @@ class PongConsumer(WebsocketConsumer):
     def joinRoom(self, message) -> None:
         self.room_name = message["room_name"]
 
-        # TODO: si la sala ya tiene a dos jugadores?
         # TODO: si no existe la sala?
+        # si no existe una instancia de esa sala, el GameConsumer deberia mandar un mensaje de que no existe
 
         # join the game room
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
         )
+
+        # TODO: si el que creo la sala sale y se vuelve a meter, deberia entrar como player1
+        # el juego de deberia asignar autometicamente?
+        # reconectarse no deberia relanzar un game.start()
 
         # send to the GameConsumer the pk of the player2
         async_to_sync(self.channel_layer.send)(
@@ -115,6 +129,7 @@ class PongConsumer(WebsocketConsumer):
             }
         )
 
+        # TODO: esto solo deberia ser si el juego no esta en curso
         # send to the GameConsumer the instruction to start the game
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
@@ -127,7 +142,7 @@ class PongConsumer(WebsocketConsumer):
         )
 
     #     "room_name": str,
-    #     "player": str
+    #     "player_id": int
     #     "dir": int
     #     "is_moving": bool
     def direction(self, message) -> None:

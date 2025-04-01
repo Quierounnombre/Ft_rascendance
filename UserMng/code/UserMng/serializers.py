@@ -5,6 +5,8 @@ from rest_framework import serializers
 from rest_framework import status
 
 class UserProfileSerializer(serializers.ModelSerializer):
+	is_logged = serializers.SerializerMethodField()
+
 	class Meta:
 		model = User
 		fields = [
@@ -14,7 +16,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			"font",
 			"avatar",
 			"language",
+			"is_logged",
 		]
+
+	def get_is_logged(self, user):
+		if Token.objects.filter(user=user):
+			return True
+		return False
+
+	def to_representation(self, instance):
+		response = super(UserProfileSerializer, self).to_representation(instance)
+		if instance.avatar:
+			response['avatar'] = instance.avatar.url
+		return response
+
+class FriendsSerializer(serializers.ModelSerializer):
+	following = UserProfileSerializer(many=True, read_only=True)
+	class Meta:
+		model = User
+		fields = [
+			"following"
+		]	
 
 class UserLoginSerializer(serializers.ModelSerializer):
 	id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -28,6 +50,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
 			"email",
 			"password"
 		]
+	
+	def validate(self, instance):
+		if not instance['password']:
+			raise ValidationError(detail="Empty password")
+		return instance
 
 class UserSingUpSerializer(serializers.ModelSerializer):
 	id = serializers.PrimaryKeyRelatedField(read_only=True)

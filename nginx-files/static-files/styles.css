@@ -1,0 +1,29 @@
+.cropped-image {
+	width: 100px;
+	height: 100px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+  }
+  
+.cropped-image img {
+	width: 100px;
+	height: 100%;
+	object-fit: cover;
+
+  }
+
+.mini-cropped-image {
+	width: 50px;
+	height: 50px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+}
+
+.mini-cropped-image img {
+	width: 50px;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+  }

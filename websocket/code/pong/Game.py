@@ -23,6 +23,9 @@ class Game(threading.Thread):
         self.max_score = 5
     
         self.room_name = room_name
+        self.number_players = 0
+
+        self.is_running = False
 
         data = json.loads(data)
 
@@ -95,22 +98,27 @@ class Game(threading.Thread):
             self.room_name, self.getGameState(msg_type)
         )
 
-    def setPlayerDir(self, playerN, dirY, is_moving) -> None:
+    def setPlayerDir(self, player_id, dirY, is_moving) -> None:
         for obj in self.game_objects:
-            if obj.id == playerN:
-                obj.dirY = dirY
-                obj.is_moving = is_moving
+            if obj.pk == player_id:
+                if (is_moving):
+                    obj.dirY = dirY
+                    obj.is_moving = is_moving
+                else:
+                    obj.is_moving = False
     
     def run(self) -> None:
         for obj in self.game_objects:
             if obj.id == "counter":
                 obj.start_time[0] = time.time()
 
+        self.is_running = True
         while not self.isEnd(): # TODO: no esta terminando
             for obj in self.game_objects:
                 obj.update(self.game_objects)
             self.broadcastState("game.state")
             time.sleep(0.01)
 
+        self.is_running = False
         self.broadcastState("game.end")# TODO: el metodo requiere el game room
         print("End game") # TODO: borrar

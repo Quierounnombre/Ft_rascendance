@@ -32,7 +32,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      - websocket
+      - usermng
     volumes:
       - ./nginx-files/static-files:/etc/nginx/html
     ports:
@@ -51,10 +52,16 @@ services:
       - ${POSTGRES_PORT}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
+      PGUSER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     networks:
       - rascendance-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}"]
+      retries: 10
+      timeout: 3s
+      interval: 1s
 
   usermng:
     restart: always
@@ -67,7 +74,8 @@ services:
     volumes:
       - ./UserMng/code:/UserMng/code
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -80,8 +88,8 @@ services:
       DATABASE_HOST: ${DB_HOST}
       BACKEND_PORT: ${BACKEND_PORT}
       DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
-      SUPER_USER: ${SUPER_USER}
-      SUPER_EMAIL: ${SUPER_EMAIL}
+      DJANGO_SUPERUSER: ${DJANGO_SUPERUSER}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
     networks:
       - rascendance-network
 
@@ -94,14 +102,14 @@ services:
     env_file:
       - .env
     depends_on:
-      - web-db
+      web-db:
+        condition: service_healthy
     networks:
       - websocket-network
     expose:
       - ${WEBSOCKET_PORT}
     volumes:
       - ./websocket/code:/code
-    command: python /code/manage.py runserver 0.0.0.0:${WEBSOCKET_PORT} && python /code/manage.py runworker game_engine
 
   redis:
     image: redis
@@ -124,8 +132,14 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
     networks:
       - websocket-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}"]
+      retries: 10
+      timeout: 3s
+      interval: 1s
 
 volumes:
   postgres_data:

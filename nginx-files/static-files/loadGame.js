@@ -54,7 +54,8 @@ gameCreator.innerHTML = `
 			<label class="form-check-label" for="flexSwitchCheckDefault">Power Ups</label>
 			<input name="power-up" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
 		</div> -->
-		<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+		<button type="submit" name="online_room" id="online_room" class="btn btn-primary">Play online</button>
+		<button type="submit" name="local_room" id="local_room" class="btn btn-primary">Play offline</button>
 	</form>
 
 <h2>Join room</h2>
@@ -69,6 +70,7 @@ gameCreator.innerHTML = `
 
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
 export default function loadGame() {
+	const div = document.createElement("div");
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
@@ -101,7 +103,10 @@ export default function loadGame() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		pong("create_room", jsonData);
+		if (event.submitter.id === "online_room")
+			pong("create_room", jsonData);
+		else if (event.submitter.id === "local_room")
+			pong("local_room", jsonData);
 	});
 
 	form2.addEventListener("submit", (event) => {

@@ -2,7 +2,7 @@ import { CanvasObject } from "./CanvasObject.js";
 import { Counter } from "./Counter.js";
 import { Ball } from "./Ball.js";
 import { Player } from "./Player.js";
-import { Floating } from "./Floating.js";
+import getUser from "../getUser.js"
 import * as THREE from 'three';
 "use strict";
 
@@ -25,7 +25,6 @@ constructor() {
 	this.game_running = false;
 	this.is_moving = false;
 
-	// TODO: esto habria que comprobar que los clientes no pueden mover a otros 
 	document.addEventListener("keydown", (event) => {
 		console.log("A");
 		if (event.key === 'ArrowUp') {
@@ -34,12 +33,37 @@ constructor() {
 		} else if (event.key === 'ArrowDown') {
 			this.dir = 4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
-		}
+		} else
+			return;
+
+		this.websocket.send(JSON.stringify({
+			"type": "direction",
+			"message": {
+				"room_name": this.room_name,
+				"player_id": this.user_id,
+				"dir": this.dir,
+				"is_moving": this.is_moving
+			}
+		}));
 	});
 
 	document.addEventListener("keyup", (event) => {
-		if (event.key == this.move_up || event.key == this.move_down)
+		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
 			this.is_moving = false;
+			this.dir = 0
+		} else
+			return;
+
+		this.websocket.send(JSON.stringify({
+			"type": "direction",
+			"message": {
+				"room_name": this.room_name,
+				"player_id": this.user_id,
+				"dir": this.dir,
+				"is_moving": this.is_moving
+			}
+		}));
+	
 	});
 
  // 3d graphics
@@ -88,33 +112,9 @@ isEnd() {
 	return false;
 }
 
-/**
- * @brief game loop
- */
-gameLoop() {
-	console.log("prelog")
-	if (!this.game_running)
-		return;
-
-	// document.getElementById("root").appendChild(this.threeCanvas);
-	console.log("loop");
-	this.websocket.send(JSON.stringify({
-		"type": "direction",
-		"message": {
-			"room_name": this.room_name,
-			"player": this.playerN,
-			"dir": this.dir,
-			"is_moving": this.is_moving
-		}
-	}));
-
-	this.gameLoop();
-}
-
 createRoom(game_config) {
-	this.room_name = generateRandomString(8);
+	this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
 	this.playerN = "player1";
-	// this.game_config = game_config; // TODO: quizas no  haga falta
 
 	this.websocket = new WebSocket(
 		'wss://'
@@ -127,7 +127,7 @@ createRoom(game_config) {
 	this.websocket.onopen = () => {
 		console.log(`WebSocket opened`);
 
-		getUsers(localStorage.getItem("token")).then((user) => {
+		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
 
 			// identificarse
@@ -171,7 +171,7 @@ joinRoom(room_name) {
 	this.websocket.onopen = () => {
 		console.log(`WebSocket opened`);
 
-		getUsers(localStorage.getItem("token")).then((user) => {
+		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
 
 			// identificarse
@@ -196,9 +196,132 @@ joinRoom(room_name) {
 	this.websocket.onmessage = server_msg.bind(this);
 }
 
-setStartTime(time) {
-// TODO: deprecated?
-	this.game_objects.find((obj) => obj.id === "counter").setStartTime(time);
+offlineRoom(game_config) {
+	this.room_name = generateRandomString(8);
+
+	this.websocket = new WebSocket(
+		'wss://'
+		+ window.location.hostname
+		+ ':7000/ws/pong/'
+		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
+		+ '/'
+	)
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key === 'ArrowUp') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": -4,
+					"is_moving": true
+				}
+			}));
+		} else if (event.key === "w") {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": -4,
+					"is_moving": true
+				}
+			}));
+		} else if (event.key === 'ArrowDown') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": 4,
+					"is_moving": true
+				}
+			}));
+
+		} else if (event.key === 's') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": 4,
+					"is_moving": true
+				}
+			}));
+		}
+	});
+
+	document.addEventListener("keyup", (event) => {
+		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": 0,
+					"is_moving": false
+				}
+			}));
+
+		} else if (event.key === "w" || event.key === "s") {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": 0,
+					"is_moving": false
+				}
+			}));
+		}
+	});
+
+	this.websocket.onopen = () => {
+		console.log(`WebSocket opened`);
+
+		getUser(localStorage.getItem("token")).then((user) => {
+			this.user_id = user.id;
+
+			// TODO: esta invertido para que no este espejado
+			// identificarse
+			this.websocket.send(JSON.stringify({
+				"type": "identify",
+				"message": {
+					"user_id": -1 // TODO: -1 para anonimos?
+				}
+			}));
+
+			// unirse a la sala
+			this.websocket.send(JSON.stringify({
+				"type": "create.room",
+				"message": {
+					"room_name": this.room_name,
+					"data": game_config
+				}
+			}));
+
+			// identificarse
+			this.websocket.send(JSON.stringify({
+				"type": "identify",
+				"message": {
+					"user_id": this.user_id
+				}
+			}));
+
+			// unirse a la sala
+			this.websocket.send(JSON.stringify({
+				"type": "join.room",
+				"message": {
+					"room_name": "pong_" + this.room_name,
+				}
+			}));
+
+		});
+	}
+
+	this.websocket.onclose = websocket_close.bind(this);
+	this.websocket.onmessage = server_msg.bind(this);
 }
 
 toJSON() {
@@ -265,14 +388,13 @@ function server_msg(event) {
 
 		document.getElementById("root").replaceChildren(this.threeCanvas);
 		this.game_running = true;
-		this.gameLoop();
 		break;
 	
 	case "game.end":
 		this.websocket.close();
 		this.game_running = false;
+		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
-		window.cancelAnimationFrame(this.animation);
 		break;
 	}
 }
