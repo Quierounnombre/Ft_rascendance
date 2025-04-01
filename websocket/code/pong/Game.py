@@ -1,6 +1,7 @@
 import json
 import time
 import threading
+import requests
 
 from pong.Ball import Ball
 from pong.Player import Player
@@ -120,5 +121,31 @@ class Game(threading.Thread):
             time.sleep(0.01)
 
         self.is_running = False
+        self.exportToDatabase()
         self.broadcastState("game.end")# TODO: el metodo requiere el game room
-        print("End game") # TODO: borrar
+        # TODO: pasar a la base de datos el resultado
+
+    def exportToDatabase() -> None:
+        for obj in self.game_objetcs:
+            if obj.id == "player1":
+                player1_id = obj.pk
+
+            elif obj.id == "player2":
+                player2_id = obj.pk
+            
+            elif obj.type == "counter":
+                player1_score = obj.player1_score
+                player2_score = obj.player2_score
+                duration = obj.time_passed
+
+            # TODO: cosas de torneo
+
+        # TODO: sacar el nombre del contenedor con el match history
+        post('', json={
+            "player1_id": player1_id,
+            "player1_score": player1_score,
+            "player2_id": player2_id,
+            "player2_score": player2_score,
+            "duration": duration,
+        })
+            # "tournament": "",

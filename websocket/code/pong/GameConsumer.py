@@ -34,9 +34,11 @@ class GameConsumer(SyncConsumer):
         pass
     
     def game_end(self, event) -> None:
-        if not game_rooms[event["message"]["room_name"]].is_running:
-            del game_rooms[event["message"]["room_name"]]
-        # TODO: pasar a la base de datos el resultado
+        message = event["message"]
+        data = message["data"]
+
+        if not game_rooms[message["room_name"]].is_running:
+            del game_rooms[message["room_name"]]
     
     # message: {
     #     "room_name": str,
