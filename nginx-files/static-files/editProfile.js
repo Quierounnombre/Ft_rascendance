@@ -2,11 +2,11 @@ export default function editProfile() {
     const submitButton = document.createElement("input");
 submitButton.setAttribute("type", "submit");
 submitButton.setAttribute("value", "Save Changes");
-submitButton.setAttribute("class", "btn btn-primary")
+submitButton.setAttribute("class", "btn btn-lg btn-primary mb-2")
 submitButton.setAttribute("id", "submit");
     const avatar_field = document.createElement("div");
 avatar_field.setAttribute("class", "mb-3 row");
-avatar_field.innerHTML = `<label for="avtar" class="col-sm-2 col-form-label">Change Avatar:</label>
+avatar_field.innerHTML = `<label for="avtar" class="col-sm-2 form-label col-form-label">Change Avatar:</label>
 		<div class="col-sm-10"><input type="file" accept=".jpg,.gif,.png,.webp" class="form-control" id="avtar" name="avatar"</div>`
 
 	const form = document.getElementById("profile");
@@ -23,6 +23,9 @@ avatar_field.innerHTML = `<label for="avtar" class="col-sm-2 col-form-label">Cha
 			field.removeAttribute("readonly");
 		}
 	});
+
+    const select = form.getElementsByTagName("select");
+    select[0].removeAttribute("disabled");
 
     document.getElementById("edit_button").toggleAttribute("disabled");
 
@@ -45,6 +48,7 @@ function saveChanges() {
 		}).then((response) => {
 			response.json().then((data) => {
 				document.getElementsByTagName("html")[0].style["font-size"] = data.font + "px";
+                localStorage.setItem("language", data.language);
 			});
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);

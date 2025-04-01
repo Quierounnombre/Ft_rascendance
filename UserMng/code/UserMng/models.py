@@ -21,7 +21,7 @@ class User(AbstractUser):
 		default = SPANISH
 	)
 	font = models.IntegerField(
-		default = 14,
+		default = 18,
 		validators = [
 			MaxValueValidator(60),
 			MinValueValidator(6)

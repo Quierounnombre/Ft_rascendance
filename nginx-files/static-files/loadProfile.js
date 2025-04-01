@@ -1,6 +1,7 @@
 import editProfile from "./editProfile.js";
 import getUser from "./getUser.js";
 import getUserElement from "./getUserElement.js";
+import translatePage from "./translate.js";
 
 export default async function loadProfile() {
 	const root = document.getElementById("root");
@@ -9,9 +10,8 @@ export default async function loadProfile() {
 		window.location.hash = '#anon-menu';
 		return ;
 	}
-
 	const user = await getUser(token);
-	if (user === -1) {
+	if (user === -1){
 		localStorage.removeItem("token");
 		window.location.hash = "#anon-menu";
 		return -1;
@@ -20,24 +20,31 @@ export default async function loadProfile() {
 
 	const logoutButton = document.createElement("button");
 	logoutButton.setAttribute("type", "button");
-	const editButton = logoutButton.cloneNode();
-
-	editButton.setAttribute("class", "btn btn-secondary");
-	editButton.setAttribute("id", "edit_button");
-	editButton.innerHTML = "Edit Profile";
-	editButton.addEventListener("click", editProfile);
-
-	logoutButton.setAttribute("class", "btn btn-danger");
+	logoutButton.setAttribute("class", "btn btn-lg btn-danger");
+    logoutButton.setAttribute("data-i18n-key", "log-out");
 	logoutButton.innerHTML = "Log Out";
 	logoutButton.addEventListener("click", logOut);
 
+    const editButton = document.createElement("button");
+	editButton.setAttribute("type", "button");
+    editButton.setAttribute("id", "edit_button");
+	editButton.setAttribute("class", "btn btn-lg btn-success me-2");
+    editButton.setAttribute("data-i18n-key", "prof-edit");
+	editButton.innerHTML = "Edit";
+    editButton.addEventListener("click", editProfile);
+
+    const historyButton = document.createElement("button");
+	historyButton.setAttribute("type", "button");
+	historyButton.setAttribute("class", "btn btn-lg btn-info me-2");
+    historyButton.setAttribute("data-i18n-key", "history");
+	historyButton.innerHTML = "History";
 
 	root.replaceChildren(userElement);
+    root.appendChild(editButton);
+    root.appendChild(historyButton);
 	root.appendChild(logoutButton);
-	root.appendChild(editButton);
+    translatePage();
 }
-
-
 
 function logOut() {
 	const token = localStorage.getItem("token");

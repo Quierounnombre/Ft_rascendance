@@ -1,4 +1,5 @@
 import getMyFriends from "./getMyFriends.js";
+import translatePage from "./translate.js";
 
 export default async function loadSocial() {
 	const token = localStorage.getItem("token");
@@ -11,16 +12,26 @@ export default async function loadSocial() {
 	const searchBar	= document.createElement("div");
 	searchBar.innerHTML = `
 <div class="search-container input-group">
-<input type="text" id="search-box" class="form-control search-input" placeholder="Search other users">
+<input type="text" id="search-box" class="form-control search-input" data-i18n-key="search-bar" placeholder="Search other users">
 <button class="btn btn-outline-secondary" id="search-button"><i class="bi bi-search"></i></button>
 </div>
 `;
-	searchBar.getElementsByTagName("button")[0].addEventListener("click", (event) => {
+
+searchBar.getElementsByTagName("input")[0].addEventListener('keydown', (event) => {
+    if (event.key === 'Enter')
+    {
+        localStorage.setItem("query", searchBar.getElementsByTagName("input")[0].value);
+        window.location.hash = "#search";
+    }
+});
+
+searchBar.getElementsByTagName("button")[0].addEventListener("click", (event) => {
 		localStorage.setItem("query", searchBar.getElementsByTagName("input")[0].value);
 		window.location.hash = "#search";
 	});
 	root.replaceChildren(searchBar);
 	root.appendChild(friends);
+    translatePage();
 }
 
 async function getFriendList(token) {
@@ -33,6 +44,7 @@ async function getFriendList(token) {
 	const friendList = document.createElement("div");
 	if (friends.length === 0) {
 		friendList.innerHTML = "Seems like you don't have any friends...";
+        friendList.setAttribute("data-i18n-key", "no-friends");
 		return friendList;
 	}
 	friends.forEach(user => {
@@ -60,6 +72,7 @@ async function getFriendList(token) {
 		<div class="w-100"></div>
 		</div>
     `});
+  
 
 	return friendList;
 }

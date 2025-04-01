@@ -1,5 +1,6 @@
 import getMyFriends from "./getMyFriends.js";
 import searchUsers from "./searchUsers.js";
+import translatePage from "./translate.js";
 
 export default async function loadSearch() {
 	if (! "query" in localStorage) {
@@ -20,6 +21,7 @@ export default async function loadSearch() {
     
 	const root = document.getElementById("root");
 	root.replaceChildren(userList);
+    translatePage();
 }
 
 async function usersList(users) {
@@ -31,6 +33,7 @@ async function usersList(users) {
     const friends = await getMyFriends(token)
     const userList = document.createElement("div");
 	if (users.length === 0) {
+        userList.setAttribute("data-i18n-key", "no-find");
 		userList.innerHTML = "Nothing to see here...";
 		return userList;
 	}
@@ -46,12 +49,12 @@ async function usersList(users) {
            <h4 class="card-title">`+ user["username"] +`</h4>
            <p class="card-text">`+ user['email'] +`</p>
             ` + friendButton(user["id"], friends) + `
-			<button type="button> class="btn btn-primary" onclick="seeProfile(`+user["id"]+`)">See Profile</button>
+			<button type="button" class="btn btn-lg btn-warning" data-i18n-key="see-prof" onclick="seeProfile(`+user["id"]+`)">See Profile</button>
 		</div>
 		<div class="w-100"></div>
 		</div>
     `});
-
+    translatePage();
 	return userList;
 }
 
@@ -61,7 +64,7 @@ function friendButton(id, friends) {
 	}
 	for (let friend in friends) {
 		if (friends[friend].id == id)
-			return `<button type="button" class="btn btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
+			return `<button type="button" data-i18n-key="del-friend" class="btn btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
 	}
-	return `<button type="button" class="btn btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
+	return `<button type="button" data-i18n-key="add-friend" class="btn btn-lg me-2 btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
 }

@@ -12,6 +12,8 @@ import loadGame from "./loadGame.js";
 import loadHistory from "./loadHistory.js";
 import loadProfile from "./loadProfile.js";
 import loadUser from "./loadUser.js";
+import loadFooter from "./loadFooter.js";
+import bindLocaleSwitcher from "./translate.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -44,16 +46,18 @@ function changeLayout() {
 			loadSearch();
 		} else if (loc === "#history") {
 			loadHistory();
-		} else if (loc === "#profile") {
+        }
+        else if (loc === "#profile") {
 			loadProfile();
 		} else if (loc === "#user") {
 			loadUser();
 		} else {
 			loadGame();
 		}
+  
 	}
+    bindLocaleSwitcher();
 }
-
 window.addEventListener("hashchange", changeLayout);
-
 changeLayout();
+loadFooter();
