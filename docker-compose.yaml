@@ -27,24 +27,24 @@ services:
 
 #Nginx
 
-  nginx:
-    build:
-      context: nginx-files 
-    container_name: ${NGINX_CONTAINER_NAME}
-    env_file:
-      - .env
-    depends_on:
-      - websocket
-      - usermng
-      - twofactorauth
-    volumes:
-      - ./nginx-files/static-files:/etc/nginx/html
-    ports:
-      - ${NGINX_EXTERNAL_PORT}:${NGINX_INTERNAL_PORT}
-    networks:
-      - websocket-network
-      - rascendance-network
-      - twofactorauth-network
+#  nginx:
+#    build:
+#      context: nginx-files 
+#    container_name: ${NGINX_CONTAINER_NAME}
+#    env_file:
+#      - .env
+#    depends_on:
+#      - websocket
+#      - usermng
+#      - twofactorauth
+#    volumes:
+#      - ./nginx-files/static-files:/etc/nginx/html
+#    ports:
+#      - ${NGINX_EXTERNAL_PORT}:${NGINX_INTERNAL_PORT}
+#    networks:
+#      - websocket-network
+#      - rascendance-network
+#      - twofactorauth-network
 
 #UserMng
 
@@ -179,6 +179,8 @@ services:
     container_name: TwoFactorAuth
     expose:
       - ${TwoFactorAuth_PORT}
+    ports:
+      - ${TwoFactorAuth_PORT}:${TwoFactorAuth_PORT}
     volumes:
       - ./TwoFactorAuth/code:/TwoFactorAuth/code
     depends_on:
@@ -198,6 +200,9 @@ services:
       DJANGO_SUPERUSER_PASSWORD: ${TwoFactorAuth_SUPERUSER_PASSWORD}
       DJANGO_SUPERUSER: ${TwoFactorAuth_SUPERUSER}
       DJANGO_SUPERUSER_EMAIL: ${TwoFactorAuth_SUPERUSER_EMAIL}
+      EMAIL: ${EMAIL}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_APP_PASSWORD: ${EMAIL_APP_PASSWORD}
     networks:
       - twofactorauth-network
 
