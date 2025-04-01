@@ -1,5 +1,7 @@
 const defaultLocale = "ENG";
-localStorage.setItem("language", defaultLocale);
+const lang = localStorage.getItem("language");
+if (!lang)
+    localStorage.setItem("language", defaultLocale);
 
 const translations = {
     "ENG": {
@@ -168,8 +170,6 @@ function setLocale(newLocale) {
 document.addEventListener("DOMContentLoaded", () => {
   bindLocaleSwitcher();
 });
-
-
 
 // ...
 // Whenever the user selects a new locale, we
