@@ -2,6 +2,7 @@ import json
 import time
 import threading
 import requests
+import os
 
 from pong.Ball import Ball
 from pong.Player import Player
@@ -140,12 +141,11 @@ class Game(threading.Thread):
 
             # TODO: cosas de torneo
 
-        # TODO: sacar el nombre del contenedor con el match history
-        post('', json={
+        post(f'history:{os.environ["HISTORY_PORT"]}/add/', json={
             "player1_id": player1_id,
             "player1_score": player1_score,
             "player2_id": player2_id,
             "player2_score": player2_score,
             "duration": duration,
         })
-            # "tournament": "",
+        # "tournament": "",
