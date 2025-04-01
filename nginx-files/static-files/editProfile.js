@@ -48,6 +48,7 @@ function saveChanges() {
 		}).then((response) => {
 			response.json().then((data) => {
 				document.getElementsByTagName("html")[0].style["font-size"] = data.font + "px";
+                localStorage.setItem("language", data.language);
 			});
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);

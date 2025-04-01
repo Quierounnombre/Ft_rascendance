@@ -130,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
 export function bindLocaleSwitcher() {
     const locale = localStorage.getItem("language");
     const switcher = document.getElementById("lang-switcher");
-    console.log("Hola");
       switcher.value = locale;
       switcher.addEventListener("change", (event) => {
         // Set the locale to the selected option[value]
