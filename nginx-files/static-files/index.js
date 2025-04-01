@@ -56,10 +56,10 @@ function changeLayout() {
 		}
   
 	}
-    loadFooter();
     bindLocaleSwitcher();
 
 }
+loadFooter();
 window.addEventListener("hashchange", changeLayout);
 changeLayout();
 
