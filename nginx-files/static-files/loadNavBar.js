@@ -1,5 +1,6 @@
 import getUser from "./getUser.js";
 import translatePage from "./translate.js";
+import bindLocaleSwitcher from "./translate.js";
 
 export default async function loadNavBar(loc) {
     const profile = await profileButton();
@@ -33,6 +34,7 @@ export default async function loadNavBar(loc) {
 	});
     const bar = document.getElementById("links");
 	bar.appendChild(profile);
+    bindLocaleSwitcher();
     translatePage();
 }
 

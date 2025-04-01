@@ -3,3 +3,4 @@
 .secrets
 media/
 __pycache__/
+migrations/

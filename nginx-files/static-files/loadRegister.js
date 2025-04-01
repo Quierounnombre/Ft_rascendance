@@ -1,3 +1,5 @@
+import getUser from  "./getUser.js"
+
 export default function loadRegister() {
 	const root = document.getElementById("root");
 
@@ -73,8 +75,11 @@ function invalidLogin() {
 	}
 }
 
-function validLogin(token, font) {
+async function validLogin(token, font) {
 	localStorage.setItem("token", token);
-	document.getElementsByTagName("html")[0].style["font-size"] = font + "px";
+    const user = await getUser(token);
+    localStorage.setItem("language", user["language"]);
+    console.log(user["language"]);
+	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = font + "px";
 	window.location.hash='';
 }

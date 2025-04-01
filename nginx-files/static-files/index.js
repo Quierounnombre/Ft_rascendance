@@ -13,6 +13,7 @@ import loadHistory from "./loadHistory.js";
 import loadProfile from "./loadProfile.js";
 import loadUser from "./loadUser.js";
 import loadFooter from "./loadFooter.js";
+import bindLocaleSwitcher from "./translate.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -55,9 +56,8 @@ function changeLayout() {
 		}
   
 	}
-    loadFooter();
+    bindLocaleSwitcher();
 }
-
 window.addEventListener("hashchange", changeLayout);
-
 changeLayout();
+loadFooter();

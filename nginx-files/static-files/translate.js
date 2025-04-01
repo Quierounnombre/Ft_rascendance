@@ -30,8 +30,11 @@ const translations = {
         "prof-email": "Email :",
         "prof-uname": "Username: ",
         "prof-font": "Font size: ",
-        "prof-lang": "Language: ",
+        "prof-lang": "Prefered Language: ",
         "no-find": "Nothing to see here...",
+        "see-prof": "See Profile",
+        "add-friend": "Add Friend",
+        "del-friend": "Delete Friend",
     },
 
     "ESP": {
@@ -62,8 +65,11 @@ const translations = {
         "prof-email": "Correo: ",
         "prof-uname": "Apodo: ",
         "prof-font": "Tamaño fuente: ",
-        "prof-lang": "Idioma: ",
+        "prof-lang": "Idioma preferido: ",
         "no-find": "Nada de na..",
+        "see-prof": "Ver Perfil",
+        "add-friend": "Añadir Amigo",
+        "del-friend": "Eliminar Amigo",
     },
 
     "CAT": {
@@ -94,8 +100,11 @@ const translations = {
         "prof-email": "Correu: ",
         "prof-uname": "Sobrenom: ",
         "prof-font": "Mida lletra: ",
-        "prof-lang": "Idioma: ",
+        "prof-lang": "Idioma preferit: ",
         "no-find": "Res de res...",
+        "see-prof": "Veure perfil",
+        "add-friend": "Afegir Amic",
+        "del-friend": "Eliminar Amic",
     },
 };
 
@@ -112,27 +121,24 @@ document.addEventListener("DOMContentLoaded", () => {
   bindLocaleSwitcher();
 });
 
-window.addEventListener("hashchange", () => {
-    bindLocaleSwitcher();
-    translatePage();
-  });
+
 
 // ...
 // Whenever the user selects a new locale, we
 // load the locale's translations and update
 // the page
-async function bindLocaleSwitcher() {
-    const locale = await localStorage.getItem("language");
-  const switcher =
-    document.querySelector("[data-i18n-switcher]");
-  switcher.value = locale;
-  switcher.onchange = (e) => {
-    // Set the locale to the selected option[value]
-    setLocale (e.target.value);
-  };
+export function bindLocaleSwitcher() {
+    const locale = localStorage.getItem("language");
+    const switcher = document.getElementById("lang-switcher");
+    console.log("Hola");
+      switcher.value = locale;
+      switcher.addEventListener("change", (event) => {
+        // Set the locale to the selected option[value]
+        setLocale (event.target.value);
+      });
 }
 
-export default async function translatePage() {
+export default function translatePage() {
     document
       .querySelectorAll("[data-i18n-key]")
       .forEach(translateElement);
