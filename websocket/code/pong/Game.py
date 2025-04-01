@@ -1,6 +1,7 @@
 import json
 import time
 import threading
+import requests
 
 from pong.Ball import Ball
 from pong.Player import Player
@@ -28,6 +29,7 @@ class Game(threading.Thread):
         self.is_running = False
 
         data = json.loads(data)
+		colors = requests.get('http://UserMng:8080/profile/colors/')
 
         for obj in data:
             if obj["type"] == "config":
