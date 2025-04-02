@@ -1,28 +1,26 @@
 def generateTournamentSchedule(list_of_players):
     number_players = len(list_of_players)
-    temporal_list = []
-    schedule = []
+
+    if number_players < 4:
+        return -1
 
     if number_players % 2  != 0:
-        return
+        return -1
 
-    for player in list_of_players:
-        temporal_list.append(player)
-
+    schedule = '['
     for i in range(number_players - 1):
-        tmp1 = temporal_list[:len(temporal_list) // 2]
-        tmp2 = temporal_list[len(temporal_list) // 2:]
+        tmp1 = list_of_players[:len(list_of_players) // 2]
+        tmp2 = list_of_players[len(list_of_players) // 2:]
 
         tmp2.reverse()
         
-        tmp3 = []
-
+        schedule += '['
         for j,k in zip(tmp1, tmp2):
-            tmp3.append((j, k))
-        
-        schedule.append(tmp3)
+            schedule += f'{{"player1":{j},"player2":{k}}},'
+        schedule = schedule[:-1] + '],'
 
-        tmp3 = temporal_list.pop()
-        temporal_list.insert(1, tmp3)
+        tmp3 = list_of_players.pop()
+        list_of_players.insert(1, tmp3)
+    schedule = schedule[:-1] + ']'
     
     return schedule
