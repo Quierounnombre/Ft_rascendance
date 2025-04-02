@@ -24,15 +24,16 @@ class PongConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code) -> None:
-        async_to_sync(self.channel_layer.send)(
-            "game_engine", {
-                "type": "game.end",
-                "message": {
-                    "room_name": self.room_name,
-                    "data": ""
-                }
-            }
-        )
+        # TODO: porque si alguien se desconecta deberia terminal el juego?
+        # async_to_sync(self.channel_layer.send)(
+        #     "game_engine", {
+        #         "type": "game.end",
+        #         "message": {
+        #             "room_name": self.room_name,
+        #             "data": ""
+        #         }
+        #     }
+        # )
 
         async_to_sync(self.channel_layer.group_discard)(
             self.room_name, self.channel_name
@@ -45,15 +46,10 @@ class PongConsumer(WebsocketConsumer):
 
         if message_type == "identify":
             self.identify(message)
-
         elif message_type == "create.room":
-            room_name = self.createRoom(message)
-
-
+            self.createRoom(message)
         elif message_type == "join.room":
-            # TODO: y si no existe la sala?
             self.joinRoom(message)
-        
         elif message_type == "direction":
             self.direction(message)
 
@@ -61,14 +57,13 @@ class PongConsumer(WebsocketConsumer):
     #         "user_id": int
     #     }
     def identify(self, message) -> None:
-        # TODO: quizas siempre tiene que identificarse
-        self.user_id = message["user_id"] # TODO: creo que no funcionaria
+        self.user_id = message["user_id"]
 
     #     "message": {
     #         "room_name": str
     #         "data": la info del formulario para generar la sala
     #     }
-    def createRoom(self, message) -> int:
+    def createRoom(self, message) -> None:
         # send to the GameConsumer the game room name and its config
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
@@ -109,6 +104,7 @@ class PongConsumer(WebsocketConsumer):
         # si no existe una instancia de esa sala, el GameConsumer deberia mandar un mensaje de que no existe
 
         # join the game room
+        # TODO: esto seria realmete necesario?, es decir, ya se ha metido al conectarse no?
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
         )

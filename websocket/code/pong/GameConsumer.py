@@ -6,6 +6,7 @@ from asgiref.sync import async_to_sync
 
 from pong.Game import Game
 
+tournaments = {}
 game_rooms = {}
 
 class GameConsumer(SyncConsumer):
@@ -73,6 +74,7 @@ class GameConsumer(SyncConsumer):
     #     "data": json converted to string with the config
     # }
     def game_config(self, event) -> None:
+        # TODO: revisar que no existe la sala ya
         message = event["message"]
 
         self.room_name = message["room_name"]
@@ -82,5 +84,7 @@ class GameConsumer(SyncConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
         )
-
-
+    
+    def tournament_config(self, event) -> None:
+        message = event["message"]
+        # TODO: habra que crear una clase torneo?

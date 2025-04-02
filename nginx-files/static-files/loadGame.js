@@ -67,6 +67,14 @@ gameCreator.innerHTML = `
 	</div>
 	<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
+<h2>Create Tournament</h2>
+<form id="dataForm3" class="container">
+	<div class="form-floating">
+		<input required type="number" name="number_players_tournament" id="number_players_tournament" class="form-control" aria-describedby="timeout of the game" min="4" max="42" value="4">
+		<label for="number_players_tournament" class="form-label">Number of players of the tournament</label>
+	</div>
+	<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+</form>
 `;
 
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
@@ -76,6 +84,7 @@ export default function loadGame() {
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
 	const form2 = document.getElementById("dataForm2");
+	const form3 = document.getElementById("dataForm3");
 
 
 	form.addEventListener("submit", (event) => {
@@ -119,8 +128,14 @@ export default function loadGame() {
 
 		pong("join_room", room_name);
 	});
-}
 
+	form3.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const number_players_tournament = document.getElementById("number_players_tournament").value;
+
+		pong("create_tournament", number_players_tournament)
+	});
+}
 
 function defaultMap(config) {
 	const data_to_send = [];
