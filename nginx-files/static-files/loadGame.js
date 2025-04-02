@@ -21,6 +21,7 @@ gameCreator.innerHTML = `
 				<option selected ="default" value="default">Default map</option>
 				<option value="doubleBall">Two balls map</option>
 				<option value="floating">Floating things map</option>
+				<option value="temporal">Temporal map</option>
 			</select>
 			<label for="map" class="form-label">Maximum score for a player</label>
 		</div>
@@ -93,6 +94,9 @@ export default function loadGame() {
 			break;
 		case "floating":
 			data_to_send = floatingMap(config);
+			break;
+		case "temporal":
+			data_to_send = temporalMap(config);
 			break;
 		default:
 			data_to_send = defaultMap(config);
@@ -191,7 +195,7 @@ function doubleBallMap(config) {
 		width: 20,
 		height: 100,
 		speed: 2,
-		move_up: "w",
+		move_up: "w", // TODO: esto esta deprecated
 		move_down: "s"
 	};
 
@@ -329,6 +333,110 @@ function floatingMap(config) {
 	data_to_send.push(ball);
 	data_to_send.push(floating1);
 	data_to_send.push(floating2);
+	data_to_send.push(counter);
+	
+	return data_to_send;
+}
+
+function temporalMap(config) {
+	const data_to_send = [];
+
+	const player1 = {
+		pk: -1,
+		id: "player1",
+		type: "player",
+		color: config.player1_color,
+		x: 10,
+		y: 200,
+		width: 20,
+		height: 100,
+		speed: 2,
+		move_up: "w",
+		move_down: "s"
+	};
+
+	const player2 = {
+		pk: -1,
+		id: "player2",
+		type: "player",
+		color: config.player2_color,
+		x: 790,
+		y: 200,
+		width: 20,
+		height: 100,
+		speed: 2,
+		move_up: "ArrowUp",
+		move_down: "ArrowDown"
+	};
+
+	const ball = {
+		id: "ball",
+		type: "ball",
+		color: config.ball_color,
+		x: 400,
+		y: 200,
+		dirX: 1,
+		dirY: 1,
+		radius: 10
+	};
+
+	const generic1 = {
+		id: "generic1",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3),
+		width: 10,
+		height: 10
+	};
+
+	const generic2 = {
+		id: "generic2",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3 * 2),
+		width: 10,
+		height: 10
+	};
+
+	const generic3 = {
+		id: "generic3",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3 * 2,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3),
+		width: 10,
+		height: 10
+	};
+
+	const generic4 = {
+		id: "generic4",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3 * 2,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3 * 2),
+		width: 10,
+		height: 10
+	};
+
+	const counter = {
+		id: "counter",
+		type: "counter",
+		color: config.counter_color,
+		x: 400,
+		y: 10,
+		font: "42px Arial"
+	};
+
+	data_to_send.push(config);
+	data_to_send.push(player1);
+	data_to_send.push(player2);
+	data_to_send.push(ball);
+	data_to_send.push(generic1);
+	data_to_send.push(generic2);
+	data_to_send.push(generic3);
+	data_to_send.push(generic4);
 	data_to_send.push(counter);
 	
 	return data_to_send;
