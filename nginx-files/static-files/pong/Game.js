@@ -10,11 +10,11 @@ class Game {
 /**
  * @param {JSON string} config string with the JSON config
  */
-constructor() {	
+constructor(colors) {	
 	// TODO: sacar de la base de datos los colores preferidos por el jugador
 
 	// TODO: que al crear la partida se genere el canvas
-
+	this.colors = colors
 	this.game_objects = new Map()
 
 	// TODO: todo esto lo puede terner el user en su configuracion, por lo que la configuracion propia de los colores iria aqui
@@ -370,19 +370,22 @@ function server_msg(event) {
 		for (let i in tmp2) {
 			switch (tmp2[i].type) {
 			case "player":
-				this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.threeCanvas, this.scene)));
+				if (tmp2[i].id === this.playerN)
+					this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.threeCanvas, this.scene, this.colors.me_color)));
+				else
+					this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.threeCanvas, this.scene, this.colors.other_color)));
 				break;
 
 			case "ball":
-				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.threeCanvas, this.scene)));
+				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.threeCanvas, this.scene, this.colors.ball_color)));
 				break;
 
 			case "counter":
-				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.threeCanvas, this.scene)));
+				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.threeCanvas, this.scene, this.colors.counter_color)));
 				break;
 
 			default:
-				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.threeCanvas, this.scene)));
+				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.threeCanvas, this.scene, this.colors.ball_color)));
 			}
 		}
 

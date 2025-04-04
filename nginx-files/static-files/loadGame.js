@@ -121,9 +121,9 @@ export default async function loadGame() {
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
 		if (event.submitter.id === "online_room")
-			pong("create_room", jsonData);
+			pong("create_room", jsonData, colors);
 		else if (event.submitter.id === "local_room")
-			pong("local_room", jsonData);
+			pong("local_room", jsonData, colors);
 	});
 
 	form2.addEventListener("submit", (event) => {

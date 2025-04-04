@@ -22,8 +22,10 @@ urlpatterns = [
 		permission_classes = [permissions.IsAuthenticated], 
 		authentication_classes = [authentication.TokenAuthentication],
 		), name="profile"),
-	path('colors/<int:pk>', ProfileView.as_view(
+	path('colors/', ProfileView.as_view(
 		{'get':'colors'},
+        permission_classes = [permissions.IsAuthenticated], 
+		authentication_classes = [authentication.TokenAuthentication],
 	)),
     path('users/', UserListView.as_view(
 		permission_classes = [permissions.IsAuthenticated], 

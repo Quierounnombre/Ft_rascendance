@@ -124,8 +124,8 @@ class ProfileView(viewsets.ModelViewSet):
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	def colors(self, request, pk):
-		self.object = get_object_or_404(get_user_model(), pk=pk)
+	def colors(self, request):
+		self.object = get_object_or_404(get_user_model(), pk=request.user.id)
 		serializer = UserColorsSerializer(self.object)
 		return Response(serializer.data);
 

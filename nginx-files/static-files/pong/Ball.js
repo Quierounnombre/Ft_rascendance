@@ -7,8 +7,8 @@ class Ball extends CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, scene) {
-	super(obj, canvas, scene);
+constructor(obj, canvas, scene, color) {
+	super(obj, canvas, scene, color);
 	this.width = this.radius * 2;
 	this.height = this.radius * 2;
 	this.recalculateHitbox();

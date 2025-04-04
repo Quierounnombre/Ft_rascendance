@@ -7,7 +7,7 @@ class CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, scene) {
+constructor(obj, canvas, scene, color) {
 	this.canvas = canvas;
 
 	this.color = "white";
@@ -25,6 +25,7 @@ constructor(obj, canvas, scene) {
 	for (let i in obj)
 		this[i] = obj[i];
 
+	this.color = color
 	/*
 	** xy1---------xy2
 	** |            |

@@ -8,15 +8,15 @@ class Counter extends CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, scene) {
-	super(obj, canvas, scene);
+constructor(obj, canvas, scene, color) {
+	super(obj, canvas, scene, color);
 	this.canvas =  canvas.cloneNode();
 	this.canvas.setAttribute("height", canvas.height / 8);
 	this.context = this.canvas.getContext("2d");
 	this.geometry = new THREE.BoxGeometry(this.canvas.width, this.canvas.height, 40);
 	this.texture = new THREE.CanvasTexture(this.canvas);
 	this.texture.needsUpdate = true;
-	this.material = new THREE.MeshPhongMaterial({map: this.texture});
+	this.material = new THREE.MeshPhongMaterial({map: this.texture, color: this.color});
 	this.mesh = new THREE.Mesh(this.geometry, this.material);
 	this.mesh.position.x = this.canvas.width / 2;
 	this.mesh.position.y = - this.canvas.height / 2;
