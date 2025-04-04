@@ -1,5 +1,6 @@
 import getUserElement from "./getUserElement.js";
 import searchUsers from "./searchUsers.js";
+import translatePage from "./translate.js";
 
 export default async function loadUser() {
 	const id = localStorage.getItem("user_id");
@@ -15,4 +16,5 @@ export default async function loadUser() {
 	const userElement = getUserElement(user[0]);
 	const root = document.getElementById("root");
 	root.replaceChildren(userElement);
+	translatePage();
 }
