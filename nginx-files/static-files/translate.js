@@ -53,6 +53,8 @@ const translations = {
         "col-ball": "Color picker for ball color",
         "col-count": "Color picker for count color",
         "join-form": "Input room code",
+        "game-mode": "Choose Game Mode",
+        "mod-tourn": "Tournament",
     },
 
     "ESP": {
@@ -89,7 +91,7 @@ const translations = {
         "add-friend": "Añadir Amigo",
         "del-friend": "Eliminar Amigo",
         "make-room": "Crear Sala Nueva",
-        "join-room": "Entrar en Sala",
+        "join-room": "Unirse a Sala",
         "crea-submit": "Crea",
         "join-submit": "Entra",
         "max-time": "Tiempo de juego máximo en segundos",
@@ -104,6 +106,8 @@ const translations = {
         "col-ball": "Selector de color para bola",
         "col-count": "Selector de color para contador",
         "join-form": "Poner código de sala",
+        "game-mode": "Elige Modo de Juego",
+        "mod-tourn": "Torneo",
     },
 
     "CAT": {
@@ -155,6 +159,8 @@ const translations = {
         "col-ball": "Selector de color de pilota",
         "col-count": "Selector de color de contador",
         "join-form": "Posar codi de sala",
+        "game-mode": "Escull Mode de Joc",
+        "mod-tourn": "Torneix",
     },
 };
 

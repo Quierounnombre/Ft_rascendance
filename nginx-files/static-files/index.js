@@ -14,6 +14,7 @@ import loadProfile from "./loadProfile.js";
 import loadUser from "./loadUser.js";
 import loadFooter from "./loadFooter.js";
 import bindLocaleSwitcher from "./translate.js";
+import loadModeGame from "./loadModeGame.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -52,7 +53,7 @@ function changeLayout() {
 		} else if (loc === "#user") {
 			loadUser();
 		} else {
-			loadGame();
+			loadModeGame();
 		}
   
 	}
