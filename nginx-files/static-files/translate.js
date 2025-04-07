@@ -33,6 +33,8 @@ const translations = {
         "prof-uname": "Username: ",
         "prof-font": "Font size: ",
         "prof-lang": "Prefered Language: ",
+        "prof-avatar": "Change Avatar: ",
+        "edit-sub": "Save Changes",
         "no-find": "Nothing to see here...",
         "see-prof": "See Profile",
         "add-friend": "Add Friend",
@@ -86,6 +88,8 @@ const translations = {
         "prof-uname": "Apodo: ",
         "prof-font": "Tamaño fuente: ",
         "prof-lang": "Idioma preferido: ",
+        "prof-avatar": "Cambiar Imagen: ",
+        "edit-sub": "Guardar Cambios",
         "no-find": "Nada de na..",
         "see-prof": "Ver Perfil",
         "add-friend": "Añadir Amigo",
@@ -139,6 +143,8 @@ const translations = {
         "prof-uname": "Sobrenom: ",
         "prof-font": "Mida lletra: ",
         "prof-lang": "Idioma preferit: ",
+        "prof-avatar": "Cambiar Imatge: ",
+        "edit-sub": "Guardar Cambis",
         "no-find": "Res de res...",
         "see-prof": "Veure perfil",
         "add-friend": "Afegir Amic",
@@ -184,8 +190,13 @@ document.addEventListener("DOMContentLoaded", () => {
 export function bindLocaleSwitcher() {
     const locale = localStorage.getItem("language");
     const switcher = document.getElementById("lang-switcher");
-    if (locale)
-      switcher.value = locale;
+    if (!switcher)
+        return ;
+    if (!locale)
+      switcher.value = defaultLocale;
+    else
+    switcher.value = locale;
+
       switcher.addEventListener("change", (event) => {
         // Set the locale to the selected option[value]
         setLocale (event.target.value);
@@ -204,7 +215,7 @@ export default function translatePage() {
     const locale = localStorage.getItem("language");
     const key = element.getAttribute("data-i18n-key");
     const translation = translations[locale][key];
-    if (key==="reg-sub" || key=== "login-sub")
+    if (key==="reg-sub" || key=== "login-sub" || key=== "edit-sub")
      element.setAttribute("value", translation);
     else if (key==="search-bar")
      element.setAttribute("placeholder", translation);
