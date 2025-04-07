@@ -10,6 +10,8 @@ import os
 # from pong.CanvasObject import CanvasObject
 # from pong.Game import Game
 
+from pong.generateRandomString import generateRandomString
+
 # from channels.layers import get_channel_layer
 # from asgiref.sync import async_to_sync
 
@@ -95,6 +97,11 @@ class Tournament:
 
     def createGame(self, game) -> None:
         print(f'│ ({game["player1"]["user_id"]}) {game["player1"]["user_name"]} vs ({game["player2"]["user_id"]}) {game["player2"]["user_name"]}')
+        # TODO: crear codigo de juego
+        # TODO: identificar player1
+        # TODO: player1 crea sala
+        # TODO: identificar player2
+        # TODO: player2 se une a sala
         pass
 
     def createRound(self) -> bool:
