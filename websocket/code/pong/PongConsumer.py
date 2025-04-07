@@ -59,6 +59,10 @@ class PongConsumer(WebsocketConsumer):
     def identify(self, message) -> None:
         self.user_id = message["user_id"]
 
+        async_to_sync(self.channel_layer.group_discard)(
+            self.user_id, self.channel_name
+        )
+
     #     "message": {
     #         "room_name": str
     #         "data": la info del formulario para generar la sala

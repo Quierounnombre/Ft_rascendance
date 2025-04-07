@@ -41,9 +41,6 @@ class Tournament:
         self.target_players : int = num_players
         self.game_config : str = game_config
 
-        self.game_rounds_to_play = 0
-        self.game_rounds_played = 0
-
         if num_players % 2 != 0:
             raise ValueError("odd players") # TODO: se deberia comprobar antes
         
@@ -61,7 +58,7 @@ class Tournament:
         return len(self.player_list) == self.target_players
 
     def isTournamentEnd(self) -> bool:
-        return self.game_rounds_to_play == self.game_rounds_played
+        return len(self.game_queue) == 0
 
     def generateSchedule(self) -> None:
         number_players = len(self.player_list)
@@ -96,8 +93,10 @@ class Tournament:
         self.game_queue = json.loads(schedule)
 
     def createGame(self, game) -> None:
-        print(f'│ ({game["player1"]["user_id"]}) {game["player1"]["user_name"]} vs ({game["player2"]["user_id"]}) {game["player2"]["user_name"]}')
-        # TODO: crear codigo de juego
+        room_name = generateRandomString(8)
+        {
+            
+        }
         # TODO: identificar player1
         # TODO: player1 crea sala
         # TODO: identificar player2
@@ -110,10 +109,8 @@ class Tournament:
 
         current_round = next(iter(self.game_queue))
 
-        print('┌───')
         for game in current_round:
             self.createGame(game)
-        print('└───')
 
         self.game_queue.pop(0)
 
@@ -124,27 +121,3 @@ class Tournament:
 
     def run(self) -> None:
         pass
-
-import sys
-
-def main(n):
-    tournament = Tournament(n, "")
-
-    for i in range(n):
-        tournament.registerPlayer(TournamentParticipant(i, f'user_{i}'))
-
-    tournament.generateSchedule()
-
-
-    # print(tournament.scheduleJSON)
-    # print(tournament.game_queue)
-    # print()
-
-    while True:
-        if not tournament.createRound():
-            break
-
-
-if __name__=="__main__":
-    main(int(sys.argv[1]))
-
