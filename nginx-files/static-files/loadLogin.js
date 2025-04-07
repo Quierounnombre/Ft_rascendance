@@ -72,7 +72,10 @@ async function validLogin(token, font) {
 	localStorage.setItem("token", token);
     const user = await getUser(token);
     localStorage.setItem("language", user["language"]);
-    console.log(user["language"]);
 	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = font + "px";
 	window.location.hash='';
+	const switcher = document.getElementById("lang-switcher");
+    if (!switcher)
+        return ;
+	switcher.value = user["language"];
 }
