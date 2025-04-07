@@ -5,6 +5,8 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from pong.Game import Game
+from pong.Tournament import Tournament, TournamentParticipant
+
 
 tournaments = {}
 game_rooms = {}
@@ -87,4 +89,24 @@ class GameConsumer(SyncConsumer):
     
     def tournament_config(self, event) -> None:
         message = event["message"]
-        # TODO: habra que crear una clase torneo?
+        config = message["config"]
+        n_players = message["number_players"]
+
+        if n_players < 4 or n_players % 2 != 0:
+            # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
+            return
+
+        tournaments[message["tournament_name"]] = Tournament(n_players, config)
+
+    def tournament_register(self, event) -> None:
+        message = event["message"]
+
+        tournament_name = str(message["tournanemt_nam"])
+        user_id = int(message["user_id"])
+        user_name = str(message["user_name"])
+
+        player = TournamentParticipant(user_id, user_name)
+
+        if not tournaments[tournament_name].registerPlayer(player):
+            # TODO: quizas enviar que el torneo esta lleno?
+            pass
