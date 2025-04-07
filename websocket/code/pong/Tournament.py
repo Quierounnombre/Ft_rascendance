@@ -12,8 +12,8 @@ import os
 
 from pong.generateRandomString import generateRandomString
 
-# from channels.layers import get_channel_layer
-# from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 # ------------------------------------------------------------------------------
 class TournamentParticipant:
@@ -34,12 +34,13 @@ class TournamentParticipant:
         return self.user_name
 
 # ------------------------------------------------------------------------------
-# class Tournament(threading.Thread):
-class Tournament:
+class Tournament(threading.Thread):
     def __init__(self, num_players : int, game_config : str, *args, **kwargs) -> None:
         self.player_list : list = []
         self.target_players : int = num_players
         self.game_config : str = game_config
+
+        # self.channel_name = get_channel_layer()
 
         if num_players % 2 != 0:
             raise ValueError("odd players") # TODO: se deberia comprobar antes
@@ -52,6 +53,12 @@ class Tournament:
             return False
 
         self.player_list.append(player)
+
+        # TODO: haria falta unirse al grupo para enviar, o es solo para recibir?
+        # async_to_sync(self.channel_layer.group_add)(
+        #     player.getId(), self.channel_name
+        # )
+
         return True
 
     def isTournamentFull(self) -> bool:
@@ -94,9 +101,28 @@ class Tournament:
 
     def createGame(self, game) -> None:
         room_name = generateRandomString(8)
-        {
-            
-        }
+        channel_layer = get_channel_layer()
+
+        player1 = game["player1"]
+        player2 = game["player2"]
+
+        async_to_sync(channel_layer.group_send)(
+            player1["player_id"], {
+                'type': 'create_tournament_game',
+                'message': {
+                    "room_name": room_name
+                }
+            }
+        )
+
+        async_to_sync(channel_layer.group_send)(
+            player2["player_id"], {
+                'type': 'join_tournament_game',
+                'message': {
+                    "room_name": room_name
+                }
+            }
+        )
         # TODO: identificar player1
         # TODO: player1 crea sala
         # TODO: identificar player2

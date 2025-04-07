@@ -59,7 +59,7 @@ class PongConsumer(WebsocketConsumer):
     def identify(self, message) -> None:
         self.user_id = message["user_id"]
 
-        async_to_sync(self.channel_layer.group_discard)(
+        async_to_sync(self.channel_layer.group_add)(
             self.user_id, self.channel_name
         )
 
