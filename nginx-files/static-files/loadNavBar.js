@@ -52,7 +52,7 @@ async function profileButton() {
 
 	document.getElementsByTagName("html")[0].style["font-size"] = user.font + "px";
 	const profile = document.createElement("span");
-	profile.setAttribute("class", "badge bg-secondary");
+	profile.setAttribute("class", "badge bg-secondary ms-3");
 	profile.innerHTML = `
 <div class="mini-cropped-image"><img class="rounded-circle me-1" width="32" height="32" src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" /> <b data-i18n-key="badge-hi">Hi</b> `+ user["username"] +` !</div>`;
 

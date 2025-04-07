@@ -8,18 +8,22 @@ import loadRegister from "./loadRegister.js";
 import loadNavBar from "./loadNavBar.js";
 import loadSocial from "./loadSocial.js";
 import loadSearch from "./loadSearch.js";
-import loadGame from "./loadGame.js";
 import loadHistory from "./loadHistory.js";
 import loadProfile from "./loadProfile.js";
 import loadUser from "./loadUser.js";
 import loadFooter from "./loadFooter.js";
 import bindLocaleSwitcher from "./translate.js";
 import loadModeGame from "./loadModeGame.js";
+import loadLocal from "./loadLocal.js";
+import loadOnline from "./loadOnline.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
-
+	const defaultLocale = "ENG";
 	const token = localStorage.getItem("token");
+	const lang = localStorage.getItem("language");
+	if (!lang)
+	localStorage.setItem("language", defaultLocale);
 	
 	if (!token && !loc.startsWith("#anon-")) {
 		loc = "#anon-menu"
@@ -41,7 +45,11 @@ function changeLayout() {
 		// else error
 	} else {
 		loadNavBar(loc);
-		if (loc === "#social") {
+		if (loc === "#form-local") {
+			loadLocal();
+		}else if (loc === "#form-online") {
+			loadOnline();
+		} else if (loc === "#social") {
 			loadSocial();
 		} else if (loc === "#search") {
 			loadSearch();

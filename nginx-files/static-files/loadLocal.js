@@ -5,6 +5,7 @@ gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
 <div>
+<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
 <h2 data-i18n-key="make-room">Create room</h2>
 <form id="dataForm" class="container">
 		<div class="form-floating">
@@ -26,35 +27,6 @@ gameCreator.innerHTML = `
 			<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
 		</div>
 
-		<div class="form-floating">
-			<input type="color" class="form-control form-control-color" name="background_color" id="background_color" value="#000000">
-			<label for="background_color" class="form-label" data-i18n-key="col-back">Color picker for backgound color</label>
-		</div>
-
-		<div class="form-floating">
-			<input type="color" class="form-control form-control-color" name="player1_color" id="player1_color" value="#FFFFFF">
-			<label for="player1_color" class="form-label" data-i18n-key="col-play1">Color picker for player1 color</label>
-		</div>
-
-		<div class="form-floating">
-			<input type="color" class="form-control form-control-color" name="player2_color" id="player2_color" value="#FFFFFF">
-			<label for="player2_color" class="form-label" data-i18n-key="col-play2">Color picker for player2 color</label>
-		</div>
-
-		<div class="form-floating">
-			<input type="color" class="form-control form-control-color" name="ball_color" id="ball_color" value="#FFFFFF">
-			<label for="ball_color" class="form-label" data-i18n-key="col-ball">Color picker for ball color</label>
-		</div>
-
-		<div class="form-floating">
-			<input type="color" class="form-control form-control-color" name="counter_color" id="counter_color" value="#FFFFFF">
-			<label for="counter_color" class="form-label" data-i18n-key="col-count">Color picker for counter color</label>
-		</div>
-
-		<!-- <div class="form-check form-switch">
-			<label class="form-check-label" for="flexSwitchCheckDefault">Power Ups</label>
-			<input name="power-up" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-		</div> -->
 		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 </div>
@@ -71,7 +43,7 @@ gameCreator.innerHTML = `
 `;
 
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
-export default function loadGame() {
+export default function loadLocal() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
