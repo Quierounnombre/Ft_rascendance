@@ -1,6 +1,17 @@
+import getHistoryTable from "./getHistoryTable.js";
+import getUser from "./getUser.js";
+
 export default function loadHistory() {
-	const div = document.createElement("div");
 	const root = document.getElementById("root");
-	div.innerHTML = "This is History";
-	root.replaceChildren(div);
+	const token = localStorage.getItem("token");
+	if (!token) {
+		window.location.hash = "";
+		return ;
+	}
+
+	getUser(token).then((user) => {
+		getHistoryTable(user, token).then((table) => {
+			// root.replaceChildren(table);
+	})});
+
 }
