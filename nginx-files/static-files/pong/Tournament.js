@@ -3,6 +3,11 @@ import generateRandomString from "./Game.js";
 "use strict";
 
 class Tournament {
+constructor(colors) {
+	self.colors = colors
+	this.game_round = []
+}
+
 createTournament(game_config) {
 	this.tournament_name = generateRandomString(8);
 
@@ -73,11 +78,31 @@ function server_msg(event) {
 		this.tournament_name = data["message"]["tournament_name"]
 		break;
     
-    case "next.round":
-        break;
+	case "next.round":
+		this.game_round = new Game(this.colors)
+		break;
+
+	case "create.tournament.game":
+		this.game_round.game_config = data["message"]["game_config"]
+		this.game_round.room_name = data["message"]["room_name"]
+
+		this.tournament_name = data["message"]["tournament_name"]
+		this.room_name = data["message"]["room_name"]
+
+		this.game_round.createRoom(data["message"]["game_config"], this.room_name)
+		break;
+
+	case "join.tournament.game":
+		this.game_round.room_name = data["message"]["room_name"];
+
+		this.tournament_name = data["message"]["tournament_name"]
+		this.room_name = data["message"]["room_name"]
+
+		this.game_round.joinRoom(this.room_name);
+		break;
 	
 	case "game.end":
-		this.websocket.close();
+		this.game_round = []
 		break;
 	}
 }

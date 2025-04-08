@@ -101,7 +101,7 @@ class GameConsumer(SyncConsumer):
     def tournament_register(self, event) -> None:
         message = event["message"]
 
-        tournament_name = str(message["tournanemt_nam"])
+        tournament_name = str(message["tournament_name"])
         user_id = int(message["user_id"])
         user_name = str(message["user_name"])
 

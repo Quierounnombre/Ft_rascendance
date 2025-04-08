@@ -358,7 +358,6 @@ toJSON() {
 		game_time:game_objects.find((obj) => obj.id === "counter").time_passed
 	}
 }
-// TODO: crear torneo
 }
 
 //------------------------------------------------------------------------------
@@ -424,23 +423,13 @@ function server_msg(event) {
 		}
 
 		this.websocket.close();
+		document.addEventListener("keydown", (event) => {});
+		document.addEventListener("keyup", (event) => {});
+
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		break;
-	
-	// TODO: esto deberia ser de la clase Tournament
-	case "create.tournament.game":
-		game_config = data["message"]["game_config"]
-		this.room_name = data["message"]["room_name"]
-		this.createRoom(game_config, this.room_name)
-		break;
-
-	case "join.tournament.game":
-		this.room_name = data["message"]["room_name"];
-		this.joinRoom(this.room_name);
-		break;
-	}
 }
 
 function websocket_close() {

@@ -138,6 +138,15 @@ class Tournament(threading.Thread):
             return False
 
         current_round = next(iter(self.game_queue))
+        
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            self.tournament_name, {
+                "type": "next.round",
+                "message": ""
+            }
+        )
 
         for game in current_round:
             self.createGame(game)
