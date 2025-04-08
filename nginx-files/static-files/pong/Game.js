@@ -25,6 +25,8 @@ constructor() {
 	this.game_running = false;
 	this.is_moving = false;
 
+	this.tournament_name = ""
+
 	document.addEventListener("keydown", (event) => {
 		console.log("A");
 		if (event.key === 'ArrowUp') {
@@ -40,6 +42,7 @@ constructor() {
 			"type": "direction",
 			"message": {
 				"room_name": this.room_name,
+				"tournament_name": this.tournament_name,
 				"player_id": this.user_id,
 				"dir": this.dir,
 				"is_moving": this.is_moving
@@ -58,6 +61,7 @@ constructor() {
 			"type": "direction",
 			"message": {
 				"room_name": this.room_name,
+				"tournament_name": this.tournament_name,
 				"player_id": this.user_id,
 				"dir": this.dir,
 				"is_moving": this.is_moving
@@ -112,8 +116,9 @@ isEnd() {
 	return false;
 }
 
-createRoom(game_config) {
-	this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
+createRoom(game_config, room_name = generateRandomString(8)) {
+	// this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
+	this.room_name = room_name;
 	this.playerN = "player1";
 
 	this.websocket = new WebSocket(
@@ -129,12 +134,14 @@ createRoom(game_config) {
 
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
+			this.user_name = user.username;
 
 			// identificarse
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
-					"user_id": this.user_id
+					"user_id": this.user_id,
+					"user_name": this.user_name,
 				}
 			}));
 
@@ -143,6 +150,7 @@ createRoom(game_config) {
 				"type": "create.room",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"data": game_config
 				}
 			}));
@@ -173,12 +181,14 @@ joinRoom(room_name) {
 
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
+			this.user_name = user.username;
 
 			// identificarse
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
-					"user_id": this.user_id
+					"user_id": this.user_id,
+					"user_name": this.user_name,
 				}
 			}));
 
@@ -186,7 +196,8 @@ joinRoom(room_name) {
 			this.websocket.send(JSON.stringify({
 				"type": "join.room",
 				"message": {
-					"room_name": this.room_name
+					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 				}
 			}));
 		});
@@ -213,6 +224,7 @@ offlineRoom(game_config) {
 				"type": "direction",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"player_id": this.user_id,
 					"dir": -4,
 					"is_moving": true
@@ -223,6 +235,7 @@ offlineRoom(game_config) {
 				"type": "direction",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"player_id": -1,
 					"dir": -4,
 					"is_moving": true
@@ -233,6 +246,7 @@ offlineRoom(game_config) {
 				"type": "direction",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"player_id": this.user_id,
 					"dir": 4,
 					"is_moving": true
@@ -244,6 +258,7 @@ offlineRoom(game_config) {
 				"type": "direction",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"player_id": -1,
 					"dir": 4,
 					"is_moving": true
@@ -258,6 +273,7 @@ offlineRoom(game_config) {
 				"type": "direction",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"player_id": this.user_id,
 					"dir": 0,
 					"is_moving": false
@@ -269,6 +285,7 @@ offlineRoom(game_config) {
 				"type": "direction",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"player_id": -1,
 					"dir": 0,
 					"is_moving": false
@@ -297,6 +314,7 @@ offlineRoom(game_config) {
 				"type": "create.room",
 				"message": {
 					"room_name": this.room_name,
+					"tournament_name": this.tournament_name,
 					"data": game_config
 				}
 			}));
@@ -314,6 +332,7 @@ offlineRoom(game_config) {
 				"type": "join.room",
 				"message": {
 					"room_name": "pong_" + this.room_name,
+					"tournament_name": this.tournament_name,
 				}
 			}));
 
@@ -340,7 +359,7 @@ toJSON() {
 		game_time:game_objects.find((obj) => obj.id === "counter").time_passed
 	}
 }
-
+// TODO: crear torneo
 }
 
 //------------------------------------------------------------------------------
@@ -391,10 +410,31 @@ function server_msg(event) {
 		break;
 	
 	case "game.end":
+		if (data["message"]["tournament_name"] != "") {
+			this.tournament_websocket.send(JSON.stringify({ // TODO: FALTA CREAR ESTE WEBSOCKET
+				"type": "end.tournament.game",
+				"message": {
+					"tournament_name": data["message"]["tournament_name"],
+					"room_name": self.room_name
+				}
+			}))
+		}
+
 		this.websocket.close();
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
+		break;
+	
+	case "create.tournament.game":
+		game_config = data["message"]["game_config"]
+		this.room_name = data["message"]["room_name"]
+		this.createRoom(game_config, this.room_name)
+		break;
+
+	case "join.tournament.game":
+		this.room_name = data["message"]["room_name"];
+		this.joinRoom(this.room_name);
 		break;
 	}
 }
@@ -404,7 +444,7 @@ function websocket_close() {
 	this.game_running = false;
 }
 
-function generateRandomString(length) {
+export default function generateRandomString(length) {
 	let result = '';
 	// const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';

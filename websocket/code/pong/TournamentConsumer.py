@@ -37,9 +37,12 @@ class TournamentConsumer(WebsocketConsumer):
             self.createTournament(message)
         elif message_type == "join.tournament":
             self.joinTournament(message)
+        elif message_type == "end.tournament.game":
+            self.endTournamentGame(message)
     
     def identify(self, message) -> None:
         self.user_id = message["user_id"]
+        self.user_name = message["user_name"]
 
         async_to_sync(self.channel_layer.group_add)(
             self.user_id, self.channel_name
@@ -91,7 +94,12 @@ class TournamentConsumer(WebsocketConsumer):
                 "type": "tournament.register",
                 "message": {
                     "tournament_name": self.tournament_name,
-                    "id": self.user_id
+                    "user_id": self.user_id,
+                    "user_name": self.user_name,
                 }
             }
         )
+    
+        def endTournamentGame(self, message) -> None:
+            tournaments[message["tournament_name"]].endGame(message["room_name"])
+            pass

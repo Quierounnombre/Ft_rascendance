@@ -27,6 +27,8 @@ class Game(threading.Thread):
         self.room_name = room_name
         self.number_players = 0
 
+        self.tournament_name = ''
+
         self.is_running = False
 
         data = json.loads(data)
@@ -87,6 +89,7 @@ class Game(threading.Thread):
             "type": msg_type,
             "message": {
                 "room_name": self.room_name,
+                "tournament_name": self.tournament_name,
                 "data": data
             }
         }

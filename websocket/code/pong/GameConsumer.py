@@ -110,3 +110,6 @@ class GameConsumer(SyncConsumer):
         if not tournaments[tournament_name].registerPlayer(player):
             # TODO: quizas enviar que el torneo esta lleno?
             pass
+
+        if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
+            tournaments[tournament_name].start()

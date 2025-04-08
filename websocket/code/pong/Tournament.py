@@ -39,8 +39,9 @@ class Tournament(threading.Thread):
         self.player_list : list = []
         self.target_players : int = num_players
         self.game_config : str = game_config
+        self.is_runing = False
 
-        # self.channel_name = get_channel_layer()
+        self.games_finished = []
 
         if num_players % 2 != 0:
             raise ValueError("odd players") # TODO: se deberia comprobar antes
@@ -108,18 +109,21 @@ class Tournament(threading.Thread):
 
         async_to_sync(channel_layer.group_send)(
             player1["player_id"], {
-                'type': 'create_tournament_game',
+                'type': 'create.tournament.game',
                 'message': {
-                    "room_name": room_name
+                    "room_name": room_name,
+                    "tournament_name": self.tournament_name,
+                    "game_config": self.game_config
                 }
             }
         )
 
         async_to_sync(channel_layer.group_send)(
             player2["player_id"], {
-                'type': 'join_tournament_game',
+                'type': 'join.tournament.game',
                 'message': {
-                    "room_name": room_name
+                    "room_name": room_name,
+                    "tournament_name": self.tournament_name
                 }
             }
         )
@@ -141,9 +145,39 @@ class Tournament(threading.Thread):
         self.game_queue.pop(0)
 
         return True
+    
+    def endGame(self, room_name) -> None:
+        if room_name in self.games_finished:
+            return
+
+        self.games_finished.append(room_name)            
+        self.round_games_finished += 1
 
     def serialize(self) -> str:
         pass
 
+    def currentRoundHasEnd(self) -> bool:
+        return self.round_games_finished == (self.target_players / 2)
+
     def run(self) -> None:
-        pass
+        # TODO:
+        self.is_running = True
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            message["room_name"], {
+                "type": "tournament.started",
+                "message": ""
+            }
+        )
+
+        while self.isTournamentEnd():
+            if not self.currentRoundHasEnd():
+                continue
+
+            if not self.createRound():
+                self.round_games_finished = 0
+                self.games_finished = []
+                break
+
+        self.is_running = False
