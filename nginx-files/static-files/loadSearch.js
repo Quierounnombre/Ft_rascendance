@@ -64,7 +64,7 @@ function friendButton(id, friends) {
 	}
 	for (let friend in friends) {
 		if (friends[friend].id == id)
-			return `<button type="button" data-i18n-key="del-friend" class="btn btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
+			return `<button type="button" data-i18n-key="del-friend" class="btn btn-lg btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
 	}
 	return `<button type="button" data-i18n-key="add-friend" class="btn btn-lg me-2 btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
 }
