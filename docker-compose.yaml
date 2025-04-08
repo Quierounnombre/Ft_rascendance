@@ -77,6 +77,8 @@ services:
     container_name: UserMng
     expose:
       - ${BACKEND_PORT}
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     volumes:
       - ./UserMng/code:/UserMng/code
     depends_on:
@@ -96,6 +98,8 @@ services:
       DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
       DJANGO_SUPERUSER: ${DJANGO_SUPERUSER}
       DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
+      API_UID: ${API_UID}
+      API_SECRET: ${API_SECRET}
     networks:
       - rascendance-network
 

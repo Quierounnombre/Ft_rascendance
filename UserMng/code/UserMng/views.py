@@ -26,6 +26,8 @@ from .serializers import FriendsSerializer
 from django.conf import settings
 from django.db import transaction
 
+from secrets import token_urlsafe
+
 import requests
 import os
 
@@ -158,7 +160,7 @@ class OAuthLoginAPIView(APIView):
 		return (q_str)
 
 	def get(self, request):
-		state_token = os.urandom(16).hex()
+		state_token = token_urlsafe(32)
 		request.session['oauth_state'] = state_token
 		redirect_uri = request.build_absolute_uri(reverse('auth_callback'))
 		params = {
