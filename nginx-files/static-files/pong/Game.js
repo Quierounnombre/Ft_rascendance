@@ -3,6 +3,7 @@ import { Counter } from "./Counter.js";
 import { Ball } from "./Ball.js";
 import { Player } from "./Player.js";
 import getUser from "../getUser.js"
+import generateRandomString from "../generateRandomString.js";
 import * as THREE from 'three';
 "use strict";
 
@@ -360,6 +361,8 @@ toJSON() {
 }
 }
 
+export {Game}
+
 //------------------------------------------------------------------------------
 function server_msg(event) {
 	const data = JSON.parse(event["data"]);
@@ -427,6 +430,7 @@ function server_msg(event) {
 		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		break;
+	}
 }
 
 function websocket_close() {
@@ -435,19 +439,3 @@ function websocket_close() {
 	document.addEventListener("keyup", (event) => {});
 	this.game_running = false;
 }
-
-export default function generateRandomString(length) {
-	let result = '';
-	// const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-	const charactersLength = characters.length;
-
-	for (let i = 0; i < length; i++) {
-		result += characters[Math.floor(Math.random() * charactersLength)];
-	}
-
-	return result;
-}
-
-export {Game}
