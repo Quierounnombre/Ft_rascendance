@@ -45,11 +45,11 @@ function server_msg(event) {
 
 	switch(data["type"]) {
 	case "tournament.created":
-		this.tournament_name = data["message"]["tournament_name"]
+		this.tournament_name = data["message"]["tournament_name"];
 
 		// TODO: debug temporal
 		const tmp = document.createElement("div");
-		tmp.innerHTML = `${this.tournament_name}`
+		tmp.innerHTML = `${this.tournament_name}`;
 		document.getElementById("root").replaceChildren(tmp);
 
 
@@ -75,28 +75,28 @@ function server_msg(event) {
 		break;
 
 	case "tournament.started":
-		this.tournament_name = data["message"]["tournament_name"]
+		this.tournament_name = data["message"]["tournament_name"];
 		break;
     
 	case "next.round":
-		this.game_round = new Game(this.colors)
+		this.game_round = new Game(this.colors);
 		break;
 
 	case "create.tournament.game":
-		this.game_round.game_config = data["message"]["game_config"]
-		this.game_round.room_name = data["message"]["room_name"]
+		this.game_round.game_config = data["message"]["game_config"];
+		this.game_round.room_name = data["message"]["room_name"];
 
-		this.tournament_name = data["message"]["tournament_name"]
-		this.room_name = data["message"]["room_name"]
+		this.tournament_name = data["message"]["tournament_name"];
+		this.room_name = data["message"]["room_name"];
 
-		this.game_round.createRoom(data["message"]["game_config"], this.room_name)
+		this.game_round.createRoom(data["message"]["game_config"], this.room_name);
 		break;
 
 	case "join.tournament.game":
 		this.game_round.room_name = data["message"]["room_name"];
 
-		this.tournament_name = data["message"]["tournament_name"]
-		this.room_name = data["message"]["room_name"]
+		this.tournament_name = data["message"]["tournament_name"];
+		this.room_name = data["message"]["room_name"];
 
 		this.game_round.joinRoom(this.room_name);
 		break;
