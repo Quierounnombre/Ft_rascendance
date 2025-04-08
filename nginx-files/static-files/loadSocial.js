@@ -68,11 +68,26 @@ async function getFriendList(token) {
 		<div class="card-block px-2">
            <h4 class="card-title">`+ user["username"] +`</h4>
            <p class="card-text">`+ user['email'] +`</p>
+            ` + friendButton(user["id"], friends) + `
+			<button type="button" class="btn btn-lg btn-warning" data-i18n-key="see-prof" onclick="seeProfile(`+user["id"]+`)">See Profile</button>
 		</div>
+
 		<div class="w-100"></div>
 		</div>
     `});
-  
+	translatePage();
 
 	return friendList;
 }
+
+function friendButton(id, friends) {
+	if (friends === "none") {
+		return ;
+	}
+	for (let friend in friends) {
+		if (friends[friend].id == id)
+			return `<button type="button" data-i18n-key="del-friend" class="btn btn-lg btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
+	}
+	return `<button type="button" data-i18n-key="add-friend" class="btn btn-lg me-2 btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
+}
+

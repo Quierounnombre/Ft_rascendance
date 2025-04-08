@@ -148,7 +148,7 @@ const translations = {
         "no-find": "Res de res...",
         "see-prof": "Veure perfil",
         "add-friend": "Afegir Amic",
-        "del-friend": "Eliminar Amic",
+        "del-friend": "Borrar Amic",
         "make-room": "Crear Sala Nova",
         "join-room": "Entrar a Sala",
         "crea-submit": "Crea",
