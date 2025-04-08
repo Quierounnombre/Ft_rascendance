@@ -59,6 +59,8 @@ const translations = {
         "join-form": "Input room code",
         "game-mode": "Choose Game Mode",
         "mod-tourn": "Tournament",
+        "make-tourn": "Create a new tournament",
+        "join-tourn": "Join to a tournament",
     },
 
     "ESP": {
@@ -116,6 +118,8 @@ const translations = {
         "join-form": "Poner código de sala",
         "game-mode": "Elige Modo de Juego",
         "mod-tourn": "Torneo",
+        "make-tourn": "Crear un nuevo torneo",
+        "join-tourn": "Unirse a un torneo",
     },
 
     "CAT": {
@@ -173,6 +177,8 @@ const translations = {
         "join-form": "Posar codi de sala",
         "game-mode": "Escull Mode de Joc",
         "mod-tourn": "Torneix",
+        "make-tourn": "Crear un nou torneig", // TODO: ferran revisa esta traduccion
+        "join-tourn": "Unir-se a un torneig", // TODO: ferran revisa esta traduccion
     },
 };
 

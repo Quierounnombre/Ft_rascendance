@@ -16,6 +16,7 @@ import bindLocaleSwitcher from "./translate.js";
 import loadModeGame from "./loadModeGame.js";
 import loadLocal from "./loadLocal.js";
 import loadOnline from "./loadOnline.js";
+import loadTournament from "./loadTournament.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -49,6 +50,8 @@ function changeLayout() {
 			loadLocal();
 		}else if (loc === "#form-online") {
 			loadOnline();
+		}else if (loc === "#form-tourn") {
+			loadTournament();		
 		} else if (loc === "#social") {
 			loadSocial();
 		} else if (loc === "#search") {
