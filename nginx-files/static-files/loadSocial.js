@@ -58,7 +58,7 @@ async function getFriendList(token) {
 						<span class="visually-hidden">Logged</span>
 					</span>`;
 		friendList.innerHTML += `
-		<div class="card flex-row flex-wrap">
+		<div class="card flex-row flex-wrap mb-2">
 		<div class="card-header border-0">
 			<div class="cropped-image">
 				<img src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" />
