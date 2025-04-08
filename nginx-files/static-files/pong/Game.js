@@ -423,9 +423,6 @@ function server_msg(event) {
 		}
 
 		this.websocket.close();
-		document.addEventListener("keydown", (event) => {});
-		document.addEventListener("keyup", (event) => {});
-
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
@@ -434,6 +431,8 @@ function server_msg(event) {
 
 function websocket_close() {
 	console.log(`WebSocket closed`);
+	document.addEventListener("keydown", (event) => {});
+	document.addEventListener("keyup", (event) => {});
 	this.game_running = false;
 }
 
