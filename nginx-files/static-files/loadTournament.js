@@ -6,7 +6,8 @@ gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
 <div>
 <a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i></a>
-<h2 data-i18n-key="make-tourn">Create Tournament</h2>
+<div class="d-flex">
+<h2 class="me-3" data-i18n-key="make-tourn">Create Tournament</h2><i class="bi bi-trophy-fill" style="font-size:2rem;"></i></div>
 <form id="dataForm" class="container mb-4">
 		<div class="form-floating">
 			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
