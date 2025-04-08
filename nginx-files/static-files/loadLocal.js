@@ -5,7 +5,6 @@ gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
 <div>
-<a href="#game"><i class="bi bi-arrow-left-circle-fill mb" style="font-size:2.5rem; color:blue"></i></a>
 <div class="d-flex">
 <h2 class="me-3" data-i18n-key="make-local">Create Local room</h2> <i class="bi bi-house-fill" style="font-size:2rem;"></i>
 </div>
@@ -41,6 +40,7 @@ gameCreator.innerHTML = `
 	</div>
 	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
+<a href="#game"><i class="bi bi-arrow-left-circle-fill mb" style="font-size:2.5rem; color:blue"></i></a>
 </div>
 `;
 

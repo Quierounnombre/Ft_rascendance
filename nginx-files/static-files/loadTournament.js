@@ -5,7 +5,7 @@ gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
 <div>
-<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i></a>
+
 <div class="d-flex">
 <h2 class="me-3" data-i18n-key="make-tourn">Create Tournament</h2><i class="bi bi-trophy-fill" style="font-size:2rem;"></i></div>
 <form id="dataForm" class="container mb-4">
@@ -40,6 +40,7 @@ gameCreator.innerHTML = `
 	</div>
 	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
+<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i></a>
 </div>
 `;
 
