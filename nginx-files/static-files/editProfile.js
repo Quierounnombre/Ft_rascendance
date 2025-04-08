@@ -19,8 +19,10 @@ avatar_field.innerHTML = `<label for="avtar" class="col-sm-2 form-label col-form
 
 	[...fields].forEach(field => {
 		if (field.name !== "email" && field.id !== "submit") {
-			field.setAttribute("class", "form-control");
+			if (field.type !== "color")
+				field.setAttribute("class", "form-control");
 			field.removeAttribute("readonly");
+			field.removeAttribute("disabled");
 		}
 	});
 

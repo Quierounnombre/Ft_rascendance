@@ -30,6 +30,40 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			response['avatar'] = instance.avatar.url
 		return response
 
+class UserSaveSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = [
+			"id",
+			"username",
+			"email",
+			"font",
+			"avatar",
+			"language",
+			"me_color",
+			"other_color",
+			"ball_color",
+			"counter_color",
+		]
+
+
+	def to_representation(self, instance):
+		response = super(UserSaveSerializer, self).to_representation(instance)
+		if instance.avatar:
+			response['avatar'] = instance.avatar.url
+		return response
+
+
+class UserColorsSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = [
+			"me_color",
+			"other_color",
+			"ball_color",
+			"counter_color",
+		]
+
 class FriendsSerializer(serializers.ModelSerializer):
 	following = UserProfileSerializer(many=True, read_only=True)
 	class Meta:

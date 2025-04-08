@@ -7,8 +7,8 @@ class Player extends CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context) {
-	super(obj, canvas, context);
+constructor(obj, canvas, scene, color) {
+	super(obj, canvas, scene, color);
 
 	document.addEventListener("keydown", playerKeyDownHandler.bind(this));
 	document.addEventListener("keyup", playerKeyUpHandler.bind(this));

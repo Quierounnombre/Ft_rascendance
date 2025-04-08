@@ -3,25 +3,18 @@ import { Counter } from "./Counter.js";
 import { Ball } from "./Ball.js";
 import { Player } from "./Player.js";
 import getUser from "../getUser.js"
+import * as THREE from 'three';
 "use strict";
 
 class Game {
 /**
  * @param {JSON string} config string with the JSON config
  */
-constructor() {	
+constructor(colors) {	
 	// TODO: sacar de la base de datos los colores preferidos por el jugador
-	// objs = JSON.parse(config);
-	this.canvas = document.createElement("canvas");
 
 	// TODO: que al crear la partida se genere el canvas
-	this.canvas.setAttribute("id", "pong");
-	this.canvas.setAttribute("width", "800");
-	this.canvas.setAttribute("height", "400");
-	this.canvas.setAttribute("style", "border: 2px solid black"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
-
-	this.context = this.canvas.getContext("2d");
-
+	this.colors = colors
 	this.game_objects = new Map()
 
 	// TODO: todo esto lo puede terner el user en su configuracion, por lo que la configuracion propia de los colores iria aqui
@@ -32,7 +25,6 @@ constructor() {
 	this.game_running = false;
 	this.is_moving = false;
 
-	// TODO: esto habria que comprobar que los clientes no pueden mover a otros 
 	document.addEventListener("keydown", (event) => {
 		if (event.key === 'ArrowUp') {
 			this.dir = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
@@ -40,15 +32,70 @@ constructor() {
 		} else if (event.key === 'ArrowDown') {
 			this.dir = 4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
-		}
+		} else
+			return;
+
+		this.websocket.send(JSON.stringify({
+			"type": "direction",
+			"message": {
+				"room_name": this.room_name,
+				"player_id": this.user_id,
+				"dir": this.dir,
+				"is_moving": this.is_moving
+			}
+		}));
 	});
 
 	document.addEventListener("keyup", (event) => {
-		if (event.key == "ArrowUp" || event.key == "ArrowDown" ) {
+		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
 			this.is_moving = false;
 			this.dir = 0
-		}
+		} else
+			return;
+
+		this.websocket.send(JSON.stringify({
+			"type": "direction",
+			"message": {
+				"room_name": this.room_name,
+				"player_id": this.user_id,
+				"dir": this.dir,
+				"is_moving": this.is_moving
+			}
+		}));
+	
 	});
+
+ // 3d graphics
+	this.threeCanvas = document.createElement("canvas");
+	this.threeCanvas.setAttribute("id", "pong");
+	this.threeCanvas.setAttribute("width", "800");
+	this.threeCanvas.setAttribute("height", "400");
+	this.threeCanvas.setAttribute("style", "border: 2px solid black"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
+	this.scene = new THREE.Scene();
+	this.scene.background = new THREE.Color(0x101010);
+
+	var FOV = 70;
+	var z = this.threeCanvas.height / (2 * Math.tan(((FOV * Math.PI) / 180)/2))
+	this.camera = new THREE.PerspectiveCamera(FOV, this.threeCanvas.width / this.threeCanvas.height, z, z + 30)
+	this.camera.position.z = z + 11;
+	this.camera.position.x = this.threeCanvas.width / 2;
+	this.camera.position.y = - this.threeCanvas.height / 2;
+	this.scene.add(this.camera);
+	this.renderer = new THREE.WebGLRenderer({
+		canvas: this.threeCanvas
+	})
+	this.renderer.setSize(this.threeCanvas.width, this.threeCanvas.height);
+	this.renderer.setAnimationLoop(this.animate.bind(this));
+}
+
+animate() {
+	if (!this.game_state)
+		return ;
+	const objs = JSON.parse(this.game_state);
+	for (let i in objs) {
+		this.game_objects.get(objs[i].id).animate(objs[i]);
+	}
+	this.renderer.render(this.scene, this.camera)
 }
 
 /**
@@ -64,85 +111,9 @@ isEnd() {
 	return false;
 }
 
-/**
- * @brief game loop
- */
-gameLoop() {
-	if (!this.game_running)
-		return;
-
-	document.getElementById("root").replaceChildren(this.canvas);
-
-	this.websocket.send(JSON.stringify({
-		"type": "direction",
-		"message": {
-			"room_name": this.room_name,
-			"player_id": this.user_id,
-			"dir": this.dir,
-			"is_moving": this.is_moving
-		}
-	}));
-
-	this.render();
-	this.animation = window.requestAnimationFrame(this.gameLoop.bind(this));
-}
-
-render() {
-	if (!this.game_state)
-		return;
-
-	const objs = JSON.parse(this.game_state);
-
-	this.drawBackground(); // TODO: retocar esto
-	for (let i in objs) {
-		// TODO: poner en el metodo render de los objetos el color
-		switch (objs[i].type) {
-		case "player":
-			const player = new Player(objs[i], this.canvas, this.context);
-			player.render();
-			break;
-
-		case "ball":
-			const ball = new Ball(objs[i], this.canvas, this.context);
-			ball.render();
-			break;
-
-		case "counter":
-			const counter = new Counter(objs[i], this.canvas, this.context);
-			counter.render();
-			break;
-
-		default:
-			const canvas_object = new CanvasObject(objs[i], this.canvas, this.context);
-			canvas_object.render();
-		}
-	}
-}
-
-/**
- * @brief clears all the canvas to get only the background
- */
-drawBackground() {
-	// Clear the canvas
-	this.context.fillStyle = this.background_color;
-	this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-	// Draw the center line
-	this.context.beginPath();
-	this.context.strokeStyle = "white"; // TODO: personalizacion?
-	this.context.lineWidth = "2";
-	this.context.moveTo(this.canvas.width / 2, this.canvas.height / 8);
-	this.context.lineTo(this.canvas.width / 2, this.canvas.height);
-	this.context.moveTo(0, this.canvas.height / 8);
-	this.context.lineTo(this.canvas.width, this.canvas.height / 8);
-	this.context.closePath();
-	this.context.stroke();
-}
-
 createRoom(game_config) {
-	this.room_name = generateRandomString(8);
+	this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
 	this.playerN = "player1";
-	// this.game_config = game_config; // TODO: quizas no  haga falta
 
 	this.websocket = new WebSocket(
 		'wss://'
@@ -224,9 +195,132 @@ joinRoom(room_name) {
 	this.websocket.onmessage = server_msg.bind(this);
 }
 
-setStartTime(time) {
-// TODO: deprecated?
-	this.game_objects.find((obj) => obj.id === "counter").setStartTime(time);
+offlineRoom(game_config) {
+	this.room_name = generateRandomString(8);
+
+	this.websocket = new WebSocket(
+		'wss://'
+		+ window.location.hostname
+		+ ':7000/ws/pong/'
+		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
+		+ '/'
+	)
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key === 'ArrowUp') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": -4,
+					"is_moving": true
+				}
+			}));
+		} else if (event.key === "w") {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": -4,
+					"is_moving": true
+				}
+			}));
+		} else if (event.key === 'ArrowDown') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": 4,
+					"is_moving": true
+				}
+			}));
+
+		} else if (event.key === 's') {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": 4,
+					"is_moving": true
+				}
+			}));
+		}
+	});
+
+	document.addEventListener("keyup", (event) => {
+		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": this.user_id,
+					"dir": 0,
+					"is_moving": false
+				}
+			}));
+
+		} else if (event.key === "w" || event.key === "s") {
+			this.websocket.send(JSON.stringify({
+				"type": "direction",
+				"message": {
+					"room_name": this.room_name,
+					"player_id": -1,
+					"dir": 0,
+					"is_moving": false
+				}
+			}));
+		}
+	});
+
+	this.websocket.onopen = () => {
+		console.log(`WebSocket opened`);
+
+		getUser(localStorage.getItem("token")).then((user) => {
+			this.user_id = user.id;
+
+			// TODO: esta invertido para que no este espejado
+			// identificarse
+			this.websocket.send(JSON.stringify({
+				"type": "identify",
+				"message": {
+					"user_id": -1 // TODO: -1 para anonimos?
+				}
+			}));
+
+			// unirse a la sala
+			this.websocket.send(JSON.stringify({
+				"type": "create.room",
+				"message": {
+					"room_name": this.room_name,
+					"data": game_config
+				}
+			}));
+
+			// identificarse
+			this.websocket.send(JSON.stringify({
+				"type": "identify",
+				"message": {
+					"user_id": this.user_id
+				}
+			}));
+
+			// unirse a la sala
+			this.websocket.send(JSON.stringify({
+				"type": "join.room",
+				"message": {
+					"room_name": "pong_" + this.room_name,
+				}
+			}));
+
+		});
+	}
+
+	this.websocket.onclose = websocket_close.bind(this);
+	this.websocket.onmessage = server_msg.bind(this);
 }
 
 toJSON() {
@@ -275,32 +369,34 @@ function server_msg(event) {
 		for (let i in tmp2) {
 			switch (tmp2[i].type) {
 			case "player":
-				this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.canvas, this.context)));
+				if (tmp2[i].pk === this.user_id)
+					this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.threeCanvas, this.scene, this.colors.me_color)));
+				else
+					this.game_objects.set(tmp2[i].id, (new Player(tmp2[i], this.threeCanvas, this.scene, this.colors.other_color)));
 				break;
 
 			case "ball":
-				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.canvas, this.context)));
+				this.game_objects.set(tmp2[i].id, (new Ball(tmp2[i], this.threeCanvas, this.scene, this.colors.ball_color)));
 				break;
 
 			case "counter":
-				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.canvas, this.context)));
+				this.game_objects.set(tmp2[i].id, (new Counter(tmp2[i], this.threeCanvas, this.scene, this.colors.counter_color)));
 				break;
 
 			default:
-				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.canvas, this.context)));
+				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.threeCanvas, this.scene, this.colors.ball_color)));
 			}
 		}
 
-		document.getElementById("root").replaceChildren(this.canvas);
+		document.getElementById("root").replaceChildren(this.threeCanvas);
 		this.game_running = true;
-		this.gameLoop();
 		break;
 	
 	case "game.end":
 		this.websocket.close();
 		this.game_running = false;
+		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
-		window.cancelAnimationFrame(this.animation);
 		break;
 	}
 }

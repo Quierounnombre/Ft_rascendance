@@ -1,4 +1,5 @@
 "use strict";
+import * as THREE from 'three';
 
 class CanvasObject {
 /**
@@ -6,9 +7,8 @@ class CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context) {
+constructor(obj, canvas, scene, color) {
 	this.canvas = canvas;
-	this.context = context;
 
 	this.color = "white";
 	this.id = "generic";
@@ -25,6 +25,7 @@ constructor(obj, canvas, context) {
 	for (let i in obj)
 		this[i] = obj[i];
 
+	this.color = color
 	/*
 	** xy1---------xy2
 	** |            |
@@ -43,14 +44,18 @@ constructor(obj, canvas, context) {
 
 	this.point_x4 = this.x + this.width / 2;
 	this.point_y4 = this.y + this.height / 2;
+
+	this.geometry = new THREE.BoxGeometry(this.width, this.height, 20);
+	this.material = new THREE.MeshPhongMaterial({color: this.color})
+	this.mesh = new THREE.Mesh(this.geometry, this.material);
+	this.mesh.position.x = this.x;
+	this.mesh.position.y = - this.y;
+	scene.add(this.mesh);
 }
 
-/**
- * @brief puts itself in the canvas
- */
-render() {
-	this.context.fillStyle = this.color;
-	this.context.fillRect(this.point_x1, this.point_y1, this.width, this.height);
+animate(obj) {
+	this.mesh.position.x = obj.x;
+	this.mesh.position.y = - obj.y;
 }
 
 /**

@@ -1,11 +1,12 @@
 import { Game } from "./Game.js";
 
-export default function pong(type, data) {
-	// TODO: quizas deberian ser dos funciones o algo asi
-	const game = new Game();
-	if (type === "create_room") {
+export default function pong(type, data, colors) {
+	const game = new Game(colors);
+
+	if (type === "create_room")
 		game.createRoom(data);
-	} else {
+	else if (type === "join_room")
 		game.joinRoom(data);
-	}
+	else if (type === "local_room")
+		game.offlineRoom(data);
 }
