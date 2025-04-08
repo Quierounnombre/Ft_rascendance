@@ -9,4 +9,5 @@ export default function pong(type, data, colors) {
 		game.joinRoom(data);
 	else if (type === "local_room")
 		game.offlineRoom(data);
+
 }

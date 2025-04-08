@@ -5,7 +5,10 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from pong.Game import Game
+from pong.Tournament import Tournament, TournamentParticipant
 
+
+tournaments = {}
 game_rooms = {}
 
 class GameConsumer(SyncConsumer):
@@ -34,9 +37,11 @@ class GameConsumer(SyncConsumer):
         pass
     
     def game_end(self, event) -> None:
-        if not game_rooms[event["message"]["room_name"]].is_running:
-            del game_rooms[event["message"]["room_name"]]
-        # TODO: pasar a la base de datos el resultado
+        message = event["message"]
+        data = message["data"]
+
+        if not game_rooms[message["room_name"]].is_running:
+            del game_rooms[message["room_name"]]
     
     # message: {
     #     "room_name": str,
@@ -71,6 +76,7 @@ class GameConsumer(SyncConsumer):
     #     "data": json converted to string with the config
     # }
     def game_config(self, event) -> None:
+        # TODO: revisar que no existe la sala ya
         message = event["message"]
 
         self.room_name = message["room_name"]
@@ -80,5 +86,30 @@ class GameConsumer(SyncConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
         )
+    
+    def tournament_config(self, event) -> None:
+        message = event["message"]
+        config = message["config"]
+        n_players = message["number_players"]
 
+        if n_players < 4 or n_players % 2 != 0:
+            # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
+            return
 
+        tournaments[message["tournament_name"]] = Tournament(n_players, config)
+
+    def tournament_register(self, event) -> None:
+        message = event["message"]
+
+        tournament_name = str(message["tournanemt_nam"])
+        user_id = int(message["user_id"])
+        user_name = str(message["user_name"])
+
+        player = TournamentParticipant(user_id, user_name)
+
+        if not tournaments[tournament_name].registerPlayer(player):
+            # TODO: quizas enviar que el torneo esta lleno?
+            pass
+
+        if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
+            tournaments[tournament_name].start()

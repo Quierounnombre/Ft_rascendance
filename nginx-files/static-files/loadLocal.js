@@ -84,6 +84,9 @@ export default async function loadLocal() {
 		case "floating":
 			data_to_send = floatingMap(config);
 			break;
+		case "temporal":
+			data_to_send = temporalMap(config);
+			break;
 		default:
 			data_to_send = defaultMap(config);
 		}
@@ -103,8 +106,14 @@ export default async function loadLocal() {
 
 		pong("join_room", room_name, colors);
 	});
-}
 
+	form3.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const number_players_tournament = document.getElementById("number_players_tournament").value;
+
+		pong("create_tournament", number_players_tournament)
+	});
+}
 
 function defaultMap(config) {
 	const data_to_send = [];
@@ -179,7 +188,7 @@ function doubleBallMap(config) {
 		width: 20,
 		height: 100,
 		speed: 2,
-		move_up: "w",
+		move_up: "w", // TODO: esto esta deprecated
 		move_down: "s"
 	};
 
@@ -317,6 +326,110 @@ function floatingMap(config) {
 	data_to_send.push(ball);
 	data_to_send.push(floating1);
 	data_to_send.push(floating2);
+	data_to_send.push(counter);
+	
+	return data_to_send;
+}
+
+function temporalMap(config) {
+	const data_to_send = [];
+
+	const player1 = {
+		pk: -1,
+		id: "player1",
+		type: "player",
+		color: config.player1_color,
+		x: 10,
+		y: 200,
+		width: 20,
+		height: 100,
+		speed: 2,
+		move_up: "w",
+		move_down: "s"
+	};
+
+	const player2 = {
+		pk: -1,
+		id: "player2",
+		type: "player",
+		color: config.player2_color,
+		x: 790,
+		y: 200,
+		width: 20,
+		height: 100,
+		speed: 2,
+		move_up: "ArrowUp",
+		move_down: "ArrowDown"
+	};
+
+	const ball = {
+		id: "ball",
+		type: "ball",
+		color: config.ball_color,
+		x: 400,
+		y: 200,
+		dirX: 1,
+		dirY: 1,
+		radius: 10
+	};
+
+	const generic1 = {
+		id: "generic1",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3),
+		width: 10,
+		height: 10
+	};
+
+	const generic2 = {
+		id: "generic2",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3 * 2),
+		width: 10,
+		height: 10
+	};
+
+	const generic3 = {
+		id: "generic3",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3 * 2,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3),
+		width: 10,
+		height: 10
+	};
+
+	const generic4 = {
+		id: "generic4",
+		type: "CanvasObject",
+		color: config.counter_color,
+		x: 800 / 3 * 2,
+		y: (400 / 8) + ((400 - (400 / 8)) / 3 * 2),
+		width: 10,
+		height: 10
+	};
+
+	const counter = {
+		id: "counter",
+		type: "counter",
+		color: config.counter_color,
+		x: 400,
+		y: 10,
+		font: "42px Arial"
+	};
+
+	data_to_send.push(config);
+	data_to_send.push(player1);
+	data_to_send.push(player2);
+	data_to_send.push(ball);
+	data_to_send.push(generic1);
+	data_to_send.push(generic2);
+	data_to_send.push(generic3);
+	data_to_send.push(generic4);
 	data_to_send.push(counter);
 	
 	return data_to_send;
