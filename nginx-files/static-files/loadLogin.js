@@ -30,7 +30,7 @@ async function logIn(form) {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("https://" + window.location.hostname + ":7000/profile/login/", {
+		const response = await fetch("https://" + window.location.hostname + ":7070/profile/login/", {
 			method: "POST",
 			body: formData,
 		});

@@ -31,7 +31,6 @@ avatar_field.innerHTML = `<label data-i18n-key="prof-avatar" for="avtar" class="
     select[0].removeAttribute("disabled");
 
     document.getElementById("edit_button").toggleAttribute("disabled");
-
 	form.appendChild(avatar_field);
 	form.appendChild(submitButton);
 	translatePage();
@@ -41,9 +40,9 @@ function saveChanges() {
 	const form = document.getElementById("profile");
 	const formData = new FormData(form);
 	const token = localStorage.getItem("token");
-	// cleanElement(form);
+	const switcher = document.getElementById("lang-switcher");
 	try {
-		fetch("https://" + window.location.hostname + ":7000/profile/me/", {
+		fetch("https://" + window.location.hostname + ":7070/profile/me/", {
 			method: "PUT",
 			headers: {
 				"Authorization": "Token " + token,
@@ -53,6 +52,8 @@ function saveChanges() {
 			response.json().then((data) => {
 				document.getElementsByTagName("html")[0].style["font-size"] = data.font + "px";
                 localStorage.setItem("language", data.language);
+				if (switcher)
+					switcher.value = data.language;
 			});
 			var event = new Event('hashchange');
 			window.dispatchEvent(event);
