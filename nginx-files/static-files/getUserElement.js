@@ -40,7 +40,7 @@ export default function getUserElement(user) {
         languageField.getElementsByTagName("option")[2].setAttribute('selected', "");
 
 	const avatar = document.createElement("div");
-	avatar.setAttribute("class", "cropped-image");
+	avatar.setAttribute("class", "cropped-image mb-3");
 	avatar.innerHTML = `<img src="` + user["avatar"] + `" alt="` + user["username"] + `'s profile picture" />`;
 
 	const form = document.createElement("form");
