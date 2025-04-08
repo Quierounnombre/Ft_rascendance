@@ -16,6 +16,7 @@ class PongConsumer(WebsocketConsumer):
 
     def connect(self) -> None:
         self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
+        self.tournament_name = ""
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
@@ -74,6 +75,7 @@ class PongConsumer(WebsocketConsumer):
                 "type": "game.config",
                 "message": {
                     "room_name": self.room_name,
+                    "tournament_name": self.tournament_name,
                     "data": message["data"]
                 }
             }
@@ -85,6 +87,7 @@ class PongConsumer(WebsocketConsumer):
                 "type": "set.player",
                 "message": {
                     "room_name": self.room_name,
+                    "tournament_name": self.tournament_name,
                     "player": "player1",
                     "id": self.user_id
                 }
@@ -95,7 +98,8 @@ class PongConsumer(WebsocketConsumer):
         self.send(json.dumps({
             "type": "room.created",
             "message": {
-                "room_name": self.room_name
+                "room_name": self.room_name,
+                "tournament_name": self.tournament_name
             }
         }))
 
@@ -123,6 +127,7 @@ class PongConsumer(WebsocketConsumer):
                 "type": "set.player",
                 "message": {
                     "room_name": self.room_name,
+                    "tournament_name": self.tournament_name,
                     "player": "player2",
                     "id": self.user_id
                 }
@@ -136,7 +141,8 @@ class PongConsumer(WebsocketConsumer):
                 "type": "game.start",
                 "message": {
                     "user_id": self.user_id,
-                    "room_name": message["room_name"]
+                    "room_name": message["room_name"],
+                    "tournament_name": self.tournament_name
                 }
             }
         )
@@ -164,6 +170,7 @@ class PongConsumer(WebsocketConsumer):
             "type": "game.state",
             "message": {
                 "room_name": self.room_name,
+                "tournament_name": self.tournament_name,
                 "game_state": event["message"]["data"]
             }
         }))
@@ -173,6 +180,7 @@ class PongConsumer(WebsocketConsumer):
             "type": "game.end",
             "message": {
                 "room_name": self.room_name,
+                "tournament_name": self.tournament_name,
                 "game_state": event["message"]["data"]
             }
         }))
@@ -188,6 +196,8 @@ class PongConsumer(WebsocketConsumer):
         }))
 
     def join_tournament_game(self, event) -> None:
+        self.tournament_name = event["message"]["tournament_name"]
+
         self.send(json.dumps({
                 "type": "join.tournament.game",
                 "message": {

@@ -410,8 +410,9 @@ function server_msg(event) {
 		break;
 	
 	case "game.end":
+		// TODO: esto deberia estar en el backend
 		if (data["message"]["tournament_name"] != "") {
-			this.tournament_websocket.send(JSON.stringify({ // TODO: FALTA CREAR ESTE WEBSOCKET
+			this.websocket.send(JSON.stringify({
 				"type": "end.tournament.game",
 				"message": {
 					"tournament_name": data["message"]["tournament_name"],
@@ -426,6 +427,7 @@ function server_msg(event) {
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		break;
 	
+	// TODO: esto deberia ser de la clase Tournament
 	case "create.tournament.game":
 		game_config = data["message"]["game_config"]
 		this.room_name = data["message"]["room_name"]
