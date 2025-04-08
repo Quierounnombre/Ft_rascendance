@@ -18,7 +18,7 @@ export default async function loadSocial() {
 `;
 
 searchBar.getElementsByTagName("input")[0].addEventListener('keydown', (event) => {
-    if (event.key === 'Enter')
+    if (event.key === 'Enter' && window.location.hash=="#social")
     {
         localStorage.setItem("query", searchBar.getElementsByTagName("input")[0].value);
         window.location.hash = "#search";
