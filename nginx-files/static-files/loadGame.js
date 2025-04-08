@@ -130,7 +130,7 @@ export default async function loadGame() {
 		event.preventDefault();
 		const room_name = document.getElementById("room_name2").value;
 
-		pong("join_room", room_name);
+		pong("join_room", room_name, colors);
 	});
 }
 
