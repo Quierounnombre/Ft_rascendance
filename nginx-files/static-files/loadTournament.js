@@ -5,8 +5,8 @@ gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
 <div>
-<a href="#game"><i class="bi bi-arrow-left-circle-fill mb" style="font-size:2.5rem; color:blue"></i></a>
-<h2 data-i18n-key="make-local">Create Local room</h2>
+<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i></a>
+<h2 data-i18n-key="make-tourn">Create Tournament</h2>
 <form id="dataForm" class="container mb-4">
 		<div class="form-floating">
 			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
@@ -43,7 +43,7 @@ gameCreator.innerHTML = `
 `;
 
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
-export default function loadLocal() {
+export default function loadTournament() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");

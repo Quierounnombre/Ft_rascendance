@@ -9,6 +9,7 @@ export default async function loadSearch() {
 	}
 	const query = localStorage.getItem("query");
 	const token = localStorage.getItem("token");
+	
 	if (!token) {
 		window.location.hash = "#anon-menu";
 		return ;
@@ -18,9 +19,11 @@ export default async function loadSearch() {
 	if (userList === -1) {
 		return ;
 	}
-    
+    const returnButton = document.createElement("p");
+	returnButton.innerHTML = `<a href="#social"><i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i></a>`;
 	const root = document.getElementById("root");
 	root.replaceChildren(userList);
+	root.appendChild(returnButton);
     translatePage();
 }
 

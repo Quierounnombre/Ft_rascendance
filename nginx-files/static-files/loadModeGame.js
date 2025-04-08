@@ -2,7 +2,7 @@ const gameSelector = document.createElement("div");
 gameSelector.setAttribute("id", "canvas_container");
 gameSelector.setAttribute("class", "container");
 gameSelector.innerHTML = `
-<div class="container">
+<div class="container mb-5">
 <h2 data-i18n-key="game-mode">Create room</h2>
     <div class="row">
         <div class="col-3 border border-5 border-info-subtle rounded-pill p-3 text-center" style="background-color: lightskyblue; padding:30px">
