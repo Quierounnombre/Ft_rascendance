@@ -1,4 +1,4 @@
-import pong from "./pong/pong.js"
+import game_offline_room from "./pong/pong.js"
 
 const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");
@@ -30,16 +30,6 @@ gameCreator.innerHTML = `
 		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 </div>
-<div>
-<h2 data-i18n-key="join-room">Join room</h2>
-<form id="dataForm2" class="container">
-	<div class="form-floating">
-		<input required name="room_name2" id="room_name2" type="text" class="form-control" size="100">
-		<label class="form-label" for="room_name2" data-i18n-key="join-form">Join pong room</label>
-	</div>
-	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
-</form>
-</div>
 `;
 
 async function getColors() {
@@ -63,7 +53,6 @@ export default async function loadLocal() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
-	const form2 = document.getElementById("dataForm2");
 	const colors = await getColors();
 
 	console.log("loaded");
@@ -96,22 +85,7 @@ export default async function loadLocal() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		console.log("local");
-		pong("local_room", jsonData, colors);
-	});
-
-	form2.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const room_name = document.getElementById("room_name2").value;
-
-		pong("join_room", room_name, colors);
-	});
-
-	form3.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const number_players_tournament = document.getElementById("number_players_tournament").value;
-
-		pong("create_tournament", number_players_tournament)
+		game_offline_room(jsonData, colors);
 	});
 }
 

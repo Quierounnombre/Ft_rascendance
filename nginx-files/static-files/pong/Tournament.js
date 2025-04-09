@@ -1,5 +1,5 @@
 import { Game } from "./Game.js"
-import generateRandomString from "./Game.js";
+import generateRandomString from "../generateRandomString.js";
 "use strict";
 
 class Tournament {

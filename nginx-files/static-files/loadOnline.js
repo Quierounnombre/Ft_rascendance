@@ -1,4 +1,5 @@
-import pong from "./pong/pong.js"
+import game_create_room from "./pong/pong.js"
+import game_join_room from "./pong/pong.js"
 
 const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");
@@ -92,14 +93,14 @@ export default async function loadOnline() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		pong("create_room", jsonData, colors);
+		game_create_room(jsonData, colors)
 	});
 
 	form2.addEventListener("submit", (event) => {
 		event.preventDefault();
 		const room_name = document.getElementById("room_name2").value;
 
-		pong("join_room", room_name, colors);
+		game_join_room(jsonData, colors)
 	});
 }
 
