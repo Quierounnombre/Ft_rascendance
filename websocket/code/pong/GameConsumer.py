@@ -90,13 +90,13 @@ class GameConsumer(SyncConsumer):
     def tournament_config(self, event) -> None:
         message = event["message"]
         config = message["config"]
-        n_players = message["number_players"]
+        number_players = message["number_players"]
 
-        if n_players < 4 or n_players % 2 != 0:
+        if number_players < 4 or number_players % 2 != 0:
             # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
             return
 
-        tournaments[message["tournament_name"]] = Tournament(n_players, config)
+        tournaments[message["tournament_name"]] = Tournament(number_players, config)
 
     def tournament_register(self, event) -> None:
         message = event["message"]

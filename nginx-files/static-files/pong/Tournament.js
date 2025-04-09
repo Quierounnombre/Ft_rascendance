@@ -1,4 +1,5 @@
 import { Game } from "./Game.js"
+import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
 "use strict";
 
@@ -8,7 +9,7 @@ constructor(colors) {
 	this.game_round = []
 }
 
-createTournament(game_config) {
+createTournament(game_config, number_players) {
 	this.tournament_name = generateRandomString(8);
 
 	this.websocket = new WebSocket(
@@ -26,7 +27,8 @@ createTournament(game_config) {
 			"type": "create.tournament",
 			"message": {
 				"tournament_name": this.tournament_name,
-				"data": game_config
+				"number_players": number_players,
+				"game_config": game_config
 			}
 		}));
 	}
@@ -54,6 +56,8 @@ joinTournament(tournament_name) {
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
+
+			console.log(`${this.user_name}: ${this.user_id}`)
 
 			this.websocket.send(JSON.stringify({
 				"type": "identity",
@@ -129,7 +133,7 @@ function server_msg(event) {
 }
 
 function websocket_close() {
-	console.log(`WebSocket closed`);
+	console.log(`Tournament WebSocket closed`);
 }
 
 export {Tournament}

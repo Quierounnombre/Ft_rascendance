@@ -129,7 +129,7 @@ class Game(threading.Thread):
         self.broadcastState("game.end")# TODO: el metodo requiere el game room
         # TODO: pasar a la base de datos el resultado
 
-    def exportToDatabase() -> None:
+    def exportToDatabase(self) -> None:
         for obj in self.game_objetcs:
             if obj.id == "player1":
                 player1_id = obj.pk

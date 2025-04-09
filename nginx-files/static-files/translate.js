@@ -61,6 +61,7 @@ const translations = {
         "mod-tourn": "Tournament",
         "make-tourn": "Create a new tournament",
         "join-tourn": "Join to a tournament",
+        "tourn_player_num": "Number of Players",
     },
 
     "ESP": {
@@ -120,6 +121,7 @@ const translations = {
         "mod-tourn": "Torneo",
         "make-tourn": "Crear un nuevo torneo",
         "join-tourn": "Unirse a un torneo",
+        "tourn_player_num": "Número de jugadores",
     },
 
     "CAT": {
@@ -177,8 +179,9 @@ const translations = {
         "join-form": "Posar codi de sala",
         "game-mode": "Escull Mode de Joc",
         "mod-tourn": "Torneix",
-        "make-tourn": "Crear un nou torneig", // TODO: ferran revisa esta traduccion
-        "join-tourn": "Unir-se a un torneig", // TODO: ferran revisa esta traduccion
+        "make-tourn": "Crear un nou torneig",
+        "join-tourn": "Unir-se a un torneig",
+        "tourn_player_num": "Nombre de jugadors",
     },
 };
 

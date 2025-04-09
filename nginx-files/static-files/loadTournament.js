@@ -28,6 +28,11 @@ gameCreator.innerHTML = `
 			<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
 		</div>
 
+		<div class="form-floating">
+			<input required type="number" name="tourn_player_num" id="tourn_player_num" class="form-control" aria-describedby="Number of players for the tournament" min="4" max="42" value="4">
+			<label for="tourn_player_num" data-i18n-key="tourn_player_num" class="form-label">Number of players</label>
+		</div>
+
 		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 </div>
@@ -77,6 +82,14 @@ export default async function loadTournament() {
 		config.max_score = parseInt(config.max_score);
 		config.type = "config";
 
+		const number_players = config.tourn_player_num;
+		delete config.tourn_player_num;
+
+		if (number_players % 2 != 0) {
+			alert("DEBUG, pon un numero de jugadores par"); // TODO: borrar
+			return;
+		}
+
 		switch(config.map) {
 		case "doubleBall":
 			data_to_send = doubleBallMap(config);
@@ -93,14 +106,14 @@ export default async function loadTournament() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		tournament_create_room(jsonData, colors);
+		tournament_create_room(jsonData, number_players, colors);
 	});
 
 	form2.addEventListener("submit", (event) => {
 		event.preventDefault();
-		const room_name = document.getElementById("room_name2").value;
+		const tournament_name = document.getElementById("tourn_name2").value;
 
-		tournament_join_room(jsonData, colors);
+		tournament_join_room(tournament_name, colors);
 	});
 }
 

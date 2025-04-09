@@ -100,7 +100,7 @@ export default async function loadOnline() {
 		event.preventDefault();
 		const room_name = document.getElementById("room_name2").value;
 
-		game_join_room(jsonData, colors)
+		game_join_room(room_name, colors)
 	});
 }
 

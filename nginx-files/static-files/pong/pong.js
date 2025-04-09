@@ -16,9 +16,9 @@ export function game_offline_room(data, colors) {
 	game.offlineRoom(data);
 }
 
-export function tournament_create_room(data, colors) {
+export function tournament_create_room(data, number_players, colors) {
 	const tournament = new Tournament(colors);
-	tournament.createTournament(data);
+	tournament.createTournament(data, number_players);
 }
 
 export function tournament_join_room(data, colors) {

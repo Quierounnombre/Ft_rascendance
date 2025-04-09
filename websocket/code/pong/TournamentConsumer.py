@@ -60,7 +60,8 @@ class TournamentConsumer(WebsocketConsumer):
                 "type": "tournament.config",
                 "message": {
                     "tournament_name": self.tournament_name,
-                    "data": message["data"]
+                    "number_players": message["number_players"],
+                    "game_config": message["game_config"]
                 }
             }
         )
@@ -86,7 +87,7 @@ class TournamentConsumer(WebsocketConsumer):
         # si no existe una instancia de ese torneo, el GameConsumer deberia mandar un mensaje de que no existe
 
         async_to_sync(self.channel_layer.group_add)(
-            self.tournament_name_name, self.channel_name
+            self.tournament_name, self.channel_name
         )
 
         async_to_sync(self.channel_layer.send)(
