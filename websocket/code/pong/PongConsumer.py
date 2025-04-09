@@ -16,6 +16,7 @@ class PongConsumer(WebsocketConsumer):
 
     def connect(self) -> None:
         self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
+        self.tournament_name = ""
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
@@ -24,6 +25,17 @@ class PongConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code) -> None:
+        # TODO: porque si alguien se desconecta deberia terminal el juego?
+        # async_to_sync(self.channel_layer.send)(
+        #     "game_engine", {
+        #         "type": "game.end",
+        #         "message": {
+        #             "room_name": self.room_name,
+        #             "data": ""
+        #         }
+        #     }
+        # )
+
         async_to_sync(self.channel_layer.group_discard)(
             self.room_name, self.channel_name
         )
@@ -35,15 +47,10 @@ class PongConsumer(WebsocketConsumer):
 
         if message_type == "identify":
             self.identify(message)
-
         elif message_type == "create.room":
-            room_name = self.createRoom(message)
-
-
+            self.createRoom(message)
         elif message_type == "join.room":
-            # TODO: y si no existe la sala?
             self.joinRoom(message)
-        
         elif message_type == "direction":
             self.direction(message)
 
@@ -51,20 +58,24 @@ class PongConsumer(WebsocketConsumer):
     #         "user_id": int
     #     }
     def identify(self, message) -> None:
-        # TODO: quizas siempre tiene que identificarse
-        self.user_id = message["user_id"] # TODO: creo que no funcionaria
+        self.user_id = message["user_id"]
+
+        async_to_sync(self.channel_layer.group_add)(
+            self.user_id, self.channel_name
+        )
 
     #     "message": {
     #         "room_name": str
     #         "data": la info del formulario para generar la sala
     #     }
-    def createRoom(self, message) -> int:
+    def createRoom(self, message) -> None:
         # send to the GameConsumer the game room name and its config
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "game.config",
                 "message": {
                     "room_name": self.room_name,
+                    "tournament_name": self.tournament_name,
                     "data": message["data"]
                 }
             }
@@ -76,6 +87,7 @@ class PongConsumer(WebsocketConsumer):
                 "type": "set.player",
                 "message": {
                     "room_name": self.room_name,
+                    "tournament_name": self.tournament_name,
                     "player": "player1",
                     "id": self.user_id
                 }
@@ -86,7 +98,8 @@ class PongConsumer(WebsocketConsumer):
         self.send(json.dumps({
             "type": "room.created",
             "message": {
-                "room_name": self.room_name
+                "room_name": self.room_name,
+                "tournament_name": self.tournament_name
             }
         }))
 
@@ -99,6 +112,7 @@ class PongConsumer(WebsocketConsumer):
         # si no existe una instancia de esa sala, el GameConsumer deberia mandar un mensaje de que no existe
 
         # join the game room
+        # TODO: esto seria realmete necesario?, es decir, ya se ha metido al conectarse no?
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
         )
@@ -113,6 +127,7 @@ class PongConsumer(WebsocketConsumer):
                 "type": "set.player",
                 "message": {
                     "room_name": self.room_name,
+                    "tournament_name": self.tournament_name,
                     "player": "player2",
                     "id": self.user_id
                 }
@@ -126,7 +141,8 @@ class PongConsumer(WebsocketConsumer):
                 "type": "game.start",
                 "message": {
                     "user_id": self.user_id,
-                    "room_name": message["room_name"]
+                    "room_name": message["room_name"],
+                    "tournament_name": self.tournament_name
                 }
             }
         )
@@ -154,6 +170,7 @@ class PongConsumer(WebsocketConsumer):
             "type": "game.state",
             "message": {
                 "room_name": self.room_name,
+                "tournament_name": self.tournament_name,
                 "game_state": event["message"]["data"]
             }
         }))
@@ -163,6 +180,30 @@ class PongConsumer(WebsocketConsumer):
             "type": "game.end",
             "message": {
                 "room_name": self.room_name,
+                "tournament_name": self.tournament_name,
                 "game_state": event["message"]["data"]
             }
         }))
+    
+    def create_tournament_game(self, event) -> None:
+        self.send(json.dumps({
+            "type": "create.tournament.game",
+            "message": {
+                "tournament_name": event["message"]["tournament_name"],
+                "room_name": event["message"]["room_name"],
+                "game_config": event["message"]["game_config"],
+            }
+        }))
+
+    def join_tournament_game(self, event) -> None:
+        self.tournament_name = event["message"]["tournament_name"]
+
+        self.send(json.dumps({
+                "type": "join.tournament.game",
+                "message": {
+                    "tournament_name": event["message"]["tournament_name"],
+                    "room_name": event["message"]["room_name"]
+                }
+        }))
+
+

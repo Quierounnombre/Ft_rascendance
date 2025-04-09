@@ -22,8 +22,10 @@ avatar_field.innerHTML = `<label data-i18n-key="prof-avatar" for="avtar" class="
 
 	[...fields].forEach(field => {
 		if (field.name !== "email" && field.id !== "submit") {
-			field.setAttribute("class", "form-control");
+			if (field.type !== "color")
+				field.setAttribute("class", "form-control");
 			field.removeAttribute("readonly");
+			field.removeAttribute("disabled");
 		}
 	});
 

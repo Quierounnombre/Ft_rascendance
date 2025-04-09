@@ -1,7 +1,7 @@
 export default function getUserElement(user) {
 	const emailField = document.createElement("div");
 	emailField.setAttribute("class", "mb-3 row");
-	emailField.innerHTML = `<label for="" data-i18n-key="prof-email" class="col-sm-2 form-label col-form-label">Email: </label>
+	emailField.innerHTML = `<label for="email" data-i18n-key="prof-email" class="col-sm-2 form-label col-form-label">Email: </label>
 		<div class="col-sm-10">
 		<input type="text" readonly class="form-control-plaintext" id="email" name="email" value="`+ user["email"] +`">`;
 

@@ -16,7 +16,9 @@ export default async function loadProfile() {
 		window.location.hash = "#anon-menu";
 		return -1;
 	}
-	const userElement = await getUserElement(user);
+	const userElement = await getProfileElement(user);
+
+	console.log(userElement);
 
 	const logoutButton = document.createElement("button");
 	logoutButton.setAttribute("type", "button");
@@ -44,6 +46,67 @@ export default async function loadProfile() {
     root.appendChild(historyButton);
 	root.appendChild(logoutButton);
     translatePage();
+}
+
+async function getColors() {
+	const token = localStorage.getItem("token")
+	const response =  await fetch("https://" + window.location.hostname + ":7000/profile/colors/", {
+		method: "GET",
+		headers: {
+			"Authorization": "Token " + token,
+		}
+	});
+	if (response.ok) {
+		const data = await response.json();
+		return data;
+	} else {
+		return -1;
+	}
+}
+
+async function getProfileElement(user) {
+	const basicUserElement = getUserElement(user);
+	const colors = await getColors();
+	const meField = document.createElement("div");
+	meField.setAttribute("class", "mb-3 row");
+	meField.innerHTML = `<label for="me_color" data-i18n-key="prof-me-color" class="col-sm-2 form-label col-form-label">Color of my paddle: </label>
+		<div class="col-sm-10">
+		<input type="color" disabled class="form-control form-control-color" id="me_color" name="me_color" value="`+ colors.me_color +`">`;
+
+	const otherField = meField.cloneNode(true);
+	const ballField = meField.cloneNode(true);
+	const counterField = meField.cloneNode(true);
+
+	otherField.getElementsByTagName("label")[0].setAttribute('for', "other_color");
+	ballField.getElementsByTagName("label")[0].setAttribute('for', "ball_color");
+	counterField.getElementsByTagName("label")[0].setAttribute('for', "counter_color");
+
+	otherField.getElementsByTagName("label")[0].setAttribute('data-i18n-key', "prof-other-color");
+	ballField.getElementsByTagName("label")[0].setAttribute('data-i18n-key', "prof-ball-color");
+	counterField.getElementsByTagName("label")[0].setAttribute('data-i18n-key', "prof-counter-color");
+
+	otherField.getElementsByTagName("label")[0].innerHTML = "Color of opponent's paddle: ";
+	ballField.getElementsByTagName("label")[0].innerHTML = "Color of the ball: ";
+	counterField.getElementsByTagName("label")[0].innerHTML = "Color of the counter: ";
+
+	otherField.getElementsByTagName("input")[0].setAttribute('id', "other_color");
+	ballField.getElementsByTagName("input")[0].setAttribute('id', "ball_color");
+	counterField.getElementsByTagName("input")[0].setAttribute('id', "counter_color");
+
+	otherField.getElementsByTagName("input")[0].setAttribute('name', "other_color");
+	ballField.getElementsByTagName("input")[0].setAttribute('name', "ball_color");
+	counterField.getElementsByTagName("input")[0].setAttribute('name', "counter_color");
+
+	otherField.getElementsByTagName("input")[0].setAttribute('value', colors["other_color"]);
+	ballField.getElementsByTagName("input")[0].setAttribute('value', colors["ball_color"]);
+	counterField.getElementsByTagName("input")[0].setAttribute('value', colors["counter_color"]);
+
+	basicUserElement.appendChild(meField);
+	basicUserElement.appendChild(otherField);
+	basicUserElement.appendChild(ballField);
+	basicUserElement.appendChild(counterField);
+
+	return(basicUserElement)
 }
 
 function logOut() {

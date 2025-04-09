@@ -34,5 +34,10 @@ class User(AbstractUser):
 	EMAIL_FIELD = 'email'
 	REQUIRED_FIELDS = ['username']
 
+	me_color = models.CharField(default="#00ffff")
+	other_color = models.CharField(default="#ffffff")
+	ball_color = models.CharField(default="#ffffff")
+	counter_color = models.CharField(default="#ffffff")
+
 	def __str__(self):
 		return (self.username) 

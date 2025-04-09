@@ -1,5 +1,6 @@
 import { CanvasObject } from "./CanvasObject.js";
 "use strict";
+import * as THREE from 'three';
 
 class Counter extends CanvasObject {
 /**
@@ -7,13 +8,45 @@ class Counter extends CanvasObject {
  * @param canvas instance of the canvas
  * @param context instance of the context
  */
-constructor(obj, canvas, context) {
-	super(obj, canvas, context);
+constructor(obj, canvas, scene, color) {
+	super(obj, canvas, scene, color);
+	this.canvas =  canvas.cloneNode();
+	this.canvas.setAttribute("height", canvas.height / 8);
+	this.context = this.canvas.getContext("2d");
+	this.geometry = new THREE.BoxGeometry(this.canvas.width, this.canvas.height, 40);
+	this.texture = new THREE.CanvasTexture(this.canvas);
+	this.texture.needsUpdate = true;
+	this.material = new THREE.MeshPhongMaterial({map: this.texture, color: this.color});
+	this.mesh = new THREE.Mesh(this.geometry, this.material);
+	this.mesh.position.x = this.canvas.width / 2;
+	this.mesh.position.y = - this.canvas.height / 2;
+	this.mesh.position.z = - 10;
+	scene.add(this.mesh);
 }
 
-setStartTime(time) {
-	// TODO: deprecated?
-	this.start_time = time;
+animate(obj) {
+	const time = obj.timeout - obj.time_passed;
+	const minutes = Math.trunc((time / 60) % 60);
+	const seconds = Math.trunc(time % 60);
+
+	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+	this.context.font = obj.font;
+	this.context.fillStyle = obj.color;
+	this.context.lineWidth = "1";
+
+	this.context.textAlign = "center";
+	this.context.fillText(`:`, this.canvas.width / 2, this.canvas.height / 2 * 1.220);
+
+	this.context.textAlign = "end";
+	this.context.fillText(`${obj.player1_score}`, this.canvas.width / 4, this.canvas.height / 2 * 1.220);
+	this.context.fillText(`${minutes}`, (this.canvas.width / 25) * 12, this.canvas.height / 2  * 1.220);
+
+	this.context.textAlign = "start";
+	this.context.fillText(`${obj.player2_score}`, (this.canvas.width / 4) * 3, this.canvas.height / 2 * 1.220);
+	this.context.fillText(`${seconds}`, (this.canvas.width / 25) * 13, this.canvas.height / 2 *  1.220);
+
+	this.texture.needsUpdate = true;
 }
 
 /**
@@ -25,29 +58,6 @@ update(canvas_objects) {
 	this.highest_score = (this.player1_score > this.player2_score) ? this.player1_score : this.player2_score;
 }
 
-/**
- * @brief renders the scores and the countdown
- */
-render() {
-	const time = this.timeout - this.time_passed;
-	const minutes = Math.trunc((time / 60) % 60);
-	const seconds = Math.trunc(time % 60);
-
-	this.context.font = this.font;
-	this.context.fillStyle = this.color;
-	this.context.lineWidth = "1";
-
-	this.context.textAlign = "center";
-	this.context.fillText(`:`, this.canvas.width / 2, this.canvas.height / 8 * 0.775);
-
-	this.context.textAlign = "end";
-	this.context.fillText(`${this.player1_score}`, this.canvas.width / 4, this.canvas.height / 8 * 0.775);
-	this.context.fillText(`${minutes}`, (this.canvas.width / 25) * 12, this.canvas.height / 8 * 0.775);
-
-	this.context.textAlign = "start";
-	this.context.fillText(`${this.player2_score}`, (this.canvas.width / 4) * 3, this.canvas.height / 8 * 0.775);
-	this.context.fillText(`${seconds}`, (this.canvas.width / 25) * 13, this.canvas.height / 8 * 0.775);
-}
 }
 
 export {Counter}

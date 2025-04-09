@@ -45,13 +45,29 @@ gameCreator.innerHTML = `
 </div>
 `;
 
+async function getColors() {
+	const token = localStorage.getItem("token")
+	const response =  await fetch("https://" + window.location.hostname + ":7000/profile/colors/", {
+		method: "GET",
+		headers: {
+			"Authorization": "Token " + token,
+		}
+	});
+	if (response.ok) {
+		const data = await response.json();
+		return data;
+	} else {
+		return -1;
+	}
+}
+
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
-export default function loadOnline() {
+export default async function loadOnline() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
 	const form2 = document.getElementById("dataForm2");
-
+	const colors = await getColors();
 
 	form.addEventListener("submit", (event) => {
 		event.preventDefault();
@@ -79,14 +95,14 @@ export default function loadOnline() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		pong("create_room", jsonData);
+		pong("create_room", jsonData, colors);
 	});
 
 	form2.addEventListener("submit", (event) => {
 		event.preventDefault();
 		const room_name = document.getElementById("room_name2").value;
 
-		pong("join_room", room_name);
+		pong("join_room", room_name, colors);
 	});
 }
 
