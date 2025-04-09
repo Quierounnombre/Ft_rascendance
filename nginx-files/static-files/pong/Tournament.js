@@ -60,7 +60,7 @@ joinTournament(tournament_name) {
 			console.log(`${this.user_name}: ${this.user_id}`)
 
 			this.websocket.send(JSON.stringify({
-				"type": "identity",
+				"type": "identify",
 				"message": {
 					"user_id": this.user_id,
 					"user_name": this.user_name,

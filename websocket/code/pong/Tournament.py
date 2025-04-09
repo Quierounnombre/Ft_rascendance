@@ -35,11 +35,13 @@ class TournamentParticipant:
 
 # ------------------------------------------------------------------------------
 class Tournament(threading.Thread):
-    def __init__(self, num_players : int, game_config : str, *args, **kwargs) -> None:
+    def __init__(self, num_players : int, game_config : str, tournament_name : str, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.player_list : list = []
         self.target_players : int = num_players
         self.game_config : str = game_config
-        self.is_runing = False
+        self.tournament_name : str = tournament_name
+        self.is_running = False
 
         self.games_finished = []
 
@@ -108,7 +110,7 @@ class Tournament(threading.Thread):
         player2 = game["player2"]
 
         async_to_sync(channel_layer.group_send)(
-            player1["player_id"], {
+            str(player1["player_id"]), {
                 'type': 'create.tournament.game',
                 'message': {
                     "room_name": room_name,
@@ -119,7 +121,7 @@ class Tournament(threading.Thread):
         )
 
         async_to_sync(channel_layer.group_send)(
-            player2["player_id"], {
+            str(player2["player_id"]), {
                 'type': 'join.tournament.game',
                 'message': {
                     "room_name": room_name,
@@ -174,13 +176,13 @@ class Tournament(threading.Thread):
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(
-            message["room_name"], {
+            self.tournament_name, {
                 "type": "tournament.started",
                 "message": ""
             }
         )
 
-        while self.isTournamentEnd():
+        while not self.isTournamentEnd():
             if not self.currentRoundHasEnd():
                 continue
 

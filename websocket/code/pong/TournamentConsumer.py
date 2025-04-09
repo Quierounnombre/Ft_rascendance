@@ -12,18 +12,18 @@ class TournamentConsumer(WebsocketConsumer):
     strict_ordering = True
 
     def connect(self) -> None:
-        self.room_name = f"tournament_{self.scope["url_route"]["kwargs"]["room_name"]}"
+        self.tournament_name = f"tournament_{self.scope["url_route"]["kwargs"]["room_name"]}"
 
         # TODO: quizas esto se deberia hacer en el join room, y que todos entren con el codigo devuelto por el create room
         async_to_sync(self.channel_layer.group_add)(
-            self.room_name, self.channel_name
+            self.tournament_name, self.channel_name
         )
 
         self.accept()
 
     def disconnect(self, close_code) -> None:
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_name, self.channel_name
+            self.tournament_name, self.channel_name
         )
 
     def receive(self, text_data) -> None:
@@ -45,7 +45,7 @@ class TournamentConsumer(WebsocketConsumer):
         self.user_name = message["user_name"]
 
         async_to_sync(self.channel_layer.group_add)(
-            self.user_id, self.channel_name
+            str(self.user_id), self.channel_name
         )
 
     #     "message": {
@@ -90,6 +90,7 @@ class TournamentConsumer(WebsocketConsumer):
             self.tournament_name, self.channel_name
         )
 
+        print(f'TournamentConsumer::joinTournament -> self.user_id = {self.user_id}', flush=True)
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "tournament.register",

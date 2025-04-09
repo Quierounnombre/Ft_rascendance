@@ -89,14 +89,16 @@ class GameConsumer(SyncConsumer):
     
     def tournament_config(self, event) -> None:
         message = event["message"]
-        config = message["config"]
-        number_players = message["number_players"]
+        game_config = message["game_config"]
+        tournament_name = message["tournament_name"]
+        number_players = int(message["number_players"])
 
         if number_players < 4 or number_players % 2 != 0:
             # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
             return
 
-        tournaments[message["tournament_name"]] = Tournament(number_players, config)
+        print(f'tournament_config: creating tournament `{message["tournament_name"]}`', flush=True)
+        tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)
 
     def tournament_register(self, event) -> None:
         message = event["message"]
@@ -112,4 +114,5 @@ class GameConsumer(SyncConsumer):
             pass
 
         if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
+            print(f'GameConsumer::tournament_register -> tournament_name = {tournament_name}', flush=True)
             tournaments[tournament_name].start()
