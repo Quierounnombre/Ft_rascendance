@@ -7,6 +7,7 @@ export default function loadRegister() {
 	form.setAttribute("class", "container-xl");
 	form.setAttribute("id", "signup_form");
 	form.innerHTML = `
+	<div id="liveAlertPlaceholder"></div>
 	<div class="mb-3">
 		<label for="email" class="form-label">Email:</label>
 		<input type="email" id="email" name="email" class="form-control" required/>
@@ -56,6 +57,16 @@ async function signUp(form) {
 			validLogin(data.token, data.font);
 		} else {
 			invalidLogin();
+			const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+			  const wrapper = document.createElement('div')
+				  wrapper.innerHTML = [
+			`<div class="alert alert-danger alert-dismissible" role="alert">`,
+				`    <div>Invalid Register, please try again</div>`,
+				'   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+			'</div>'
+			  ].join('')
+	
+			  alertPlaceholder.append(wrapper)
 		}
 	} catch (e) {
 		console.error(e);

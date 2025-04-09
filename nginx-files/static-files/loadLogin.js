@@ -7,6 +7,7 @@ export default function loadLogin() {
 	form.setAttribute("class", "container-xl");
 	form.setAttribute("id", "login_form");
 	form.innerHTML = `
+	<div id="liveAlertPlaceholder"></div>
 	<div class="mb-3">
 		<label for="email" class="form-label">Email:</label>
 		<input type="email" id="email" name="email" class="form-control" required />
@@ -37,6 +38,16 @@ async function logIn(form) {
 		const data = await response.json();
 		if (!response.ok) {
 			invalidLogin(data);
+			const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+			const wrapper = document.createElement('div')
+			wrapper.innerHTML = [
+	  `<div class="alert alert-danger alert-dismissible" role="alert">`,
+	  `   <div>Invalid Login, please try again</div>`,
+	  '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+	  '</div>'
+		].join('')
+  
+		alertPlaceholder.append(wrapper)
 		} else {
 			validLogin(data.token, data.font);
 		}
@@ -57,15 +68,6 @@ function invalidLogin(data) {
 		fields[i].classList.remove("is-valid");
 	}
 	
-	const alert = document.createElement("div");
-	alert.setAttribute("class", "alert alert-danger alert-dismissible fade show");
-	alert.setAttribute("role", "alert");
-	alert.innerHTML= `
-<strong>Error: </strong>`+ data.error +`
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	`
-	const root = document.getElementById("root");
-	root.insertAdjacentElement("afterbegin", alert);
 }
 
 async function validLogin(token, font) {
