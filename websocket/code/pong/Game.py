@@ -14,7 +14,7 @@ from asgiref.sync import async_to_sync
 
 class Game(threading.Thread):
     def __init__(self, room_name, data, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs, daemon=True)
 
         self.game_objects = []
 

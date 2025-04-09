@@ -36,7 +36,7 @@ class TournamentParticipant:
 # ------------------------------------------------------------------------------
 class Tournament(threading.Thread):
     def __init__(self, num_players : int, game_config : str, tournament_name : str, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs, daemon=True)
         self.player_list : list = []
         self.target_players : int = num_players
         self.game_config : str = game_config
