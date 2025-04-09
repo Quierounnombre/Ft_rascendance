@@ -30,7 +30,7 @@ export default async function getHistoryTable(user, token) {
 }
 
 async function getHistory(user, userList) {
-	const response = await fetch("https://" + window.location.hostname + ":7000/history/" + user.id, {
+	const response = await fetch("https://" + window.location.hostname + ":" + window.location.port + "/history/" + user.id, {
 		method: "GET",
 	});
 	const data = await response.json();

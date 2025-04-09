@@ -48,7 +48,7 @@ async function signUp(form) {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("https://" + window.location.hostname + ":7070/profile/singup/", {
+		const response = await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/singup/", {
 			method: "POST",
 			body: formData,
 		});

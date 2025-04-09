@@ -4,7 +4,7 @@ function addFriend(id, button) {
 	const lang = localStorage.getItem("language");
 	formData.append("friendID", id)
 
-	fetch("https://" + window.location.hostname + ":7070/profile/friends/", {
+	fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/friends/", {
         method: "PUT",
 		body: formData,
 		headers: {
@@ -29,7 +29,7 @@ function deleteFriend(id, button) {
 	const lang = localStorage.getItem("language");
 	formData.append("friendID", id);
 
-	fetch("https://" + window.location.hostname + ":7070/profile/friends/", {
+	fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/friends/", {
         method: "DELETE",
 		body: formData,
 		headers: {

@@ -9,7 +9,8 @@ createTournament(game_config) {
 	this.websocket = new WebSocket(
 		'wss://'
 		+ window.location.hostname
-		+ ':7000/ws/tournament/'
+		+ ":" + window.location.port
+		+ '/ws/tournament/'
 		+ this.tournament_name
 		+ '/'
 	)

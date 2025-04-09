@@ -1,5 +1,5 @@
 export default async function searchUsers(query, token) {
-	const response = await fetch("https://" + window.location.hostname + ":7070/profile/users?search=" + query, {
+	const response = await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/users?search=" + query, {
 	  method: "GET",
 	  headers: {
 		  "Authorization": "Token " + token,

@@ -1,6 +1,6 @@
 export default async function getUser(token) {
 	try {
-		const response = await fetch("https://" + window.location.hostname + ":7070/profile/me/", {
+		const response = await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/me/", {
 			method: "GET",
 			headers: {
 				"Authorization": "Token " + token,

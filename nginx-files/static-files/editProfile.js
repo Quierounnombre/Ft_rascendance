@@ -44,7 +44,7 @@ function saveChanges() {
 	const token = localStorage.getItem("token");
 	const switcher = document.getElementById("lang-switcher");
 	try {
-		fetch("https://" + window.location.hostname + ":7070/profile/me/", {
+		fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/me/", {
 			method: "PUT",
 			headers: {
 				"Authorization": "Token " + token,

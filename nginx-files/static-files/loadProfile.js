@@ -51,7 +51,7 @@ export default async function loadProfile() {
 
 async function getColors() {
 	const token = localStorage.getItem("token")
-	const response =  await fetch("https://" + window.location.hostname + ":7000/profile/colors/", {
+	const response =  await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/colors/", {
 		method: "GET",
 		headers: {
 			"Authorization": "Token " + token,
@@ -113,7 +113,7 @@ async function getProfileElement(user) {
 function logOut() {
 	const token = localStorage.getItem("token");
 	try {
-		fetch("https://" + window.location.hostname + ":7070/profile/logout/", {
+		fetch("https://" + window.location.hostname + ":" + window.location.port+ "/profile/logout/", {
 			method: "POST",
 			headers: {
 				"Authorization": "Token " + token,

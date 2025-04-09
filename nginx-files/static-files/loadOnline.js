@@ -47,7 +47,7 @@ gameCreator.innerHTML = `
 
 async function getColors() {
 	const token = localStorage.getItem("token")
-	const response =  await fetch("https://" + window.location.hostname + ":7000/profile/colors/", {
+	const response =  await fetch("https://" + window.location.hostname +":" + window.location.port + "/profile/colors/", {
 		method: "GET",
 		headers: {
 			"Authorization": "Token " + token,
