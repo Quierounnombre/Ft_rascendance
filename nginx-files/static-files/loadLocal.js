@@ -1,4 +1,4 @@
-import game_offline_room from "./pong/pong.js"
+import {game_offline_room} from "./pong/pong.js"
 
 const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");

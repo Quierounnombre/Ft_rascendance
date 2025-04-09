@@ -20,7 +20,7 @@ createTournament(game_config) {
 	)
 
 	this.websocket.onopen = () => {
-		console.log(`WebSocket opened`);
+		console.log(`Tournament WebSocket opened`);
 
 		this.websocket.send(JSON.stringify({
 			"type": "create.tournament",
@@ -37,21 +37,19 @@ createTournament(game_config) {
 	return this.room_name;
 }
 
-}
+joinTournament(tournament_name) {
+	this.tournament_name = tournament_name;
 
-//------------------------------------------------------------------------------
-function server_msg(event) {
-	const data = JSON.parse(event["data"]);
+	this.websocket = new WebSocket(
+		'wss://'
+		+ window.location.hostname
+		+ ':7000/ws/tournament/'
+		+ this.tournament_name
+		+ '/'
+	)
 
-	switch(data["type"]) {
-	case "tournament.created":
-		this.tournament_name = data["message"]["tournament_name"];
-
-		// TODO: debug temporal
-		const tmp = document.createElement("div");
-		tmp.innerHTML = `${this.tournament_name}`;
-		document.getElementById("root").replaceChildren(tmp);
-
+	this.websocket.onopen = () => {
+		console.log(`Tournament WebSocket opened`);
 
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
@@ -72,6 +70,29 @@ function server_msg(event) {
 				}
 			}))
 		});
+	}
+
+
+	this.websocket.onclose = websocket_close.bind(this);
+	this.websocket.onmessage = server_msg.bind(this);
+}
+
+}
+
+//------------------------------------------------------------------------------
+function server_msg(event) {
+	const data = JSON.parse(event["data"]);
+
+	switch(data["type"]) {
+	case "tournament.created":
+		this.tournament_name = data["message"]["tournament_name"];
+
+		// TODO: debug temporal
+		const tmp = document.createElement("div");
+		tmp.innerHTML = `${this.tournament_name}`;
+		document.getElementById("root").replaceChildren(tmp);
+
+		this.joinTournament(this.tournament_name);
 		break;
 
 	case "tournament.started":
