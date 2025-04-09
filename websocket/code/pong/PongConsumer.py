@@ -61,7 +61,7 @@ class PongConsumer(WebsocketConsumer):
         self.user_id = message["user_id"]
 
         async_to_sync(self.channel_layer.group_add)(
-            self.user_id, self.channel_name
+            str(self.user_id), self.channel_name
         )
 
     #     "message": {

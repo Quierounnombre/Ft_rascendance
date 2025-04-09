@@ -40,6 +40,7 @@ export default async function loadProfile() {
 	historyButton.setAttribute("class", "btn btn-lg btn-info me-2");
     historyButton.setAttribute("data-i18n-key", "history");
 	historyButton.innerHTML = "History";
+    historyButton.addEventListener("click", () => {window.location.hash = "#history"});
 
 	root.replaceChildren(userElement);
     root.appendChild(editButton);

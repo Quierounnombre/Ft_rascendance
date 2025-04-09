@@ -59,6 +59,9 @@ const translations = {
         "join-form": "Input room code",
         "game-mode": "Choose Game Mode",
         "mod-tourn": "Tournament",
+        "WIN!": "WIN!",
+        "LOSE!": "LOSE!",
+        "TIE!": "TIE!",
     },
 
     "ESP": {
@@ -116,6 +119,9 @@ const translations = {
         "join-form": "Poner código de sala",
         "game-mode": "Elige Modo de Juego",
         "mod-tourn": "Torneo",
+        "WIN!": "¡VICTORIA!",
+        "LOSE!": "¡DERROTA!",
+        "TIE!": "¡EMPATE!",
     },
 
     "CAT": {
@@ -173,6 +179,9 @@ const translations = {
         "join-form": "Posar codi de sala",
         "game-mode": "Escull Mode de Joc",
         "mod-tourn": "Torneix",
+        "WIN!": "VICTÒRIA!",
+        "LOSE!": "DERROTA!",
+        "TIE!": "EMPAT!",
     },
 };
 

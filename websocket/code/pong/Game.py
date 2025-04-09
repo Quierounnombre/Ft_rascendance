@@ -129,13 +129,17 @@ class Game(threading.Thread):
         self.broadcastState("game.end")# TODO: el metodo requiere el game room
         # TODO: pasar a la base de datos el resultado
 
-    def exportToDatabase() -> None:
-        for obj in self.game_objetcs:
+    def exportToDatabase(self) -> None:
+        for obj in self.game_objects:
             if obj.id == "player1":
                 player1_id = obj.pk
+                if (obj.pk == -1):
+                    return
 
             elif obj.id == "player2":
                 player2_id = obj.pk
+                if (obj.pk == -1):
+                    return
             
             elif obj.type == "counter":
                 player1_score = obj.player1_score
@@ -144,7 +148,7 @@ class Game(threading.Thread):
 
             # TODO: cosas de torneo
 
-        post(f'history:{os.environ["HISTORY_PORT"]}/add/', json={
+        requests.post(f'http://history:{os.environ["HISTORY_PORT"]}/add/', json={
             "player1_id": player1_id,
             "player1_score": player1_score,
             "player2_id": player2_id,

@@ -26,7 +26,7 @@ class AddMatch(APIView):
 
 class UserHistory(APIView):
 	def get(self, request, pk):
-		matches = Match.objects.filter(winner_id=pk) | Match.objects.filter(loser_id=pk)
+		matches = Match.objects.filter(player1_id=pk) | Match.objects.filter(player2_id=pk)
 		# print(matches);
 		# if (len(matches) == 0):
 		# 	return Response(status=status.HTTP_204_NO_CONTENT)

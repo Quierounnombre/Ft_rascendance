@@ -102,7 +102,7 @@ services:
       dockerfile: Dockerfile
     container_name: history
     expose:
-      - ${BACKEND_PORT}
+      - ${HISTORY_PORT}
     volumes:
       - ./history/code:/history/code
     depends_on:
@@ -156,6 +156,7 @@ services:
         condition: service_healthy
     networks:
       - websocket-network
+      - rascendance-network
     expose:
       - ${WEBSOCKET_PORT}
     volumes:
