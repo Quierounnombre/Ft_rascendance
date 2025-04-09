@@ -123,7 +123,7 @@ createRoom(game_config, room_name = generateRandomString(8)) {
 	this.websocket = new WebSocket(
 		'wss://'
 		+ window.location.hostname
-		+ ':7000/ws/pong/'
+		+ ':7070/ws/pong/'
 		+ this.room_name
 		+ '/'
 	)
@@ -170,7 +170,7 @@ joinRoom(room_name) {
 	this.websocket = new WebSocket(
 		'wss://'
 		+ window.location.hostname
-		+ ':7000/ws/pong/'
+		+ ':7070/ws/pong/'
 		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
 		+ '/'
 	)

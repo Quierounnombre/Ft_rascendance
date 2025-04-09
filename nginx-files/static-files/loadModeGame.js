@@ -2,28 +2,28 @@ const gameSelector = document.createElement("div");
 gameSelector.setAttribute("id", "canvas_container");
 gameSelector.setAttribute("class", "container");
 gameSelector.innerHTML = `
-<div class="container">
+<div class="container mb-5">
 <h2 data-i18n-key="game-mode">Create room</h2>
     <div class="row">
-        <div class="col-3 border border-5 border-info-subtle rounded-pill text-center" style="background-color: lightskyblue; padding:30px">
+        <div class="col-3 border border-5 border-info-subtle rounded-pill p-6 text-center" style="background-color: lightskyblue; padding:30px">
         <a class="link-offset-2 link-underline link-underline-opacity-0" href="#form-tourn">
-        <i class="bi bi-trophy-fill" style="font-size:14rem; color:blue"></i>
+        <i class="bi bi-trophy-fill" style="font-size:12rem; color:blue"></i>
         <p data-i18n-key="mod-tourn" style="color: blue; font-size:2rem;">Tournament</p>
         </a>
         </div>
         <div class="col">
         </div>
-        <div class="col-3 border border-5 border-info-subtle rounded-pill text-center" style="background-color: lightskyblue; padding:33px">
+        <div class="col-3 border border-5 border-info-subtle rounded-pill p-6 text-center" style="background-color: lightskyblue; padding:33px">
         <a class="link-offset-2 link-underline link-underline-opacity-0" href="#form-online">
-        <i class="bi bi-globe2" style="font-size:14rem; color:blue"></i>
+        <i class="bi bi-globe2" style="font-size:12rem; color:blue"></i>
         <p style="color: blue; font-size:2rem;">Online</p>
         </a>
         </div>
         <div class="col">
         </div>
-        <div class="col-3 border border-5 border-info-subtle rounded-pill text-center" style="background-color: lightskyblue; padding:33px">
+        <div class="col-3 border border-5 border-info-subtle rounded-pill p-6 text-center" style="background-color: lightskyblue; padding:33px">
         <a class="link-offset-2 link-underline link-underline-opacity-0" href="#form-local">
-        <i class="bi bi-house-fill" style="font-size:14rem; color:blue"></i>
+        <i class="bi bi-house-fill" style="font-size:12rem; color:blue"></i>
         <p style="color: blue; font-size:2rem;">Local</p>
         </a>
         </div>

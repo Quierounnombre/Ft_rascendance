@@ -5,9 +5,9 @@ gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
 <div>
+
 <div class="d-flex">
-<h2 class="me-3" data-i18n-key="make-local">Create Local room</h2> <i class="bi bi-house-fill" style="font-size:2rem;"></i>
-</div>
+<h2 class="me-3" data-i18n-key="make-tourn">Create Tournament</h2><i class="bi bi-trophy-fill" style="font-size:2rem;"></i></div>
 <form id="dataForm" class="container mb-4">
 		<div class="form-floating">
 			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
@@ -40,35 +40,18 @@ gameCreator.innerHTML = `
 	</div>
 	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
-<a href="#game"><i class="bi bi-arrow-left-circle-fill mb" style="font-size:2.5rem; color:blue"></i></a>
+<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i></a>
 </div>
 `;
 
-async function getColors() {
-	const token = localStorage.getItem("token")
-	const response =  await fetch("https://" + window.location.hostname + ":7000/profile/colors/", {
-		method: "GET",
-		headers: {
-			"Authorization": "Token " + token,
-		}
-	});
-	if (response.ok) {
-		const data = await response.json();
-		return data;
-	} else {
-		return -1;
-	}
-}
-
 // TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
-export default async function loadLocal() {
+export default function loadTournament() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
 	const form2 = document.getElementById("dataForm2");
-	const colors = await getColors();
 
-	console.log("loaded");
+
 	form.addEventListener("submit", (event) => {
 		event.preventDefault();
 		const config = {};
@@ -86,9 +69,6 @@ export default async function loadLocal() {
 		case "floating":
 			data_to_send = floatingMap(config);
 			break;
-		case "temporal":
-			data_to_send = temporalMap(config);
-			break;
 		default:
 			data_to_send = defaultMap(config);
 		}
@@ -98,24 +78,17 @@ export default async function loadLocal() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		console.log("local");
-		pong("local_room", jsonData, colors);
+		pong("create_room", jsonData);
 	});
 
 	form2.addEventListener("submit", (event) => {
 		event.preventDefault();
 		const room_name = document.getElementById("room_name2").value;
 
-		pong("join_room", room_name, colors);
-	});
-
-	form3.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const number_players_tournament = document.getElementById("number_players_tournament").value;
-
-		pong("create_tournament", number_players_tournament)
+		pong("join_room", room_name);
 	});
 }
+
 
 function defaultMap(config) {
 	const data_to_send = [];
@@ -190,7 +163,7 @@ function doubleBallMap(config) {
 		width: 20,
 		height: 100,
 		speed: 2,
-		move_up: "w", // TODO: esto esta deprecated
+		move_up: "w",
 		move_down: "s"
 	};
 
@@ -328,110 +301,6 @@ function floatingMap(config) {
 	data_to_send.push(ball);
 	data_to_send.push(floating1);
 	data_to_send.push(floating2);
-	data_to_send.push(counter);
-	
-	return data_to_send;
-}
-
-function temporalMap(config) {
-	const data_to_send = [];
-
-	const player1 = {
-		pk: -1,
-		id: "player1",
-		type: "player",
-		color: config.player1_color,
-		x: 10,
-		y: 200,
-		width: 20,
-		height: 100,
-		speed: 2,
-		move_up: "w",
-		move_down: "s"
-	};
-
-	const player2 = {
-		pk: -1,
-		id: "player2",
-		type: "player",
-		color: config.player2_color,
-		x: 790,
-		y: 200,
-		width: 20,
-		height: 100,
-		speed: 2,
-		move_up: "ArrowUp",
-		move_down: "ArrowDown"
-	};
-
-	const ball = {
-		id: "ball",
-		type: "ball",
-		color: config.ball_color,
-		x: 400,
-		y: 200,
-		dirX: 1,
-		dirY: 1,
-		radius: 10
-	};
-
-	const generic1 = {
-		id: "generic1",
-		type: "CanvasObject",
-		color: config.counter_color,
-		x: 800 / 3,
-		y: (400 / 8) + ((400 - (400 / 8)) / 3),
-		width: 10,
-		height: 10
-	};
-
-	const generic2 = {
-		id: "generic2",
-		type: "CanvasObject",
-		color: config.counter_color,
-		x: 800 / 3,
-		y: (400 / 8) + ((400 - (400 / 8)) / 3 * 2),
-		width: 10,
-		height: 10
-	};
-
-	const generic3 = {
-		id: "generic3",
-		type: "CanvasObject",
-		color: config.counter_color,
-		x: 800 / 3 * 2,
-		y: (400 / 8) + ((400 - (400 / 8)) / 3),
-		width: 10,
-		height: 10
-	};
-
-	const generic4 = {
-		id: "generic4",
-		type: "CanvasObject",
-		color: config.counter_color,
-		x: 800 / 3 * 2,
-		y: (400 / 8) + ((400 - (400 / 8)) / 3 * 2),
-		width: 10,
-		height: 10
-	};
-
-	const counter = {
-		id: "counter",
-		type: "counter",
-		color: config.counter_color,
-		x: 400,
-		y: 10,
-		font: "42px Arial"
-	};
-
-	data_to_send.push(config);
-	data_to_send.push(player1);
-	data_to_send.push(player2);
-	data_to_send.push(ball);
-	data_to_send.push(generic1);
-	data_to_send.push(generic2);
-	data_to_send.push(generic3);
-	data_to_send.push(generic4);
 	data_to_send.push(counter);
 	
 	return data_to_send;

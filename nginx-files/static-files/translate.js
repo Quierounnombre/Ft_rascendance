@@ -33,6 +33,8 @@ const translations = {
         "prof-uname": "Username: ",
         "prof-font": "Font size: ",
         "prof-lang": "Prefered Language: ",
+        "prof-avatar": "Change Avatar: ",
+        "edit-sub": "Save Changes",
         "prof-me-color": "Color of my paddle:",
         "prof-other-color": "Color of opponent's paddle:",
         "prof-ball-color": "Color of the ball:",
@@ -41,7 +43,9 @@ const translations = {
         "see-prof": "See Profile",
         "add-friend": "Add Friend",
         "del-friend": "Delete Friend",
-        "make-room": "Create new room",
+        "make-local": "Create new Local room",
+        "make-online": "Create new Online room",
+        "make-tourn": "Create new Tournament",
         "join-room": "Join room",
         "crea-submit": "Submit",
         "join-submit": "Submit",
@@ -93,6 +97,8 @@ const translations = {
         "prof-uname": "Apodo: ",
         "prof-font": "Tamaño fuente: ",
         "prof-lang": "Idioma preferido: ",
+        "prof-avatar": "Cambiar Imagen: ",
+        "edit-sub": "Guardar Cambios",
         "prof-me-color": "Color de mi pala:",
         "prof-other-color": "Color de la pala del oponente:",
         "prof-ball-color": "Color de la bola:",
@@ -101,7 +107,9 @@ const translations = {
         "see-prof": "Ver Perfil",
         "add-friend": "Añadir Amigo",
         "del-friend": "Eliminar Amigo",
-        "make-room": "Crear Sala Nueva",
+        "make-local": "Crear Sala Local nueva",
+        "make-online": "Crear Sala Online nueva",
+        "make-tourn": "Crear Torneo nuevo",
         "join-room": "Unirse a Sala",
         "crea-submit": "Crea",
         "join-submit": "Entra",
@@ -153,15 +161,19 @@ const translations = {
         "prof-uname": "Sobrenom: ",
         "prof-font": "Mida lletra: ",
         "prof-lang": "Idioma preferit: ",
+        "prof-avatar": "Cambiar Imatge: ",
+        "edit-sub": "Guardar Cambis",
         "prof-me-color": "Color de la meva pala:",
         "prof-other-color": "Color de la pala de l'oponent:",
-        "prof-ball-color": "Color de la bola:",
+        "prof-ball-color": "Color de la pilota:",
         "prof-counter-color": "Color del comptador:",
         "no-find": "Res de res...",
         "see-prof": "Veure perfil",
         "add-friend": "Afegir Amic",
-        "del-friend": "Eliminar Amic",
-        "make-room": "Crear Sala Nova",
+        "del-friend": "Borrar Amic",
+        "make-local": "Crear Sala Local nova",
+        "make-online": "Crear Sala Online nova",
+        "make-tourn": "Crear Torneig nou",
         "join-room": "Entrar a Sala",
         "crea-submit": "Crea",
         "join-submit": "Entra",
@@ -205,8 +217,13 @@ document.addEventListener("DOMContentLoaded", () => {
 export function bindLocaleSwitcher() {
     const locale = localStorage.getItem("language");
     const switcher = document.getElementById("lang-switcher");
-    if (locale)
-      switcher.value = locale;
+    if (!switcher)
+        return ;
+    if (!locale)
+      switcher.value = defaultLocale;
+    else
+    switcher.value = locale;
+
       switcher.addEventListener("change", (event) => {
         // Set the locale to the selected option[value]
         setLocale (event.target.value);
@@ -225,7 +242,7 @@ export default function translatePage() {
     const locale = localStorage.getItem("language");
     const key = element.getAttribute("data-i18n-key");
     const translation = translations[locale][key];
-    if (key==="reg-sub" || key=== "login-sub")
+    if (key==="reg-sub" || key=== "login-sub" || key=== "edit-sub")
      element.setAttribute("value", translation);
     else if (key==="search-bar")
      element.setAttribute("placeholder", translation);

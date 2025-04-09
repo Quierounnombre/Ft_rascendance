@@ -1,6 +1,6 @@
 export default async function getMyFriends(token) {
 	try {
-		const response = await fetch("https://" + window.location.hostname + ":7000/profile/friends/", {
+		const response = await fetch("https://" + window.location.hostname + ":7070/profile/friends/", {
 			method: "GET",
 			headers: {
 				"Authorization": "Token " + token,

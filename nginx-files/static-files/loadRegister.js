@@ -7,6 +7,7 @@ export default function loadRegister() {
 	form.setAttribute("class", "container-xl");
 	form.setAttribute("id", "signup_form");
 	form.innerHTML = `
+	<div id="liveAlertPlaceholder"></div>
 	<div class="mb-3">
 		<label for="email" class="form-label">Email:</label>
 		<input type="email" id="email" name="email" class="form-control" required/>
@@ -47,7 +48,7 @@ async function signUp(form) {
 	const formData = new FormData(form);
 
 	try {
-		const response = await fetch("https://" + window.location.hostname + ":7000/profile/singup/", {
+		const response = await fetch("https://" + window.location.hostname + ":7070/profile/singup/", {
 			method: "POST",
 			body: formData,
 		});
@@ -56,6 +57,16 @@ async function signUp(form) {
 			validLogin(data.token, data.font);
 		} else {
 			invalidLogin();
+			const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+			  const wrapper = document.createElement('div')
+				  wrapper.innerHTML = [
+			`<div class="alert alert-danger alert-dismissible" role="alert">`,
+				`    <div>Invalid Register, please try again</div>`,
+				'   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+			'</div>'
+			  ].join('')
+	
+			  alertPlaceholder.append(wrapper)
 		}
 	} catch (e) {
 		console.error(e);
@@ -82,4 +93,8 @@ async function validLogin(token, font) {
     console.log(user["language"]);
 	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = font + "px";
 	window.location.hash='';
+	const switcher = document.getElementById("lang-switcher");
+    if (!switcher)
+        return ;
+	switcher.value = user["language"];
 }

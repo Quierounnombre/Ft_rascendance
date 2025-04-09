@@ -113,7 +113,7 @@ async function getProfileElement(user) {
 function logOut() {
 	const token = localStorage.getItem("token");
 	try {
-		fetch("https://" + window.location.hostname + ":7000/profile/logout/", {
+		fetch("https://" + window.location.hostname + ":7070/profile/logout/", {
 			method: "POST",
 			headers: {
 				"Authorization": "Token " + token,

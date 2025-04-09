@@ -1,9 +1,10 @@
 function addFriend(id, button) {
 	const formData = new FormData();
 	const token = localStorage.getItem("token");
+	const lang = localStorage.getItem("language");
 	formData.append("friendID", id)
 
-	fetch("https://" + window.location.hostname + ":7000/profile/friends/", {
+	fetch("https://" + window.location.hostname + ":7070/profile/friends/", {
         method: "PUT",
 		body: formData,
 		headers: {
@@ -11,17 +12,24 @@ function addFriend(id, button) {
 		},
 	})
 
-	button.setAttribute("class", "btn btn-outline-primary");
-	button.innerHTML = "Delete friend";
+	button.setAttribute("class", "btn btn-lg btn-outline-primary");
+	button.setAttribute("data-i18n-key", "del-friend");
+	if (lang === "ENG" || !lang)
+		button.innerHTML = "Delete friend";
+	else if (lang === "ESP")
+		button.innerHTML = "Eliminar Amigo";
+	else if (lang === "CAT")
+		button.innerHTML = "Borrar Amic";
 	button.setAttribute("onclick", "deleteFriend("+ id +", this)");
 }
 
 function deleteFriend(id, button) {
 	const formData = new FormData();
 	const token = localStorage.getItem("token");
+	const lang = localStorage.getItem("language");
 	formData.append("friendID", id);
 
-	fetch("https://" + window.location.hostname + ":7000/profile/friends/", {
+	fetch("https://" + window.location.hostname + ":7070/profile/friends/", {
         method: "DELETE",
 		body: formData,
 		headers: {
@@ -29,8 +37,14 @@ function deleteFriend(id, button) {
 		},
 	})
 
-	button.setAttribute("class", "btn btn-primary");
-	button.innerHTML = "Add Friend";
+	button.setAttribute("class", "btn  btn-lg btn-primary");
+	button.setAttribute("data-i18n-key", "add-friend");
+	if (lang === "ENG" || !lang)
+		button.innerHTML = "Add friend";
+	else if (lang === "ESP")
+		button.innerHTML = "Añadir Amigo";
+	else if (lang === "CAT")
+		button.innerHTML = "Afegir Amic";
 	button.setAttribute("onclick", "addFriend("+ id +", this)");
 }
 

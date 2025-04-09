@@ -38,7 +38,7 @@ services:
     volumes:
       - ./nginx-files/static-files:/etc/nginx/html
     ports:
-      - 7000:443
+      - 7070:443
     networks:
       - websocket-network
       - rascendance-network

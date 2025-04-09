@@ -9,6 +9,7 @@ export default async function loadSearch() {
 	}
 	const query = localStorage.getItem("query");
 	const token = localStorage.getItem("token");
+	
 	if (!token) {
 		window.location.hash = "#anon-menu";
 		return ;
@@ -18,9 +19,11 @@ export default async function loadSearch() {
 	if (userList === -1) {
 		return ;
 	}
-    
+    const returnButton = document.createElement("p");
+	returnButton.innerHTML = `<a href="#social"><i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i></a>`;
 	const root = document.getElementById("root");
 	root.replaceChildren(userList);
+	root.appendChild(returnButton);
     translatePage();
 }
 
@@ -64,7 +67,7 @@ function friendButton(id, friends) {
 	}
 	for (let friend in friends) {
 		if (friends[friend].id == id)
-			return `<button type="button" data-i18n-key="del-friend" class="btn btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
+			return `<button type="button" data-i18n-key="del-friend" class="btn btn-lg btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
 	}
 	return `<button type="button" data-i18n-key="add-friend" class="btn btn-lg me-2 btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
 }

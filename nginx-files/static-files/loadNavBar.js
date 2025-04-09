@@ -11,7 +11,7 @@ export default async function loadNavBar(loc) {
 	const header = document.getElementById("header");
 	header.innerHTML = `
 <nav class="navbar navbar-expand-lg fixed-topnavbar navbar-dark bg-dark">
-  <div class="container">
+  <div class="container-fluid">
     <a class="navbar-brand light"><h1>Rascendance🏓</h1></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
