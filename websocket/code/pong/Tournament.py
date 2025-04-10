@@ -44,6 +44,7 @@ class Tournament(threading.Thread):
         self.is_running = False
 
         self.games_finished = []
+        self.round_games_finished = 0
 
         if num_players % 2 != 0:
             raise ValueError("odd players") # TODO: se deberia comprobar antes
@@ -190,5 +191,7 @@ class Tournament(threading.Thread):
                 self.round_games_finished = 0
                 self.games_finished = []
                 break
+            
+            time.sleep(1)
 
         self.is_running = False

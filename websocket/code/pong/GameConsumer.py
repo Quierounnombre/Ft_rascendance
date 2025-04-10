@@ -115,4 +115,8 @@ class GameConsumer(SyncConsumer):
 
         if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
             print(f'GameConsumer::tournament_register -> tournament_name = {tournament_name}', flush=True)
+            tournaments[tournament_name].generateSchedule()
             tournaments[tournament_name].start()
+        
+        def tournament_started(self, event) -> None:
+            pass

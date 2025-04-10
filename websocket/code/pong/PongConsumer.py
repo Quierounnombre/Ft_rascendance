@@ -206,4 +206,5 @@ class PongConsumer(WebsocketConsumer):
                 }
         }))
 
-
+    def tournament_started(self, event) -> None:
+        pass
