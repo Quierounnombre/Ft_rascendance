@@ -31,6 +31,14 @@ from secrets import token_urlsafe
 import requests
 import os
 
+def load_query_string(params):
+	q_str = ""
+
+	for key, value in params.items():
+		tmp_str = "&{0}={1}".format(key, value)
+		q_str = q_str + tmp_str
+	return (q_str)
+
 class	UserLoginAPIView(APIView):
 
 	def login_empty_user_response(self):
@@ -57,12 +65,16 @@ class	UserLoginAPIView(APIView):
 		}
 		return (response)
 
-	def post(self, request, *args, **kargs):
+	def post(self, request):
 		serializer = UserLoginSerializer(data=request.data)
+		send_email_url = 'http://TwoFactorAuth:8081/email/'
 		if serializer.is_valid():
 			response = self.login_empty_user_response()
 			if User.objects.filter(email=request.data['email']).exists():
 				if authenticate(email=request.data["email"], password=request.data["password"]):
+					q_str = load_query_string({'email' : request.data['email']})
+					email_loaded_url = f"{send_email_url}?{q_str}"
+					requests.post(email_loaded_url)
 					user = User.objects.get(email=request.data['email'])
 					token, created = Token.objects.get_or_create(user=user)
 					response = self.login_succesfull_response(user, token)
@@ -83,7 +95,7 @@ class	UserSingUpAPIView(APIView):
 		}
 		return (response)
 
-	def post(self, request, *args, **kargs):
+	def post(self, request):
 		serializer = UserSingUpSerializer(data=request.data)
 		if (serializer.is_valid()):
 			serializer.save()
@@ -151,13 +163,6 @@ class UserListView(ListAPIView):
         return get_user_model().objects.exclude(id=self.request.user.id)
 
 class OAuthLoginAPIView(APIView):
-	def load_query_string(self, params):
-		q_str = ""
-
-		for key, value in params.items():
-			tmp_str = "&{0}={1}".format(key, value)
-			q_str = q_str + tmp_str
-		return (q_str)
 
 	def get(self, request):
 		state_token = token_urlsafe(32)
@@ -171,7 +176,7 @@ class OAuthLoginAPIView(APIView):
 			'state': state_token,
 		}
 		auth_url = 'https://api.intra.42.fr/v2/oauth/authorize'
-		query_string = self.load_query_string(params)
+		query_string = load_query_string(params)
 		final_auth_url = f"{auth_url}?{query_string}"
 
 		return (redirect(final_auth_url))

@@ -39,24 +39,24 @@ class FriendsSerializer(serializers.ModelSerializer):
 		]	
 
 class UserLoginSerializer(serializers.ModelSerializer):
-	id = serializers.PrimaryKeyRelatedField(read_only=True)
-	email = serializers.CharField(read_only=True)
+	email = serializers.CharField(write_only=True)
 	password = serializers.CharField(write_only=True)
 
 	class Meta:
 		model = User
 		fields = [
-			"id",
 			"email",
 			"password"
 		]
 	
 	def validate(self, instance):
-		if not instance['password']:
+		if (not instance['password']):
 			raise ValidationError(detail="Empty password")
+		if (not instance['email']):
+			raise ValidationError(detail="Empty email")
+		return instance
 
 class UserSingUpSerializer(serializers.ModelSerializer):
-	id = serializers.PrimaryKeyRelatedField(read_only=True)
 	username = serializers.CharField()
 	first_name = serializers.CharField()
 	last_name = serializers.CharField()
@@ -67,7 +67,6 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = [
-			"id",
 			"username",
 			"first_name",
 			"last_name",

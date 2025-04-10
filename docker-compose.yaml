@@ -209,6 +209,7 @@ services:
       EMAIL_APP_PASSWORD: ${EMAIL_APP_PASSWORD}
     networks:
       - twofactorauth-network
+      - rascendance-network
 
 volumes:
   postgres_data:

@@ -9,20 +9,30 @@ from rest_framework import status
 from secrets import token_urlsafe
 from TwoFactorAuth.models import TwoFA_code
 from django.utils import timezone
+from .serializers import SendEmailSerializer
 import os
 
 # Create your views here.
 
 class	SendEmail(APIView):
-	def get(self, request):
-		random_emailer = "{0}{1}".format(os.urandom(6).hex(), "@gmail.com")
-		new_code = TwoFA_code(code=(token_urlsafe(6)), email=(random_emailer))
-		txt = "SENDING TO: {reciver} code: {code} create at: {timestamp}".format(reciver=new_code.email, code=new_code.code, timestamp=new_code.timestamp)
+	def post(self, request):
+		bad_request = status.HTTP_400_BAD_REQUEST
+		serializer = SendEmailSerializer(data=request.data)
+		if (not serializer.is_valid()):
+			Response("Validation Error", status=bad_request)
+		target_email = request.GET.get('email')
+		try:
+			token = TwoFA_code.objects.get(email=target_email)
+			token.delete()
+		except:
+			pass #ERASIN PREVIOUS ONE FROM DB
+		new_code = TwoFA_code(code=(token_urlsafe(6)), email=(target_email))
+		txt = "Welcome to the ramscendance, this is your 2FA, bear in mind, you only have 5 minutes to input the code: {code}".format(code=new_code.code)
 		send_mail(
 			"2FA",
 			txt,
 			settings.EMAIL_HOST_USER,
-			[""],
+			[target_email],
 			fail_silently=False,
 		)
 		new_code.save()
