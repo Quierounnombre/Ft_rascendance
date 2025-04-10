@@ -107,6 +107,8 @@ class Tournament(threading.Thread):
         room_name = generateRandomString(8)
         channel_layer = get_channel_layer()
 
+        print(f'Tournament game `{room_name}` has been created', flush=True)
+
         player1 = game["player1"]
         player2 = game["player2"]
 
@@ -142,6 +144,7 @@ class Tournament(threading.Thread):
 
         current_round = next(iter(self.game_queue))
         
+        print(f'Tournament round created', flush=True)
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -162,6 +165,7 @@ class Tournament(threading.Thread):
         if room_name in self.games_finished:
             return
 
+        print(f'Tournament game`{room_name}` has finished', flush=True)
         self.games_finished.append(room_name)            
         self.round_games_finished += 1
 
@@ -184,6 +188,10 @@ class Tournament(threading.Thread):
         )
 
         while not self.isTournamentEnd():
+            print(f'Tournament has {self.games_finished} games finished in current round', flush=True)
+            print(f'Tournament has {len(self.game_queue)} rounds in the queue', flush=True)
+            print(f'Tournament has {self.game_queue}', flush=True)
+
             if not self.currentRoundHasEnd():
                 continue
 
@@ -192,6 +200,6 @@ class Tournament(threading.Thread):
                 self.games_finished = []
                 break
             
-            time.sleep(1)
+            time.sleep(5)
 
         self.is_running = False
