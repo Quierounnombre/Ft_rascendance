@@ -120,3 +120,14 @@ class GameConsumer(SyncConsumer):
         
         def tournament_started(self, event) -> None:
             pass
+
+    def next_round(self, event) -> None:
+        pass
+
+    def create_tournament_game(self, event) -> None:
+        pass
+
+    def join_tournament_game(self, event) -> None:
+        pass
+
+

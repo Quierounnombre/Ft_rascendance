@@ -113,3 +113,13 @@ class TournamentConsumer(WebsocketConsumer):
                 "tournament_name": self.tournament_name
             }
         }))
+
+    def next_round(self, event) -> None:
+        # TODO: enviar info
+        pass
+
+    def create_tournament_game(self, event) -> None:
+        pass
+
+    def join_tournament_game(self, event) -> None:
+        pass

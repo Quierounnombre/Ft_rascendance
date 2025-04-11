@@ -107,36 +107,31 @@ class Tournament(threading.Thread):
         room_name = generateRandomString(8)
         channel_layer = get_channel_layer()
 
-        print(f'Tournament game `{room_name}` has been created', flush=True)
-
         player1 = game["player1"]
         player2 = game["player2"]
 
         async_to_sync(channel_layer.group_send)(
-            str(player1["player_id"]), {
+            self.tournament_name, {
                 'type': 'create.tournament.game',
                 'message': {
                     "room_name": room_name,
                     "tournament_name": self.tournament_name,
-                    "game_config": self.game_config
+                    "game_config": self.game_config,
+                    "user_id": player1["user_id"],
                 }
             }
         )
 
         async_to_sync(channel_layer.group_send)(
-            str(player2["player_id"]), {
+            self.tournament_name, {
                 'type': 'join.tournament.game',
                 'message': {
                     "room_name": room_name,
-                    "tournament_name": self.tournament_name
+                    "tournament_name": self.tournament_name,
+                    "user_id": player1["user_id"],
                 }
             }
         )
-        # TODO: identificar player1
-        # TODO: player1 crea sala
-        # TODO: identificar player2
-        # TODO: player2 se une a sala
-        pass
 
     def createRound(self) -> bool:
         if len(self.game_queue) < 1:
@@ -187,11 +182,9 @@ class Tournament(threading.Thread):
             }
         )
 
-        while not self.isTournamentEnd():
-            print(f'Tournament has {self.games_finished} games finished in current round', flush=True)
-            print(f'Tournament has {len(self.game_queue)} rounds in the queue', flush=True)
-            print(f'Tournament has {self.game_queue}', flush=True)
+        self.createRound()
 
+        while not self.isTournamentEnd():
             if not self.currentRoundHasEnd():
                 continue
 

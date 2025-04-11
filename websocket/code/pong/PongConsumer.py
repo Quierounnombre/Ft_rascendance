@@ -40,6 +40,10 @@ class PongConsumer(WebsocketConsumer):
             self.room_name, self.channel_name
         )
 
+        async_to_sync(self.channel_layer.group_discard)(
+            str(self.user_id), self.channel_name
+        )
+
     def receive(self, text_data) -> None:
         content = json.loads(text_data)
         message_type = content["type"]
@@ -186,6 +190,11 @@ class PongConsumer(WebsocketConsumer):
         }))
     
     def create_tournament_game(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
+        self.tournament_name = event["message"]["tournament_name"]
+
         self.send(json.dumps({
             "type": "create.tournament.game",
             "message": {
@@ -196,15 +205,21 @@ class PongConsumer(WebsocketConsumer):
         }))
 
     def join_tournament_game(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
         self.tournament_name = event["message"]["tournament_name"]
 
         self.send(json.dumps({
-                "type": "join.tournament.game",
-                "message": {
-                    "tournament_name": event["message"]["tournament_name"],
-                    "room_name": event["message"]["room_name"]
-                }
+            "type": "join.tournament.game",
+            "message": {
+                "tournament_name": event["message"]["tournament_name"],
+                "room_name": event["message"]["room_name"]
+            }
         }))
 
     def tournament_started(self, event) -> None:
+        pass
+
+    def next_round(self, event) -> None:
         pass
