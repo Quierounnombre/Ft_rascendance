@@ -189,34 +189,12 @@ class PongConsumer(WebsocketConsumer):
             }
         }))
     
+
     def create_tournament_game(self, event) -> None:
-        if event["message"]["user_id"] != self.user_id:
-            return
-
-        self.tournament_name = event["message"]["tournament_name"]
-
-        self.send(json.dumps({
-            "type": "create.tournament.game",
-            "message": {
-                "tournament_name": event["message"]["tournament_name"],
-                "room_name": event["message"]["room_name"],
-                "game_config": event["message"]["game_config"],
-            }
-        }))
+        pass
 
     def join_tournament_game(self, event) -> None:
-        if event["message"]["user_id"] != self.user_id:
-            return
-
-        self.tournament_name = event["message"]["tournament_name"]
-
-        self.send(json.dumps({
-            "type": "join.tournament.game",
-            "message": {
-                "tournament_name": event["message"]["tournament_name"],
-                "room_name": event["message"]["room_name"]
-            }
-        }))
+        pass
 
     def tournament_started(self, event) -> None:
         pass

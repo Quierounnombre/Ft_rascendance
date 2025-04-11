@@ -87,6 +87,8 @@ joinTournament(tournament_name) {
 function server_msg(event) {
 	const data = JSON.parse(event["data"]);
 
+	console.log(`Tournament has recived a msg type: ${data["type"]}`)
+
 	switch(data["type"]) {
 	case "tournament.created":
 		this.tournament_name = data["message"]["tournament_name"];
@@ -104,10 +106,12 @@ function server_msg(event) {
 		break;
     
 	case "next.round":
-		this.game_round = new Game(this.colors);
+		// TODO: una alerta? notificacion? redireccion?
 		break;
 
 	case "create.tournament.game":
+		this.game_round = new Game(this.colors);
+
 		this.game_round.game_config = data["message"]["game_config"];
 		this.game_round.room_name = data["message"]["room_name"];
 
@@ -118,11 +122,14 @@ function server_msg(event) {
 		break;
 
 	case "join.tournament.game":
+		this.game_round = new Game(this.colors);
+
 		this.game_round.room_name = data["message"]["room_name"];
 
 		this.tournament_name = data["message"]["tournament_name"];
 		this.room_name = data["message"]["room_name"];
 
+		// TODO: el que se une no le llega estados del juego
 		this.game_round.joinRoom(this.room_name);
 		break;
 	
