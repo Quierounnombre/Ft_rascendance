@@ -54,16 +54,6 @@ class	UserLoginAPIView(APIView):
 			"error": "Wrong email and/or password"
 		}
 		return (response)
-	
-	def login_succesfull_response(self, user, token):
-		response = { 
-			'success': True,
-			'username': user.username,
-			'email': user.email,
-			'token':token.key,
-			'font':user.font,
-		}
-		return (response)
 
 	def post(self, request):
 		serializer = UserLoginSerializer(data=request.data)
@@ -75,13 +65,61 @@ class	UserLoginAPIView(APIView):
 					q_str = load_query_string({'email' : request.data['email']})
 					email_loaded_url = f"{send_email_url}?{q_str}"
 					requests.post(email_loaded_url)
-					user = User.objects.get(email=request.data['email'])
-					token, created = Token.objects.get_or_create(user=user)
-					response = self.login_succesfull_response(user, token)
-					return Response(response, status=status.HTTP_200_OK)
+					return Response(status=status.HTTP_200_OK) #REDIRECT?
 				return Response(self.login_wrong_credentials_response(), status=status.HTTP_400_BAD_REQUEST)
 			return Response(response, status=status.HTTP_400_BAD_REQUEST) 
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#! BE AWARE TO PASS THE EMAIL AND CODE IN THE BODY
+#TODO CHEKEAR CON FRONTEND PARA INTEGRARLO
+
+class	GenerateToken(APIView):
+	
+	def login_succesfull_response(self, token):
+		response = { 
+			'success': True,
+			'token':token.key,
+		}
+		return (response)
+	
+	def	load_validate_response(self, request):
+		response = {
+			'email' : request.data['email'],
+			'code' : request.data['code'],
+		}
+		return (response)
+	
+	def validate(self, request) -> bool:
+		try:
+			email = request.data['email']
+		except:
+			return False
+		try:
+			code = request.data['code']
+		except:
+			return False
+		return True
+	
+	def post(self, request):
+		bad_request = status.HTTP_400_BAD_REQUEST
+		
+		if not self.validate(request):
+			return (Response(status=bad_request))
+		
+		json_for_validate = self.load_validate_response(request)
+		validate_url = 'http://TwoFactorAuth:8081/email/validate/'
+		response = requests.post(validate_url, json=json_for_validate)
+		print(response.status_code)
+		if (response.status_code != status.HTTP_200_OK):
+			return (Response(response, status=bad_request))
+		#SEND FIRST TO 2FA code to validate
+		
+		user = User.objects.get(email=request.data['email'])
+		token, created = Token.objects.get_or_create(user=user)
+		if (not created):
+			Response('TOKEN CREATION FAILURE', status=bad_request)
+		response = self.login_succesfull_response(token)
+		return (Response(response, status=status.HTTP_200_OK))
 
 
 class	UserSingUpAPIView(APIView):
@@ -90,14 +128,16 @@ class	UserSingUpAPIView(APIView):
 		response = {
 			'success': True,
 			'user': serializer.data,
-			'token': Token.objects.get(
-			user=User.objects.get(email=serializer.data['email'])).key
 		}
 		return (response)
 
 	def post(self, request):
 		serializer = UserSingUpSerializer(data=request.data)
+		send_email_url = 'http://TwoFactorAuth:8081/email/'
 		if (serializer.is_valid()):
+			q_str = load_query_string({'email' : request.data['email']})
+			email_loaded_url = f"{send_email_url}?{q_str}"
+			requests.post(email_loaded_url)
 			serializer.save()
 			response = self.sing_up_succesfull_response(serializer)
 			return Response(response, status=status.HTTP_200_OK)
