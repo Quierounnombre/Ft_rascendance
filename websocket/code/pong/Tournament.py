@@ -45,6 +45,8 @@ class Tournament(threading.Thread):
 
         self.games_finished = []
         self.round_games_finished = 0
+        self.round_active = False
+        self.tournament_end = False
 
         if num_players % 2 != 0:
             raise ValueError("odd players") # TODO: se deberia comprobar antes
@@ -58,18 +60,10 @@ class Tournament(threading.Thread):
 
         self.player_list.append(player)
 
-        # TODO: haria falta unirse al grupo para enviar, o es solo para recibir?
-        # async_to_sync(self.channel_layer.group_add)(
-        #     player.getId(), self.channel_name
-        # )
-
         return True
 
     def isTournamentFull(self) -> bool:
         return len(self.player_list) == self.target_players
-
-    def isTournamentEnd(self) -> bool:
-        return len(self.game_queue) == 0
 
     def generateSchedule(self) -> None:
         number_players = len(self.player_list)
@@ -155,29 +149,34 @@ class Tournament(threading.Thread):
             self.createGame(game)
 
         self.game_queue.pop(0)
+        self.round_active = True
 
         return True
     
     def endGame(self, room_name) -> None:
-        print(f'\033[31mTournament::endGame -> `{room_name}` in games_finished: {self.games_finished}', flush=True)
         if room_name in self.games_finished:
             return
 
         print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` has finished', flush=True)
+
         self.games_finished.append(room_name)            
         self.round_games_finished += 1
+
+        if self.round_games_finished == (self.target_players / 2):
+            self.round_active = False
 
     def serialize(self) -> str:
         pass
 
     def currentRoundHasEnd(self) -> bool:
+        # TODO: borrar
+        print(f'\033[32mTournament::currentRoundHasEnd -> {self.round_games_finished == (self.target_players / 2)}', flush=True)
         return self.round_games_finished == (self.target_players / 2)
 
     def run(self) -> None:
-        # TODO:
         self.is_running = True
-        channel_layer = get_channel_layer()
 
+        channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             self.tournament_name, {
                 "type": "tournament.started",
@@ -185,10 +184,10 @@ class Tournament(threading.Thread):
             }
         )
 
-        self.createRound()
-
-        while not self.isTournamentEnd():
-            if not self.currentRoundHasEnd():
+	# TODO: no se si solo es en mi portatil, pero a veces parece que pierde algun paquete y se queda pillado
+        while True:
+            if self.round_active:
+                time.sleep(2)
                 continue
 
             if not self.createRound():
@@ -196,6 +195,5 @@ class Tournament(threading.Thread):
                 self.games_finished = []
                 break
             
-            time.sleep(5)
 
         self.is_running = False

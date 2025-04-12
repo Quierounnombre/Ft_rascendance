@@ -103,7 +103,6 @@ class TournamentConsumer(WebsocketConsumer):
         )
     
     def endTournamentGame(self, message) -> None:
-        tournaments[message["tournament_name"]].endGame(message["room_name"])
         pass
 
     def tournament_started(self, event) -> None:

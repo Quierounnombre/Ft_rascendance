@@ -14,6 +14,8 @@ tournaments = {}
 game_rooms = {}
 
 class GameConsumer(SyncConsumer):
+    strict_ordering = True
+
     # message: {"room_name: string"}
     def game_start(self, event) -> None:
         channel_layer = get_channel_layer()
@@ -96,6 +98,7 @@ class GameConsumer(SyncConsumer):
         message = event["message"]
 
         self.room_name = message["room_name"]
+        self.tournament_name = message["tournament_name"]
         game_rooms[message["room_name"]] = Game(room_name=self.room_name, tournament_name=message["tournament_name"], data=message["data"])
 
         # Join room group
