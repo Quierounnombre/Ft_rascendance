@@ -73,6 +73,8 @@ class PongConsumer(WebsocketConsumer):
     #         "data": la info del formulario para generar la sala
     #     }
     def createRoom(self, message) -> None:
+        self.tournament_name = message["tournament_name"]
+
         # send to the GameConsumer the game room name and its config
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
@@ -111,6 +113,7 @@ class PongConsumer(WebsocketConsumer):
     #     "message": {"room_name": str}
     def joinRoom(self, message) -> None:
         self.room_name = message["room_name"]
+        self.tournament_name = message["tournament_name"]
 
         # TODO: si no existe la sala?
         # si no existe una instancia de esa sala, el GameConsumer deberia mandar un mensaje de que no existe

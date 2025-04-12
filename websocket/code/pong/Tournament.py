@@ -159,10 +159,11 @@ class Tournament(threading.Thread):
         return True
     
     def endGame(self, room_name) -> None:
+        print(f'\033[31mTournament::endGame -> `{room_name}` in games_finished: {self.games_finished}', flush=True)
         if room_name in self.games_finished:
             return
 
-        print(f'\033[31mTournament game`{room_name}` has finished', flush=True)
+        print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` has finished', flush=True)
         self.games_finished.append(room_name)            
         self.round_games_finished += 1
 

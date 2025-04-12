@@ -13,7 +13,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 class Game(threading.Thread):
-    def __init__(self, room_name, data, *args, **kwargs) -> None:
+    def __init__(self, room_name, tournament_name ,data, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs, daemon=True)
 
         self.game_objects = []
@@ -25,11 +25,11 @@ class Game(threading.Thread):
         self.max_score = 5
     
         self.room_name = room_name
+        self.tournament_name = tournament_name
         self.number_players = 0
 
-        self.tournament_name = ''
-
         self.is_running = False
+
 
         data = json.loads(data)
 

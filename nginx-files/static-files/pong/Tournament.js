@@ -117,6 +117,7 @@ function server_msg(event) {
 
 		this.tournament_name = data["message"]["tournament_name"];
 		this.room_name = data["message"]["room_name"];
+		this.game_round.tournament_name = data["message"]["tournament_name"]
 
 		this.game_round.createRoom(data["message"]["game_config"], this.room_name);
 		break;
@@ -128,6 +129,8 @@ function server_msg(event) {
 
 		this.tournament_name = data["message"]["tournament_name"];
 		this.room_name = data["message"]["room_name"];
+
+		this.game_round.tournament_name = data["message"]["tournament_name"]
 
 		// TODO: el que se une no le llega estados del juego
 		this.game_round.joinRoom(this.room_name);

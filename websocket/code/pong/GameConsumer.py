@@ -1,5 +1,6 @@
 import json
 import time
+import threading
 
 from channels.consumer import SyncConsumer
 from channels.layers import get_channel_layer
@@ -23,6 +24,7 @@ class GameConsumer(SyncConsumer):
                 "type": "game.started",
                 "message": {
                     "room_name": message["room_name"],
+                    "tournament_name": message["tournament_name"],
                     "data": game_rooms[message["room_name"]].serialize()
                 }
             }
@@ -42,7 +44,15 @@ class GameConsumer(SyncConsumer):
         data = message["data"]
 
         if not game_rooms[message["room_name"]].is_running:
+            tmp = len(game_rooms)
             del game_rooms[message["room_name"]]
+
+            print(f'\033[31mGameConsumer::game_end -> deleted game room `{message["room_name"]}`, game_rooms before: {tmp}, game_rooms now: {len(game_rooms)}, active threads: {threading.active_count()}', flush=True)
+            print(f'\033[31mGameConsumer::game_end -> tournament_name: `{message["tournament_name"]}`', flush=True)
+
+            if message["tournament_name"] != "":
+                tournaments[message["tournament_name"]].endGame(message["room_name"])
+                
     
     # message: {
     #     "room_name": str,
@@ -86,7 +96,7 @@ class GameConsumer(SyncConsumer):
         message = event["message"]
 
         self.room_name = message["room_name"]
-        game_rooms[message["room_name"]] = Game(room_name=self.room_name, data=message["data"])
+        game_rooms[message["room_name"]] = Game(room_name=self.room_name, tournament_name=message["tournament_name"], data=message["data"])
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
