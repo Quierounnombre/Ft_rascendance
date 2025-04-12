@@ -39,7 +39,7 @@ class FriendsSerializer(serializers.ModelSerializer):
 		]	
 
 class UserLoginSerializer(serializers.ModelSerializer):
-	email = serializers.CharField(write_only=True)
+	email = serializers.EmailField(write_only=True)
 	password = serializers.CharField(write_only=True)
 
 	class Meta:

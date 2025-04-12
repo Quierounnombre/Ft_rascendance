@@ -5,7 +5,7 @@ from TwoFactorAuth.models import TwoFA_code
 #either dosen't exist in the db or it exist, and if so it must be valid
 
 class	SendEmailSerializer(serializers.ModelSerializer):
-	email = serializers.CharField()
+	email = serializers.EmailField()
 	
 	class Meta:
 		model = TwoFA_code
@@ -19,7 +19,7 @@ class	SendEmailSerializer(serializers.ModelSerializer):
 		return instance
 
 class	ValidateCodeSerializer(serializers.ModelSerializer):
-	email = serializers.CharField()
+	email = serializers.EmailField()
 	
 	class Meta:
 		model = TwoFA_code

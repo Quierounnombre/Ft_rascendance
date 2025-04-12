@@ -75,6 +75,7 @@ class	UserLoginAPIView(APIView):
 
 class	GenerateToken(APIView):
 	
+	#Librerias for JWT PyJWT -> codifica y deccodifica los JWT
 	def login_succesfull_response(self, token):
 		response = { 
 			'success': True,
