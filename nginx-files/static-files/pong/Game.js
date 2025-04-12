@@ -367,7 +367,7 @@ export {Game}
 function server_msg(event) {
 	const data = JSON.parse(event["data"]);
 
-	console.log(`Tournament has recived a msg type: ${data["type"]}`)
+	console.log(`Game has recived a msg type: ${data["type"]}`)
 
 	switch(data["type"]) {
 	case "game.state":

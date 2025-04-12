@@ -1,4 +1,5 @@
 import json
+import time
 
 from channels.consumer import SyncConsumer
 from channels.layers import get_channel_layer
@@ -62,6 +63,11 @@ class GameConsumer(SyncConsumer):
     def set_player(self, event) -> None:
         message = event["message"]
 
+        print(f'\033[31mGameConsumer::set_player -> setting {message["player"]} ({message["id"]}) in game room {message["room_name"]}', flush=True)
+
+        while not message["room_name"] in game_rooms:
+            time.sleep(1)
+
         if game_rooms[message["room_name"]].number_players == 2:
             return
 
@@ -97,7 +103,7 @@ class GameConsumer(SyncConsumer):
             # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
             return
 
-        print(f'tournament_config: creating tournament `{message["tournament_name"]}`', flush=True)
+        print(f'\033[31mtournament_config: creating tournament `{message["tournament_name"]}`', flush=True)
         tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)
 
     def tournament_register(self, event) -> None:
@@ -114,12 +120,12 @@ class GameConsumer(SyncConsumer):
             pass
 
         if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
-            print(f'GameConsumer::tournament_register -> tournament_name = {tournament_name}', flush=True)
+            print(f'\033[31mGameConsumer::tournament_register -> tournament with name `{tournament_name}` has started', flush=True)
             tournaments[tournament_name].generateSchedule()
             tournaments[tournament_name].start()
         
-        def tournament_started(self, event) -> None:
-            pass
+    def tournament_started(self, event) -> None:
+        pass
 
     def next_round(self, event) -> None:
         pass
@@ -129,5 +135,3 @@ class GameConsumer(SyncConsumer):
 
     def join_tournament_game(self, event) -> None:
         pass
-
-

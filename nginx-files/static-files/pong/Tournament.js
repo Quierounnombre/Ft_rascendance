@@ -5,7 +5,7 @@ import generateRandomString from "../generateRandomString.js";
 
 class Tournament {
 constructor(colors) {
-	self.colors = colors
+	this.colors = colors
 	this.game_round = []
 }
 

@@ -110,6 +110,8 @@ class Tournament(threading.Thread):
         player1 = game["player1"]
         player2 = game["player2"]
 
+        print(f'\033[31mTournament::createGame -> game room {room_name} ({player1["user_id"]} vs {player2["user_id"]}) created', flush=True)
+
         async_to_sync(channel_layer.group_send)(
             self.tournament_name, {
                 'type': 'create.tournament.game',
@@ -121,14 +123,14 @@ class Tournament(threading.Thread):
                 }
             }
         )
-
+        time.sleep(1)
         async_to_sync(channel_layer.group_send)(
             self.tournament_name, {
                 'type': 'join.tournament.game',
                 'message': {
                     "room_name": room_name,
                     "tournament_name": self.tournament_name,
-                    "user_id": player1["user_id"],
+                    "user_id": player2["user_id"],
                 }
             }
         )
@@ -139,7 +141,7 @@ class Tournament(threading.Thread):
 
         current_round = next(iter(self.game_queue))
         
-        print(f'Tournament round created', flush=True)
+        print(f'\033[31mTournament::createRound -> Tournament round {len(self.scheduleDICT) - len(self.game_queue)} created', flush=True)
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -160,7 +162,7 @@ class Tournament(threading.Thread):
         if room_name in self.games_finished:
             return
 
-        print(f'Tournament game`{room_name}` has finished', flush=True)
+        print(f'\033[31mTournament game`{room_name}` has finished', flush=True)
         self.games_finished.append(room_name)            
         self.round_games_finished += 1
 

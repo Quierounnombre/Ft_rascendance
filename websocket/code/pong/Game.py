@@ -125,7 +125,7 @@ class Game(threading.Thread):
             time.sleep(0.01)
 
         self.is_running = False
-        self.exportToDatabase()
+        # self.exportToDatabase()
         self.broadcastState("game.end")# TODO: el metodo requiere el game room
         # TODO: pasar a la base de datos el resultado
 
