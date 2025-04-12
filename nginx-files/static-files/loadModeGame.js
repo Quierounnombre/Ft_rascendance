@@ -23,16 +23,6 @@ gameSelector.innerHTML = `
         </a>
         </div>
     </div>
-<div>
-<h2 data-i18n-key="join-room">Join room</h2>
-<form id="dataForm2" class="container">
-	<div class="form-floating">
-		<input required name="room_name2" id="room_name2" type="text" class="form-control" size="100">
-		<label class="form-label" for="room_name2" data-i18n-key="join-form">Join pong room</label>
-	</div>
-	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
-</form>
-</div>
 `;
 
 export default function loadModeGame() {
