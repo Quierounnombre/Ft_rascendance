@@ -140,7 +140,7 @@ class	UserSingUpAPIView(APIView):
 			requests.post(email_loaded_url)
 			serializer.save()
 			response = self.sing_up_succesfull_response(serializer)
-			return Response(response, status=status.HTTP_200_OK)
+			return Response(response, status=status.HTTP_200_OK) #REDIRECT?
 		raise ValidationError(serializer.errors, code=status.HTTP_406_NOT_ACCEPTABLE)
 
 class UserLogoutAPIView(APIView):
@@ -287,4 +287,3 @@ class OAuthCallbackAPIView(APIView):
 		}
 
 		return (Response(response, status=status.HTTP_200_OK))
-		#return (Response({'user' : user_info}))
