@@ -184,7 +184,7 @@ class Tournament(threading.Thread):
             }
         )
 
-	# TODO: no se si solo es en mi portatil, pero a veces parece que pierde algun paquete y se queda pillado
+        # TODO: no se si solo es en mi portatil, pero a veces parece que pierde algun paquete y se queda pillado
         while True:
             if self.round_active:
                 time.sleep(2)
@@ -195,5 +195,4 @@ class Tournament(threading.Thread):
                 self.games_finished = []
                 break
             
-
         self.is_running = False
