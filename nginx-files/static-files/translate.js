@@ -66,6 +66,10 @@ const translations = {
         "WIN!": "WIN!",
         "LOSE!": "LOSE!",
         "TIE!": "TIE!",
+        "hist-par": "Participants",
+        "hist-res": "Results",
+        "hist-tim": "Time",
+        "hist-dat": "Date",
     },
 
     "ESP": {
@@ -130,6 +134,10 @@ const translations = {
         "WIN!": "¡VICTORIA!",
         "LOSE!": "¡DERROTA!",
         "TIE!": "¡EMPATE!",
+        "hist-par": "Participantes",
+        "hist-res": "Resultados",
+        "hist-tim": "Tiempo",
+        "hist-dat": "Fecha",
     },
 
     "CAT": {
@@ -194,6 +202,10 @@ const translations = {
         "WIN!": "VICTÒRIA!",
         "LOSE!": "DERROTA!",
         "TIE!": "EMPAT!",
+        "hist-par": "Participants",
+        "hist-res": "Resultats",
+        "hist-tim": "Temps",
+        "hist-dat": "Data",
     },
 };
 

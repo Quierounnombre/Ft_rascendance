@@ -1,5 +1,6 @@
 import getHistoryTable from "./getHistoryTable.js";
 import getUser from "./getUser.js";
+import translatePage from "./translate.js";
 
 export default function loadHistory() {
 	const root = document.getElementById("root");
@@ -11,7 +12,7 @@ export default function loadHistory() {
 
 	getUser(token).then((user) => {
 		getHistoryTable(user, token).then((table) => {
-			// root.replaceChildren(table);
+			translatePage();
 	})});
 
 }

@@ -6,8 +6,28 @@ export default async function getHistoryTable(user, token) {
 
 	const historyTable = document.createElement("table");
 	historyTable.setAttribute("class", "table");
+	const tableHeader = document.createElement("tr");
+	const h1 = document.createElement("th");
+	const h2 = h1.cloneNode(true);
+	h2.innerHTML = "Participants";
+	h2.setAttribute("data-i18n-key", "hist-par");
+	const h3 = h1.cloneNode(true);
+	h3.innerHTML = "Result";
+	h3.setAttribute("data-i18n-key", "hist-res");
+	const h4 = h1.cloneNode(true);
+	h4.innerHTML = "Time";
+	h4.setAttribute("data-i18n-key", "hist-tim");
+	const h5 = h1.cloneNode(true);
+	h5.innerHTML = "Date";
+	h5.setAttribute("data-i18n-key", "hist-dat");
+	tableHeader.appendChild(h1);
+	tableHeader.appendChild(h2);
+	tableHeader.appendChild(h3);
+	tableHeader.appendChild(h4);
+	tableHeader.appendChild(h5);
+	historyTable.appendChild(tableHeader);
 	const tableBody = document.createElement("tbody");
-
+	
 	history.forEach(match => {
 		const row = document.createElement("tr");
 		if (match.status === "WIN!")
@@ -19,13 +39,13 @@ export default async function getHistoryTable(user, token) {
 		row.innerHTML = `
 		<th data-i18n-key="`+ match.status + `">`+ match.status +`</th>
 		<td>`+ match.player1_id + ` vs ` + match.player2_id +`</td>
-		<td>`+ match.player1_score + `vs` + match.player2_score +`</td>
+		<td>`+ match.player1_score + `-` + match.player2_score +`</td>
 		<td>`+ Math.trunc((match.duration / 60) % 60) + `:` + Math.trunc(match.duration % 60) +`</td>
 		<td>`+ match.date +`</td>
 		`;
 		tableBody.appendChild(row);
 	})
-	historyTable.replaceChildren(tableBody);
+	historyTable.appendChild(tableBody);
 	document.getElementById("root").replaceChildren(historyTable);
 }
 

@@ -31,17 +31,6 @@ gameCreator.innerHTML = `
 		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 </div>
-<div>
-<h2 data-i18n-key="join-room">Join room</h2>
-<form id="dataForm2" class="container">
-	<div class="form-floating">
-		<input required name="room_name2" id="room_name2" type="text" class="form-control" size="100">
-		<label class="form-label" for="room_name2" data-i18n-key="join-form">Join pong room</label>
-	</div>
-	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
-</form>
-<a href="#game"><i class="bi bi-arrow-left-circle-fill mb" style="font-size:2.5rem; color:blue"></i></a>
-</div>
 `;
 
 async function getColors() {
@@ -65,7 +54,6 @@ export default async function loadLocal() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
-	const form2 = document.getElementById("dataForm2");
 	const colors = await getColors();
 
 	console.log("loaded");
@@ -102,19 +90,6 @@ export default async function loadLocal() {
 		pong("local_room", jsonData, colors);
 	});
 
-	form2.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const room_name = document.getElementById("room_name2").value;
-
-		pong("join_room", room_name, colors);
-	});
-
-	form3.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const number_players_tournament = document.getElementById("number_players_tournament").value;
-
-		pong("create_tournament", number_players_tournament)
-	});
 }
 
 function defaultMap(config) {
