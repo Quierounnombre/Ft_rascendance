@@ -6,6 +6,8 @@ class Player(CanvasObject):
         super().__init__(obj)
         self.is_moving = False
         self.pk = -1
+        self.user_name = ''
+        self.playerN = ''
     
     def slide(self, dirX, dirY):
         self.y += self.speed * dirY
@@ -21,6 +23,9 @@ class Player(CanvasObject):
 
     def serialize(self):
         return json.dumps({
+            "playerN": self.playerN,
+            "user_name": self.user_name,
+
             'id': self.id,
             'pk': self.pk,
             'type': self.type,

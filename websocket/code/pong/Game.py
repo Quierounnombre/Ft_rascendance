@@ -30,6 +30,8 @@ class Game(threading.Thread):
 
         self.is_running = False
 
+        self.player1_username =  ''
+        self.player2_username =  ''
 
         data = json.loads(data)
 
@@ -84,12 +86,14 @@ class Game(threading.Thread):
     
     def getGameState(self, msg_type) -> dict:
         data = self.serialize()
-        
+
         return {
             "type": msg_type,
             "message": {
                 "room_name": self.room_name,
                 "tournament_name": self.tournament_name,
+                "player1_username": self.player1_username,
+                "player2_username": self.player2_username,
                 "data": data
             }
         }
