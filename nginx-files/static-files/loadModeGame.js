@@ -1,4 +1,10 @@
-const gameSelector = document.createElement("div");
+import { onGoing } from "./pong/pong.js";
+
+export default function loadModeGame() {
+    if (onGoing.game) {
+        onGoing.game.reconect();
+    } else {
+        const gameSelector = document.createElement("div");
 gameSelector.setAttribute("id", "canvas_container");
 gameSelector.setAttribute("class", "container");
 gameSelector.innerHTML = `
@@ -24,10 +30,9 @@ gameSelector.innerHTML = `
         </div>
     </div>
 `;
-
-export default function loadModeGame() {
-    const root = document.getElementById("root");
-	root.replaceChildren(gameSelector);
+        const root = document.getElementById("root");
+	    root.replaceChildren(gameSelector);
+    }
 
 
 }

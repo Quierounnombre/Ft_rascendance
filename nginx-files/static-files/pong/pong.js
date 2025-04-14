@@ -1,32 +1,33 @@
 import { Game } from "./Game.js";
 import { Tournament } from "./Tournament.js";
 
-export let game = ''
-export let tournament = ''
+export let onGoing = new Object();
 
 export function game_create_room(data, colors) {
-	game = new Game(colors);
-	game.createRoom(data);
+	onGoing.game = new Game(colors);
+	onGoing.game.createRoom(data);
+	// game = '';
 }
 
 export function game_join_room(data, colors) {
-	game = new Game(colors);
-	game.joinRoom(data);
+	onGoing.game = new Game(colors);
+	onGoing.game.joinRoom(data);
+	// game = '';
 }
 
 export function game_offline_room(data, colors) {
-	game = new Game(colors);
-	game.offlineRoom(data);
+	onGoing.game = new Game(colors);
+	onGoing.game.offlineRoom(data);
 }
 
 export function tournament_create_room(data, number_players, colors) {
-	tournament = new Tournament(colors);
-	tournament.createTournament(data, number_players);
+	onGoing.tournament = new Tournament(colors);
+	onGoing.tournament.createTournament(data, number_players);
 }
 
 export function tournament_join_room(data, colors) {
-	tournament = new Tournament(colors);
-	tournament.joinTournament(data);
+	onGoing.tournament = new Tournament(colors);
+	onGoing.tournament.joinTournament(data);
 }
 
 export default { game_create_room, game_join_room, game_offline_room, tournament_create_room, tournament_join_room };

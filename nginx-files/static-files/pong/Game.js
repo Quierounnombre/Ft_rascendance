@@ -2,6 +2,7 @@ import { CanvasObject } from "./CanvasObject.js";
 import { Counter } from "./Counter.js";
 import { Ball } from "./Ball.js";
 import { Player } from "./Player.js";
+import { onGoing } from "./pong.js";
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
 import * as THREE from 'three';
@@ -138,7 +139,6 @@ createRoom(game_config, room_name = generateRandomString(8)) {
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
-
 			// identificarse
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
@@ -164,6 +164,11 @@ createRoom(game_config, room_name = generateRandomString(8)) {
 	this.websocket.onmessage = server_msg.bind(this);
 
 	return this.room_name;
+}
+
+reconect() {
+	document.getElementById("root").replaceChildren(this.banner);
+	document.getElementById("root").appendChild(this.threeCanvas);
 }
 
 joinRoom(room_name) {
@@ -415,11 +420,9 @@ function server_msg(event) {
 				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.threeCanvas, this.scene, this.colors.ball_color)));
 			}
 		}
-
-		const banner = document.createElement("h1");
-		banner.innerHTML = data["message"]["player1_username"] + " vs " + data["message"]["player2_username"]
-		document.getElementById("root").replaceChildren(banner);
-		document.getElementById("root").appendChild(this.threeCanvas);
+		this.banner = document.createElement("h1");
+		this.banner.innerHTML = data["message"]["player1_username"] + " vs " + data["message"]["player2_username"]
+		this.reconect();
 		this.game_running = true;
 		break;
 	
@@ -439,13 +442,14 @@ function server_msg(event) {
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
+		delete onGoing.game;
+		document.addEventListener("keydown", (event) => {});
+		document.addEventListener("keyup", (event) => {});
 		break;
 	}
 }
 
 function websocket_close() {
 	console.log(`WebSocket closed`);
-	document.addEventListener("keydown", (event) => {});
-	document.addEventListener("keyup", (event) => {});
 	this.game_running = false;
 }
