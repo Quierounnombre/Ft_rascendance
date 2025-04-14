@@ -1,3 +1,5 @@
+import pong from "./pong/pong.js";
+
 const gameSelector = document.createElement("div");
 gameSelector.setAttribute("id", "canvas_container");
 gameSelector.setAttribute("class", "container");
@@ -41,9 +43,31 @@ gameSelector.innerHTML = `
 </div>
 `;
 
-export default function loadModeGame() {
-    const root = document.getElementById("root");
-	root.replaceChildren(gameSelector);
+async function getColors() {
+	const token = localStorage.getItem("token")
+	const response =  await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/colors/", {
+		method: "GET",
+		headers: {
+			"Authorization": "Token " + token,
+		}
+	});
+	if (response.ok) {
+		const data = await response.json();
+		return data;
+	} else {
+		return -1;
+	}
+}
 
+
+export default async function loadModeGame() {
+    const currentGame = localStorage.getItem("currentGame")
+    const colors = await getColors();
+    if (currentGame)
+        pong("join_room", currentGame, colors)
+    else {
+        const root = document.getElementById("root");
+	    root.replaceChildren(gameSelector);
+    }
 
 }

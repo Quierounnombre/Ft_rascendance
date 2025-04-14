@@ -37,7 +37,10 @@ async function getHistory(user, userList) {
 	data.forEach(match => {
 		if (match.player1_id === user.id) {
 			match.player1_id = user.username;
-			match.player2_id = userList.find((u) => u.id === match.player2_id).username;
+			if (match.player2_id === user.id)
+				match.player2_id = user.username;
+			else
+				match.player2_id = userList.find((u) => u.id === match.player2_id).username;
 			if (match.player1_score > match.player2_score)
 				match["status"] = "WIN!";
 			else if (match.player1_score < match.player2_score)

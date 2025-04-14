@@ -119,6 +119,7 @@ createRoom(game_config, room_name = generateRandomString(8)) {
 	// this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
 	this.room_name = room_name;
 	this.playerN = "player1";
+	localStorage.setItem("currentGame", room_name);
 
 	this.websocket = new WebSocket(
 		'wss://'
@@ -165,6 +166,7 @@ createRoom(game_config, room_name = generateRandomString(8)) {
 
 joinRoom(room_name) {
 	this.room_name = room_name;
+	localStorage.setItem("currentGame", room_name);
 	this.playerN = "player2";
 
 
@@ -426,6 +428,7 @@ function server_msg(event) {
 			}))
 		}
 
+		localStorage.removeItem("currentGame");
 		this.websocket.close();
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
