@@ -153,7 +153,7 @@ class UserListView(ListAPIView):
     search_fields = ['username', 'email']
 
     def get_queryset(self):
-        return get_user_model().objects.exclude(id=self.request.user.id)
+        return get_user_model().objects.all()
 
 class OAuthLoginAPIView(APIView):
 	def load_query_string(self, params):
