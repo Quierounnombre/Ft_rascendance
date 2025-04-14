@@ -94,9 +94,11 @@ class GameConsumer(SyncConsumer):
                 if game_rooms[message["room_name"]].number_players == 0:
                     obj.playerN = "player1"
                     game_rooms[message["room_name"]].player1_username = message["user_name"]
+                    game_rooms[message["room_name"]].player1_id = message["id"]
                 else:
                     obj.playerN = "player2"
                     game_rooms[message["room_name"]].player2_username = message["user_name"]
+                    game_rooms[message["room_name"]].player2_id = message["id"]
 
                 game_rooms[message["room_name"]].number_players += 1
 
