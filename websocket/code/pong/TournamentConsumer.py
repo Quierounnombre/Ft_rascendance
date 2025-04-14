@@ -90,7 +90,7 @@ class TournamentConsumer(WebsocketConsumer):
             self.tournament_name, self.channel_name
         )
 
-        print(f'\033[31mTournamentConsumer::joinTournament -> self.user_id = {self.user_id}', flush=True)
+        # print(f'\033[31mTournamentConsumer::joinTournament -> self.user_id = {self.user_id}', flush=True)
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "tournament.register",

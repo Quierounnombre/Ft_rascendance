@@ -49,8 +49,8 @@ class GameConsumer(SyncConsumer):
             tmp = len(game_rooms)
             del game_rooms[message["room_name"]]
 
-            print(f'\033[31mGameConsumer::game_end -> deleted game room `{message["room_name"]}`, game_rooms before: {tmp}, game_rooms now: {len(game_rooms)}, active threads: {threading.active_count()}', flush=True)
-            print(f'\033[31mGameConsumer::game_end -> tournament_name: `{message["tournament_name"]}`', flush=True)
+            # print(f'\033[31mGameConsumer::game_end -> deleted game room `{message["room_name"]}`, game_rooms before: {tmp}, game_rooms now: {len(game_rooms)}, active threads: {threading.active_count()}', flush=True)
+            # print(f'\033[31mGameConsumer::game_end -> tournament_name: `{message["tournament_name"]}`', flush=True)
 
             if message["tournament_name"] != "":
                 tournaments[message["tournament_name"]].endGame(message["room_name"])
@@ -75,7 +75,7 @@ class GameConsumer(SyncConsumer):
     def set_player(self, event) -> None:
         message = event["message"]
 
-        print(f'\033[31mGameConsumer::set_player -> setting {message["player"]} ({message["id"]}) in game room {message["room_name"]}', flush=True)
+        # print(f'\033[31mGameConsumer::set_player -> setting {message["player"]} ({message["id"]}) in game room {message["room_name"]}', flush=True)
 
         while not message["room_name"] in game_rooms:
             time.sleep(1)
@@ -116,7 +116,7 @@ class GameConsumer(SyncConsumer):
             # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
             return
 
-        print(f'\033[31mtournament_config: creating tournament `{message["tournament_name"]}`', flush=True)
+        # print(f'\033[31mtournament_config: creating tournament `{message["tournament_name"]}`', flush=True)
         tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)
 
     def tournament_register(self, event) -> None:
@@ -133,7 +133,7 @@ class GameConsumer(SyncConsumer):
             pass
 
         if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
-            print(f'\033[31mGameConsumer::tournament_register -> tournament with name `{tournament_name}` has started', flush=True)
+            # print(f'\033[31mGameConsumer::tournament_register -> tournament with name `{tournament_name}` has started', flush=True)
             tournaments[tournament_name].generateSchedule()
             tournaments[tournament_name].start()
         

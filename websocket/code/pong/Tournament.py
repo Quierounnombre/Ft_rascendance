@@ -104,7 +104,7 @@ class Tournament(threading.Thread):
         player1 = game["player1"]
         player2 = game["player2"]
 
-        print(f'\033[31mTournament::createGame -> game room {room_name} ({player1["user_id"]} vs {player2["user_id"]}) created', flush=True)
+        # print(f'\033[31mTournament::createGame -> game room {room_name} ({player1["user_id"]} vs {player2["user_id"]}) created', flush=True)
 
         async_to_sync(channel_layer.group_send)(
             self.tournament_name, {
@@ -135,7 +135,7 @@ class Tournament(threading.Thread):
 
         current_round = next(iter(self.game_queue))
         
-        print(f'\033[31mTournament::createRound -> Tournament round {len(self.scheduleDICT) - len(self.game_queue)} created', flush=True)
+        # print(f'\033[31mTournament::createRound -> Tournament round {len(self.scheduleDICT) - len(self.game_queue) + 1} created', flush=True)
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -154,23 +154,27 @@ class Tournament(threading.Thread):
         return True
     
     def endGame(self, room_name) -> None:
+        # print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` is in {self.games_finished}', flush=True)
         if room_name in self.games_finished:
             return
 
-        print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` has finished', flush=True)
+        # print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` has finished', flush=True)
 
-        self.games_finished.append(room_name)            
+        self.games_finished.append(room_name)
         self.round_games_finished += 1
 
-        if self.round_games_finished == (self.target_players / 2):
+        # print(f'\033[31mTournament::endGame -> Tournament `{self.tournament_name}` round {len(self.scheduleDICT) - len(self.game_queue)} is checking {self.round_games_finished} == {self.target_players // 2} -> {self.round_games_finished == (self.target_players // 2)}', flush=True)
+        if self.round_games_finished == (self.target_players // 2):
+            # print(f'\033[31mTournament::endGame -> Tournament `{self.tournament_name}` round {len(self.scheduleDICT) - len(self.game_queue)} has been marked as inactive', flush=True)
             self.round_active = False
+            self.round_games_finished = 0
+            self.games_finished = []
 
     def serialize(self) -> str:
         pass
 
     def currentRoundHasEnd(self) -> bool:
-        # TODO: borrar
-        print(f'\033[32mTournament::currentRoundHasEnd -> {self.round_games_finished == (self.target_players / 2)}', flush=True)
+        # print(f'\033[32mTournament::currentRoundHasEnd -> {self.round_games_finished == (self.target_players / 2)}', flush=True)
         return self.round_games_finished == (self.target_players / 2)
 
     def run(self) -> None:
@@ -191,8 +195,7 @@ class Tournament(threading.Thread):
                 continue
 
             if not self.createRound():
-                self.round_games_finished = 0
-                self.games_finished = []
                 break
             
+        # TODO: enviar el ranking
         self.is_running = False
