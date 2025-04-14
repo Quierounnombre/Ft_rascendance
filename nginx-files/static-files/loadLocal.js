@@ -87,21 +87,7 @@ export default async function loadLocal() {
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
 		console.log("local");
-		pong("local_room", jsonData, colors);
-	});
-
-	form2.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const room_name = document.getElementById("room_name2").value;
-
-		pong("join_room", room_name, colors);
-	});
-
-	form3.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const number_players_tournament = document.getElementById("number_players_tournament").value;
-
-		pong("create_tournament", number_players_tournament)
+		game_offline_room(jsonData, colors)
 	});
 }
 

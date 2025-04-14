@@ -1,8 +1,8 @@
 import { Game } from "./Game.js";
 import { Tournament } from "./Tournament.js";
 
-export let game = ''
-export let tournament = ''
+let game;
+let tournament;
 
 export function game_create_room(data, colors) {
 	game = new Game(colors);
@@ -29,4 +29,4 @@ export function tournament_join_room(data, colors) {
 	tournament.joinTournament(data);
 }
 
-export default { game_create_room, game_join_room, game_offline_room, tournament_create_room, tournament_join_room };
+export default { game_create_room, game_join_room, game_offline_room, tournament_create_room, tournament_join_room, game, tournament };

@@ -304,14 +304,15 @@ offlineRoom(game_config) {
 
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
+			this.user_name = user.username;
 
 			// TODO: esta invertido para que no este espejado
 			// identificarse
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
-					"user_id": -1 // TODO: -1 para anonimos?
-					// TODO: username?
+					"user_id": -1, // TODO: -1 para anonimos?
+					"user_name": this.user_name // TODO: -1 para anonimos?
 				}
 			}));
 
@@ -329,7 +330,8 @@ offlineRoom(game_config) {
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
-					"user_id": this.user_id
+					"user_id": this.user_id,
+					"user_name": this.user_name
 				}
 			}));
 
