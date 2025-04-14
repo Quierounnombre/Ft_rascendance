@@ -25,6 +25,8 @@ class GameConsumer(SyncConsumer):
             message["room_name"], {
                 "type": "game.started",
                 "message": {
+                    "player1_username": game_rooms[message["room_name"]].player1_username,
+                    "player2_username": game_rooms[message["room_name"]].player2_username,
                     "room_name": message["room_name"],
                     "tournament_name": message["tournament_name"],
                     "data": game_rooms[message["room_name"]].serialize()
@@ -77,6 +79,7 @@ class GameConsumer(SyncConsumer):
 
         # print(f'\033[31mGameConsumer::set_player -> setting {message["player"]} ({message["id"]}) in game room {message["room_name"]}', flush=True)
 
+        # TODO: y este sleep?
         while not message["room_name"] in game_rooms:
             time.sleep(1)
 
@@ -86,6 +89,15 @@ class GameConsumer(SyncConsumer):
         for obj in game_rooms[message["room_name"]].game_objects:
             if obj.id == message["player"] and obj.pk < 0:
                 obj.pk = message["id"]
+                obj.user_name = message["user_name"]
+
+                if game_rooms[message["room_name"]].number_players == 0:
+                    obj.playerN = "player1"
+                    game_rooms[message["room_name"]].player1_username = message["user_name"]
+                else:
+                    obj.playerN = "player2"
+                    game_rooms[message["room_name"]].player2_username = message["user_name"]
+
                 game_rooms[message["room_name"]].number_players += 1
 
         

@@ -44,6 +44,7 @@ constructor(colors) {
 				"room_name": this.room_name,
 				"tournament_name": this.tournament_name,
 				"player_id": this.user_id,
+				"username": this.user_name,
 				"dir": this.dir,
 				"is_moving": this.is_moving
 			}
@@ -63,6 +64,7 @@ constructor(colors) {
 				"room_name": this.room_name,
 				"tournament_name": this.tournament_name,
 				"player_id": this.user_id,
+				"username": this.user_name,
 				"dir": this.dir,
 				"is_moving": this.is_moving
 			}
@@ -306,6 +308,7 @@ offlineRoom(game_config) {
 				"type": "identify",
 				"message": {
 					"user_id": -1 // TODO: -1 para anonimos?
+					// TODO: username?
 				}
 			}));
 
