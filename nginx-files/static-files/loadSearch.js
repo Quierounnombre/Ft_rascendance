@@ -1,4 +1,5 @@
 import getMyFriends from "./getMyFriends.js";
+import getUser from "./getUser.js";
 import searchUsers from "./searchUsers.js";
 import translatePage from "./translate.js";
 
@@ -15,7 +16,8 @@ export default async function loadSearch() {
 		return ;
 	}
 	const users = await searchUsers(query, token);
-	const userList = await usersList(users);
+	const me = await getUser(token);
+	const userList = await usersList(users, me);
 	if (userList === -1) {
 		return ;
 	}
@@ -27,12 +29,13 @@ export default async function loadSearch() {
     translatePage();
 }
 
-async function usersList(users) {
+async function usersList(users, me) {
     const token = localStorage.getItem("token");
     if (!token) {
         window.location.hash = "#anon-menu";
         return -1;
     }
+	users = users.filter((user) => user.username !== me.username)
     const friends = await getMyFriends(token)
     const userList = document.createElement("div");
 	if (users.length === 0) {

@@ -12,6 +12,7 @@ export default function loadHistory() {
 
 	getUser(token).then((user) => {
 		getHistoryTable(user, token).then((table) => {
+			document.getElementById("root").replaceChildren(table);
 			translatePage();
 	})});
 

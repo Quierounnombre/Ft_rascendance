@@ -46,7 +46,7 @@ export default async function getHistoryTable(user, token) {
 		tableBody.appendChild(row);
 	})
 	historyTable.appendChild(tableBody);
-	document.getElementById("root").replaceChildren(historyTable);
+	return historyTable;
 }
 
 async function getHistory(user, userList) {
