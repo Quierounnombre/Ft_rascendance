@@ -416,7 +416,10 @@ function server_msg(event) {
 			}
 		}
 
-		document.getElementById("root").replaceChildren(this.threeCanvas);
+		const banner = document.createElement("h1");
+		banner.innerHTML = data["message"]["player1_username"] + " vs " + data["message"]["player2_username"]
+		document.getElementById("root").replaceChildren(banner);
+		document.getElementById("root").appendChild(this.threeCanvas);
 		this.game_running = true;
 		break;
 	

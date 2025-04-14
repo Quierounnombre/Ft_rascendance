@@ -50,6 +50,8 @@ function changeLayout() {
 			loadLocal();
 		} else if (loc === "#form-online") {
 			loadOnline();
+		} else if (loc === "#form-tourn") {
+			loadTournament();
 		} else if (loc === "#social") {
 			loadSocial();
 		} else if (loc === "#search") {

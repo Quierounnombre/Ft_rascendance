@@ -1,28 +1,31 @@
 import { Game } from "./Game.js";
 import { Tournament } from "./Tournament.js";
 
+export let game = ''
+export let tournament = ''
+
 export function game_create_room(data, colors) {
-	const game = new Game(colors);
+	game = new Game(colors);
 	game.createRoom(data);
 }
 
 export function game_join_room(data, colors) {
-	const game = new Game(colors);
+	game = new Game(colors);
 	game.joinRoom(data);
 }
 
 export function game_offline_room(data, colors) {
-	const game = new Game(colors);
+	game = new Game(colors);
 	game.offlineRoom(data);
 }
 
 export function tournament_create_room(data, number_players, colors) {
-	const tournament = new Tournament(colors);
+	tournament = new Tournament(colors);
 	tournament.createTournament(data, number_players);
 }
 
 export function tournament_join_room(data, colors) {
-	const tournament = new Tournament(colors);
+	tournament = new Tournament(colors);
 	tournament.joinTournament(data);
 }
 
