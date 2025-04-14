@@ -1,9 +1,15 @@
 import { Game } from "./Game.js"
-import generateRandomString from "./Game.js";
+import getUser from "../getUser.js"
+import generateRandomString from "../generateRandomString.js";
 "use strict";
 
 class Tournament {
-createTournament(game_config) {
+constructor(colors) {
+	this.colors = colors
+	this.game_round = []
+}
+
+createTournament(game_config, number_players) {
 	this.tournament_name = generateRandomString(8);
 
 	this.websocket = new WebSocket(
@@ -16,13 +22,14 @@ createTournament(game_config) {
 	)
 
 	this.websocket.onopen = () => {
-		console.log(`WebSocket opened`);
+		console.log(`Tournament WebSocket opened`);
 
 		this.websocket.send(JSON.stringify({
 			"type": "create.tournament",
 			"message": {
 				"tournament_name": this.tournament_name,
-				"data": game_config
+				"number_players": number_players,
+				"game_config": game_config
 			}
 		}));
 	}
@@ -33,28 +40,28 @@ createTournament(game_config) {
 	return this.room_name;
 }
 
-}
+joinTournament(tournament_name) {
+	this.tournament_name = tournament_name;
 
-//------------------------------------------------------------------------------
-function server_msg(event) {
-	const data = JSON.parse(event["data"]);
+	this.websocket = new WebSocket(
+		'wss://'
+		+ window.location.hostname
+		+ ':7000/ws/tournament/'
+		+ this.tournament_name
+		+ '/'
+	)
 
-	switch(data["type"]) {
-	case "tournament.created":
-		this.tournament_name = data["message"]["tournament_name"]
-
-		// TODO: debug temporal
-		const tmp = document.createElement("div");
-		tmp.innerHTML = `${this.tournament_name}`
-		document.getElementById("root").replaceChildren(tmp);
-
+	this.websocket.onopen = () => {
+		console.log(`Tournament WebSocket opened`);
 
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
 
+			console.log(`${this.user_name}: ${this.user_id}`)
+
 			this.websocket.send(JSON.stringify({
-				"type": "identity",
+				"type": "identify",
 				"message": {
 					"user_id": this.user_id,
 					"user_name": this.user_name,
@@ -68,23 +75,76 @@ function server_msg(event) {
 				}
 			}))
 		});
+	}
+
+
+	this.websocket.onclose = websocket_close.bind(this);
+	this.websocket.onmessage = server_msg.bind(this);
+}
+
+}
+
+//------------------------------------------------------------------------------
+function server_msg(event) {
+	const data = JSON.parse(event["data"]);
+
+	console.log(`Tournament has recived a msg type: ${data["type"]}`)
+
+	switch(data["type"]) {
+	case "tournament.created":
+		this.tournament_name = data["message"]["tournament_name"];
+
+		// TODO: debug temporal
+		const tmp = document.createElement("div");
+		tmp.innerHTML = `${this.tournament_name}`;
+		document.getElementById("root").replaceChildren(tmp);
+
+		this.joinTournament(this.tournament_name);
 		break;
 
 	case "tournament.started":
-		this.tournament_name = data["message"]["tournament_name"]
+		this.tournament_name = data["message"]["tournament_name"];
 		break;
     
-    case "next.round":
-        break;
+	case "next.round":
+		// TODO: una alerta? notificacion? redireccion?
+		break;
+
+	case "create.tournament.game":
+		this.game_round = new Game(this.colors);
+
+		this.game_round.game_config = data["message"]["game_config"];
+		this.game_round.room_name = data["message"]["room_name"];
+
+		this.tournament_name = data["message"]["tournament_name"];
+		this.room_name = data["message"]["room_name"];
+		this.game_round.tournament_name = data["message"]["tournament_name"]
+
+		this.game_round.createRoom(data["message"]["game_config"], this.room_name);
+		break;
+
+	case "join.tournament.game":
+		this.game_round = new Game(this.colors);
+
+		this.game_round.room_name = data["message"]["room_name"];
+
+		this.tournament_name = data["message"]["tournament_name"];
+		this.room_name = data["message"]["room_name"];
+
+		this.game_round.tournament_name = data["message"]["tournament_name"]
+
+		// TODO: el que se une no le llega estados del juego
+		this.game_round.joinRoom(this.room_name);
+		break;
 	
 	case "game.end":
-		this.websocket.close();
+		this.game_round = []
 		break;
 	}
 }
 
 function websocket_close() {
-	console.log(`WebSocket closed`);
+	console.log(`Tournament WebSocket closed`);
 }
 
 export {Tournament}

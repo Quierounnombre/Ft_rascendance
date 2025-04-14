@@ -40,6 +40,10 @@ class PongConsumer(WebsocketConsumer):
             self.room_name, self.channel_name
         )
 
+        async_to_sync(self.channel_layer.group_discard)(
+            str(self.user_id), self.channel_name
+        )
+
     def receive(self, text_data) -> None:
         content = json.loads(text_data)
         message_type = content["type"]
@@ -69,6 +73,8 @@ class PongConsumer(WebsocketConsumer):
     #         "data": la info del formulario para generar la sala
     #     }
     def createRoom(self, message) -> None:
+        self.tournament_name = message["tournament_name"]
+
         # send to the GameConsumer the game room name and its config
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
@@ -107,6 +113,7 @@ class PongConsumer(WebsocketConsumer):
     #     "message": {"room_name": str}
     def joinRoom(self, message) -> None:
         self.room_name = message["room_name"]
+        self.tournament_name = message["tournament_name"]
 
         # TODO: si no existe la sala?
         # si no existe una instancia de esa sala, el GameConsumer deberia mandar un mensaje de que no existe
@@ -185,25 +192,15 @@ class PongConsumer(WebsocketConsumer):
             }
         }))
     
+
     def create_tournament_game(self, event) -> None:
-        self.send(json.dumps({
-            "type": "create.tournament.game",
-            "message": {
-                "tournament_name": event["message"]["tournament_name"],
-                "room_name": event["message"]["room_name"],
-                "game_config": event["message"]["game_config"],
-            }
-        }))
+        pass
 
     def join_tournament_game(self, event) -> None:
-        self.tournament_name = event["message"]["tournament_name"]
+        pass
 
-        self.send(json.dumps({
-                "type": "join.tournament.game",
-                "message": {
-                    "tournament_name": event["message"]["tournament_name"],
-                    "room_name": event["message"]["room_name"]
-                }
-        }))
+    def tournament_started(self, event) -> None:
+        pass
 
-
+    def next_round(self, event) -> None:
+        pass

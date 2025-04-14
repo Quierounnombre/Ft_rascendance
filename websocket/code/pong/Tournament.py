@@ -35,13 +35,18 @@ class TournamentParticipant:
 
 # ------------------------------------------------------------------------------
 class Tournament(threading.Thread):
-    def __init__(self, num_players : int, game_config : str, *args, **kwargs) -> None:
+    def __init__(self, num_players : int, game_config : str, tournament_name : str, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs, daemon=True)
         self.player_list : list = []
         self.target_players : int = num_players
         self.game_config : str = game_config
-        self.is_runing = False
+        self.tournament_name : str = tournament_name
+        self.is_running = False
 
         self.games_finished = []
+        self.round_games_finished = 0
+        self.round_active = False
+        self.tournament_end = False
 
         if num_players % 2 != 0:
             raise ValueError("odd players") # TODO: se deberia comprobar antes
@@ -55,18 +60,10 @@ class Tournament(threading.Thread):
 
         self.player_list.append(player)
 
-        # TODO: haria falta unirse al grupo para enviar, o es solo para recibir?
-        # async_to_sync(self.channel_layer.group_add)(
-        #     player.getId(), self.channel_name
-        # )
-
         return True
 
     def isTournamentFull(self) -> bool:
         return len(self.player_list) == self.target_players
-
-    def isTournamentEnd(self) -> bool:
-        return len(self.game_queue) == 0
 
     def generateSchedule(self) -> None:
         number_players = len(self.player_list)
@@ -107,77 +104,98 @@ class Tournament(threading.Thread):
         player1 = game["player1"]
         player2 = game["player2"]
 
+        # print(f'\033[31mTournament::createGame -> game room {room_name} ({player1["user_id"]} vs {player2["user_id"]}) created', flush=True)
+
         async_to_sync(channel_layer.group_send)(
-            player1["player_id"], {
+            self.tournament_name, {
                 'type': 'create.tournament.game',
                 'message': {
                     "room_name": room_name,
                     "tournament_name": self.tournament_name,
-                    "game_config": self.game_config
+                    "game_config": self.game_config,
+                    "user_id": player1["user_id"],
                 }
             }
         )
-
+        time.sleep(1)
         async_to_sync(channel_layer.group_send)(
-            player2["player_id"], {
+            self.tournament_name, {
                 'type': 'join.tournament.game',
                 'message': {
                     "room_name": room_name,
-                    "tournament_name": self.tournament_name
+                    "tournament_name": self.tournament_name,
+                    "user_id": player2["user_id"],
                 }
             }
         )
-        # TODO: identificar player1
-        # TODO: player1 crea sala
-        # TODO: identificar player2
-        # TODO: player2 se une a sala
-        pass
 
     def createRound(self) -> bool:
         if len(self.game_queue) < 1:
             return False
 
         current_round = next(iter(self.game_queue))
+        
+        # print(f'\033[31mTournament::createRound -> Tournament round {len(self.scheduleDICT) - len(self.game_queue) + 1} created', flush=True)
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            self.tournament_name, {
+                "type": "next.round",
+                "message": ""
+            }
+        )
 
         for game in current_round:
             self.createGame(game)
 
         self.game_queue.pop(0)
+        self.round_active = True
 
         return True
     
     def endGame(self, room_name) -> None:
+        # print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` is in {self.games_finished}', flush=True)
         if room_name in self.games_finished:
             return
 
-        self.games_finished.append(room_name)            
+        # print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` has finished', flush=True)
+
+        self.games_finished.append(room_name)
         self.round_games_finished += 1
+
+        # print(f'\033[31mTournament::endGame -> Tournament `{self.tournament_name}` round {len(self.scheduleDICT) - len(self.game_queue)} is checking {self.round_games_finished} == {self.target_players // 2} -> {self.round_games_finished == (self.target_players // 2)}', flush=True)
+        if self.round_games_finished == (self.target_players // 2):
+            # print(f'\033[31mTournament::endGame -> Tournament `{self.tournament_name}` round {len(self.scheduleDICT) - len(self.game_queue)} has been marked as inactive', flush=True)
+            self.round_active = False
+            self.round_games_finished = 0
+            self.games_finished = []
 
     def serialize(self) -> str:
         pass
 
     def currentRoundHasEnd(self) -> bool:
+        # print(f'\033[32mTournament::currentRoundHasEnd -> {self.round_games_finished == (self.target_players / 2)}', flush=True)
         return self.round_games_finished == (self.target_players / 2)
 
     def run(self) -> None:
-        # TODO:
         self.is_running = True
-        channel_layer = get_channel_layer()
 
+        channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
-            message["room_name"], {
+            self.tournament_name, {
                 "type": "tournament.started",
                 "message": ""
             }
         )
 
-        while self.isTournamentEnd():
-            if not self.currentRoundHasEnd():
+        # TODO: no se si solo es en mi portatil, pero a veces parece que pierde algun paquete y se queda pillado
+        while True:
+            if self.round_active:
+                time.sleep(2)
                 continue
 
             if not self.createRound():
-                self.round_games_finished = 0
-                self.games_finished = []
                 break
-
+            
+        # TODO: enviar el ranking
         self.is_running = False

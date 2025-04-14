@@ -1,4 +1,6 @@
 import json
+import time
+import threading
 
 from channels.consumer import SyncConsumer
 from channels.layers import get_channel_layer
@@ -12,6 +14,8 @@ tournaments = {}
 game_rooms = {}
 
 class GameConsumer(SyncConsumer):
+    strict_ordering = True
+
     # message: {"room_name: string"}
     def game_start(self, event) -> None:
         channel_layer = get_channel_layer()
@@ -22,6 +26,7 @@ class GameConsumer(SyncConsumer):
                 "type": "game.started",
                 "message": {
                     "room_name": message["room_name"],
+                    "tournament_name": message["tournament_name"],
                     "data": game_rooms[message["room_name"]].serialize()
                 }
             }
@@ -41,7 +46,15 @@ class GameConsumer(SyncConsumer):
         data = message["data"]
 
         if not game_rooms[message["room_name"]].is_running:
+            tmp = len(game_rooms)
             del game_rooms[message["room_name"]]
+
+            # print(f'\033[31mGameConsumer::game_end -> deleted game room `{message["room_name"]}`, game_rooms before: {tmp}, game_rooms now: {len(game_rooms)}, active threads: {threading.active_count()}', flush=True)
+            # print(f'\033[31mGameConsumer::game_end -> tournament_name: `{message["tournament_name"]}`', flush=True)
+
+            if message["tournament_name"] != "":
+                tournaments[message["tournament_name"]].endGame(message["room_name"])
+                
     
     # message: {
     #     "room_name": str,
@@ -62,6 +75,11 @@ class GameConsumer(SyncConsumer):
     def set_player(self, event) -> None:
         message = event["message"]
 
+        # print(f'\033[31mGameConsumer::set_player -> setting {message["player"]} ({message["id"]}) in game room {message["room_name"]}', flush=True)
+
+        while not message["room_name"] in game_rooms:
+            time.sleep(1)
+
         if game_rooms[message["room_name"]].number_players == 2:
             return
 
@@ -80,7 +98,8 @@ class GameConsumer(SyncConsumer):
         message = event["message"]
 
         self.room_name = message["room_name"]
-        game_rooms[message["room_name"]] = Game(room_name=self.room_name, data=message["data"])
+        self.tournament_name = message["tournament_name"]
+        game_rooms[message["room_name"]] = Game(room_name=self.room_name, tournament_name=message["tournament_name"], data=message["data"])
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -89,19 +108,21 @@ class GameConsumer(SyncConsumer):
     
     def tournament_config(self, event) -> None:
         message = event["message"]
-        config = message["config"]
-        n_players = message["number_players"]
+        game_config = message["game_config"]
+        tournament_name = message["tournament_name"]
+        number_players = int(message["number_players"])
 
-        if n_players < 4 or n_players % 2 != 0:
+        if number_players < 4 or number_players % 2 != 0:
             # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
             return
 
-        tournaments[message["tournament_name"]] = Tournament(n_players, config)
+        # print(f'\033[31mtournament_config: creating tournament `{message["tournament_name"]}`', flush=True)
+        tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)
 
     def tournament_register(self, event) -> None:
         message = event["message"]
 
-        tournament_name = str(message["tournanemt_nam"])
+        tournament_name = str(message["tournament_name"])
         user_id = int(message["user_id"])
         user_name = str(message["user_name"])
 
@@ -112,4 +133,18 @@ class GameConsumer(SyncConsumer):
             pass
 
         if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
+            # print(f'\033[31mGameConsumer::tournament_register -> tournament with name `{tournament_name}` has started', flush=True)
+            tournaments[tournament_name].generateSchedule()
             tournaments[tournament_name].start()
+        
+    def tournament_started(self, event) -> None:
+        pass
+
+    def next_round(self, event) -> None:
+        pass
+
+    def create_tournament_game(self, event) -> None:
+        pass
+
+    def join_tournament_game(self, event) -> None:
+        pass

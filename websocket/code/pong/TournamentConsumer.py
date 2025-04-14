@@ -12,18 +12,18 @@ class TournamentConsumer(WebsocketConsumer):
     strict_ordering = True
 
     def connect(self) -> None:
-        self.room_name = f"tournament_{self.scope["url_route"]["kwargs"]["room_name"]}"
+        self.tournament_name = f"tournament_{self.scope["url_route"]["kwargs"]["room_name"]}"
 
         # TODO: quizas esto se deberia hacer en el join room, y que todos entren con el codigo devuelto por el create room
         async_to_sync(self.channel_layer.group_add)(
-            self.room_name, self.channel_name
+            self.tournament_name, self.channel_name
         )
 
         self.accept()
 
     def disconnect(self, close_code) -> None:
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_name, self.channel_name
+            self.tournament_name, self.channel_name
         )
 
     def receive(self, text_data) -> None:
@@ -45,7 +45,7 @@ class TournamentConsumer(WebsocketConsumer):
         self.user_name = message["user_name"]
 
         async_to_sync(self.channel_layer.group_add)(
-            self.user_id, self.channel_name
+            str(self.user_id), self.channel_name
         )
 
     #     "message": {
@@ -60,7 +60,8 @@ class TournamentConsumer(WebsocketConsumer):
                 "type": "tournament.config",
                 "message": {
                     "tournament_name": self.tournament_name,
-                    "data": message["data"]
+                    "number_players": message["number_players"],
+                    "game_config": message["game_config"]
                 }
             }
         )
@@ -86,9 +87,10 @@ class TournamentConsumer(WebsocketConsumer):
         # si no existe una instancia de ese torneo, el GameConsumer deberia mandar un mensaje de que no existe
 
         async_to_sync(self.channel_layer.group_add)(
-            self.tournament_name_name, self.channel_name
+            self.tournament_name, self.channel_name
         )
 
+        # print(f'\033[31mTournamentConsumer::joinTournament -> self.user_id = {self.user_id}', flush=True)
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "tournament.register",
@@ -100,6 +102,49 @@ class TournamentConsumer(WebsocketConsumer):
             }
         )
     
-        def endTournamentGame(self, message) -> None:
-            tournaments[message["tournament_name"]].endGame(message["room_name"])
-            pass
+    def endTournamentGame(self, message) -> None:
+        pass
+
+    def tournament_started(self, event) -> None:
+        self.send(json.dumps({
+            "type": "tournament.started",
+            "message": {
+                "tournament_name": self.tournament_name
+            }
+        }))
+
+    def next_round(self, event) -> None:
+        self.send(json.dumps({
+                "type": "next.round",
+                "message": ""
+        }))
+
+    def create_tournament_game(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
+        self.tournament_name = event["message"]["tournament_name"]
+
+        self.send(json.dumps({
+            "type": "create.tournament.game",
+            "message": {
+                "tournament_name": event["message"]["tournament_name"],
+                "room_name": event["message"]["room_name"],
+                "game_config": event["message"]["game_config"],
+            }
+        }))
+
+    def join_tournament_game(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
+        self.tournament_name = event["message"]["tournament_name"]
+
+        self.send(json.dumps({
+            "type": "join.tournament.game",
+            "message": {
+                "tournament_name": event["message"]["tournament_name"],
+                "room_name": ("pong_" + event["message"]["room_name"])
+            }
+        }))
+        pass

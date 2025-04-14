@@ -1,4 +1,4 @@
-import pong from "./pong/pong.js"
+import {game_offline_room} from "./pong/pong.js"
 
 const gameCreator = document.createElement("div");
 gameCreator.setAttribute("id", "canvas_container");
@@ -90,6 +90,19 @@ export default async function loadLocal() {
 		pong("local_room", jsonData, colors);
 	});
 
+	form2.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const room_name = document.getElementById("room_name2").value;
+
+		pong("join_room", room_name, colors);
+	});
+
+	form3.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const number_players_tournament = document.getElementById("number_players_tournament").value;
+
+		pong("create_tournament", number_players_tournament)
+	});
 }
 
 function defaultMap(config) {

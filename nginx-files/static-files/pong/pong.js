@@ -1,13 +1,29 @@
 import { Game } from "./Game.js";
+import { Tournament } from "./Tournament.js";
 
-export default function pong(type, data, colors) {
+export function game_create_room(data, colors) {
 	const game = new Game(colors);
-
-	if (type === "create_room")
-		game.createRoom(data);
-	else if (type === "join_room")
-		game.joinRoom(data);
-	else if (type === "local_room")
-		game.offlineRoom(data);
-
+	game.createRoom(data);
 }
+
+export function game_join_room(data, colors) {
+	const game = new Game(colors);
+	game.joinRoom(data);
+}
+
+export function game_offline_room(data, colors) {
+	const game = new Game(colors);
+	game.offlineRoom(data);
+}
+
+export function tournament_create_room(data, number_players, colors) {
+	const tournament = new Tournament(colors);
+	tournament.createTournament(data, number_players);
+}
+
+export function tournament_join_room(data, colors) {
+	const tournament = new Tournament(colors);
+	tournament.joinTournament(data);
+}
+
+export default { game_create_room, game_join_room, game_offline_room, tournament_create_room, tournament_join_room };
