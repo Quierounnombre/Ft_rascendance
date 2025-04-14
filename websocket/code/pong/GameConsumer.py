@@ -48,14 +48,15 @@ class GameConsumer(SyncConsumer):
         data = message["data"]
 
         if not game_rooms[message["room_name"]].is_running:
-            tmp = len(game_rooms)
+            tmp = len(game_rooms) # TODO: esto para que?
+            result = game_rooms[message["room_name"]].getResult()
             del game_rooms[message["room_name"]]
 
             # print(f'\033[31mGameConsumer::game_end -> deleted game room `{message["room_name"]}`, game_rooms before: {tmp}, game_rooms now: {len(game_rooms)}, active threads: {threading.active_count()}', flush=True)
             # print(f'\033[31mGameConsumer::game_end -> tournament_name: `{message["tournament_name"]}`', flush=True)
 
             if message["tournament_name"] != "":
-                tournaments[message["tournament_name"]].endGame(message["room_name"])
+                tournaments[message["tournament_name"]].endGame(message["room_name"], result)
                 
     
     # message: {

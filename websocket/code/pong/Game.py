@@ -131,10 +131,32 @@ class Game(threading.Thread):
             time.sleep(0.01)
 
         self.is_running = False
-        self.exportToDatabase()
+        # self.exportToDatabase() # TODO: hacer que funcione
         self.broadcastState("game.end")# TODO: el metodo requiere el game room
         # TODO: pasar a la base de datos el resultado
-
+    
+    def getResult(self) -> dict:
+        for obj in self.game_objects:
+            if obj.id == "counter":
+                player1_score = obj.player1_score
+                player2_score = obj.player2_score
+        
+        if player1_score > player2_score:
+            return {
+                self.player1_id: 2,
+                self.player2_id: 0
+            }
+        elif player1_score > player2_score: 
+            return {
+                self.player1_id: 0,
+                self.player2_id: 2
+            }
+        else:
+            return {
+                self.player1_id: 1,
+                self.player2_id: 1
+            }
+ 
     def exportToDatabase(self) -> None:
         for obj in self.game_objects:
             if obj.id == "player1":

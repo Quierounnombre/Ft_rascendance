@@ -20,6 +20,7 @@ class TournamentParticipant:
     def __init__(self, user_id : int = -1, user_name : str = "", *args, **kwargs) -> None:
         self.user_id = user_id
         self.user_name = user_name
+        self.scores = []
     
     def setId(self, user_id : str) -> None:
         self.user_id = user_id
@@ -32,6 +33,19 @@ class TournamentParticipant:
 
     def getUserName(self) -> str:
         return self.user_name
+    
+    def getScores(self) -> dict:
+        return self.scores
+    
+    # TODO: cambiar a una unica variable
+    def getTotalPoints(self) -> int:
+        total_points = 0;
+
+        for score in self.scores:
+            total_points += score
+        
+        print(f'{self.user_name} has {total_points}', flush=True)
+        return total_points
 
 # ------------------------------------------------------------------------------
 class Tournament(threading.Thread):
@@ -153,8 +167,12 @@ class Tournament(threading.Thread):
 
         return True
     
-    def endGame(self, room_name) -> None:
+    def endGame(self, room_name, score) -> None:
         # print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` is in {self.games_finished}', flush=True)
+        for player in self.player_list:
+            if player.user_id in score:
+                player.scores.append(score[player.user_id])
+
         if room_name in self.games_finished:
             return
 
@@ -176,7 +194,7 @@ class Tournament(threading.Thread):
     def currentRoundHasEnd(self) -> bool:
         # print(f'\033[32mTournament::currentRoundHasEnd -> {self.round_games_finished == (self.target_players / 2)}', flush=True)
         return self.round_games_finished == (self.target_players / 2)
-
+    
     def run(self) -> None:
         self.is_running = True
 
@@ -199,3 +217,17 @@ class Tournament(threading.Thread):
             
         # TODO: enviar el ranking
         self.is_running = False
+        async_to_sync(channel_layer.group_send)(
+            self.tournament_name, {
+                "type": "tournament.ended",
+                "message": json.dumps(self.getPlayersRanking())
+            }
+        )
+
+
+    
+    def getPlayersRanking(self) -> list:
+        tmp = map(lambda p: (p.getUserName(), p.getTotalPoints()), self.player_list)
+        tmp2 = sorted(tmp, key=lambda p: -p[1])
+        return tmp2
+

@@ -113,6 +113,14 @@ class TournamentConsumer(WebsocketConsumer):
             }
         }))
 
+    def tournament_ended(self, event) -> None:
+        self.send(json.dumps({
+            "type": "tournament.ended",
+            "message": event["message"]
+        }))
+
+
+
     def next_round(self, event) -> None:
         self.send(json.dumps({
                 "type": "next.round",
