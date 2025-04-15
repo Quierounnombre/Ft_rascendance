@@ -16,6 +16,9 @@ class TournamentParticipant:
         self.user_name = user_name
         self.scores = []
     
+    def __str__(self):
+        return f'[{self.user_id}, {self.user_name}]'
+    
     def setId(self, user_id : str) -> None:
         self.user_id = user_id
 
@@ -62,6 +65,9 @@ class Tournament(threading.Thread):
             raise ValueError("low players") # TODO: se deberia comprobar antes
 
     def registerPlayer(self, player : TournamentParticipant) -> bool:
+        if len(list(filter(lambda p: p.user_id == player.user_id, self.player_list))) != 0:
+            return True
+
         if len(self.player_list) >= self.target_players:
             return False
 
