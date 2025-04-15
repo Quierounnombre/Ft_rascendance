@@ -31,6 +31,7 @@ gameCreator.innerHTML = `
 		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 </div>
+<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
 `;
 
 async function getColors() {

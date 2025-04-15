@@ -3,12 +3,12 @@ export default function getUserElement(user) {
 	emailField.setAttribute("class", "mb-3 row");
 	emailField.innerHTML = `<label for="email" data-i18n-key="prof-email" class="col-sm-2 form-label col-form-label">Email: </label>
 		<div class="col-sm-10">
-		<input type="text" readonly class="form-control-plaintext" id="email" name="email" value="`+ user["email"] +`">`;
+		<input type="text" readonly class="form-control-plaintext" autocomplete="off" id="email" name="email" value="`+ user["email"] +`">`;
 
 	const usernameField = emailField.cloneNode(true);
 	const fontField = document.createElement("div");
 	fontField.setAttribute("class", "mb-3 row");
-	fontField.innerHTML = `<label for="" data-i18n-key="prof-font" class="col-sm-2 form-label col-form-label">Font Size: </label>
+	fontField.innerHTML = `<label for="font" data-i18n-key="prof-font" class="col-sm-2 form-label col-form-label">Font Size: </label>
 		<div class="col-sm-10">
 		<input type="number" readonly class="form-control-plaintext" id="font" name="font" min="11" max="33" value="`+ user["font"] +`">`;
 	const languageField = document.createElement("div");

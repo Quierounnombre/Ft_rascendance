@@ -6,7 +6,6 @@ gameCreator.setAttribute("id", "canvas_container");
 gameCreator.setAttribute("class", "container");
 gameCreator.innerHTML = `
 <div>
-<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
 <h2 data-i18n-key="make-tourn">Create tourn</h2>
 <form id="dataForm" class="container">
 		<div class="form-floating">
@@ -46,6 +45,7 @@ gameCreator.innerHTML = `
 	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
+<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
 `;
 
 async function getColors() {

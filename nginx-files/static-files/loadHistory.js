@@ -3,16 +3,19 @@ import getUser from "./getUser.js";
 import translatePage from "./translate.js";
 
 export default function loadHistory() {
-	const root = document.getElementById("root");
 	const token = localStorage.getItem("token");
 	if (!token) {
 		window.location.hash = "";
 		return ;
 	}
+	const back = document.createElement("a");
+	back.setAttribute("href", "#profile");
+	back.innerHTML='<i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i>'
 
 	getUser(token).then((user) => {
 		getHistoryTable(user, token).then((table) => {
 			document.getElementById("root").replaceChildren(table);
+			document.getElementById("root").appendChild(back);
 			translatePage();
 	})});
 

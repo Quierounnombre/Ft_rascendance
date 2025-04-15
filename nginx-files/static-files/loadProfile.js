@@ -37,7 +37,7 @@ export default async function loadProfile() {
 
     const historyButton = document.createElement("button");
 	historyButton.setAttribute("type", "button");
-	historyButton.setAttribute("class", "btn btn-lg btn-info me-2");
+	historyButton.setAttribute("class", "btn btn-lg btn-primary me-2");
     historyButton.setAttribute("data-i18n-key", "history");
 	historyButton.innerHTML = "History";
     historyButton.addEventListener("click", () => {window.location.hash = "#history"});
