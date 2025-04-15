@@ -78,7 +78,7 @@ constructor(colors) {
 	this.threeCanvas.setAttribute("id", "pong");
 	this.threeCanvas.setAttribute("width", "800");
 	this.threeCanvas.setAttribute("height", "400");
-	this.threeCanvas.setAttribute("style", "border: 2px solid black"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
+	this.threeCanvas.setAttribute("style", "border: 2px solid black; display: flex;justify-content: center; align-items: center;"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
 	this.scene = new THREE.Scene();
 	this.scene.background = new THREE.Color(0x101010);
 
@@ -421,6 +421,7 @@ function server_msg(event) {
 			}
 		}
 		this.banner = document.createElement("h1");
+		this.banner.setAttribute("style", "display: flex;justify-content: center; align-items: center;")
 		this.banner.innerHTML = data["message"]["player1_username"] + " vs " + data["message"]["player2_username"]
 		this.reconect();
 		this.game_running = true;
