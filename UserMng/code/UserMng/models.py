@@ -23,8 +23,8 @@ class User(AbstractUser):
 	font = models.IntegerField(
 		default = 18,
 		validators = [
-			MaxValueValidator(60),
-			MinValueValidator(6)
+			MaxValueValidator(33),
+			MinValueValidator(11)
 		]
 	)
 	email = models.EmailField(unique=True)
