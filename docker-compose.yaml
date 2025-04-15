@@ -62,7 +62,7 @@ services:
       - rascendance-network
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}"]
-      retries: 10
+      retries: 15
       timeout: 3s
       interval: 1s
 
@@ -146,7 +146,7 @@ services:
       - rascendance-network
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB_HISTORY}"]
-      retries: 10
+      retries: 15
       timeout: 3s
       interval: 1s
 
@@ -195,7 +195,7 @@ services:
       - websocket-network
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}"]
-      retries: 10
+      retries: 15
       timeout: 3s
       interval: 1s
 
@@ -218,7 +218,7 @@ services:
       - twofactorauth-network
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${TwoFactorAuth_DB}"]
-      retries: 10
+      retries: 15
       timeout: 3s
       interval: 1s
 
@@ -230,8 +230,6 @@ services:
     container_name: TwoFactorAuth
     expose:
       - ${TwoFactorAuth_PORT}
-    ports:
-      - ${TwoFactorAuth_PORT}:${TwoFactorAuth_PORT}
     volumes:
       - ./TwoFactorAuth/code:/TwoFactorAuth/code
     depends_on:

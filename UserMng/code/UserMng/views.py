@@ -78,10 +78,11 @@ class	UserLoginAPIView(APIView):
 class	GenerateToken(APIView):
 	
 	#Librerias for JWT PyJWT -> codifica y deccodifica los JWT
-	def login_succesfull_response(self, token):
+	def login_succesfull_response(self, token, user):
 		response = { 
 			'success': True,
 			'token':token.key,
+			'font': user.font
 		}
 		return (response)
 	
@@ -121,7 +122,7 @@ class	GenerateToken(APIView):
 		token, created = Token.objects.get_or_create(user=user)
 		if (not created):
 			Response('TOKEN CREATION FAILURE', status=bad_request)
-		response = self.login_succesfull_response(token)
+		response = self.login_succesfull_response(token, user)
 		return (Response(response, status=status.HTTP_200_OK))
 
 

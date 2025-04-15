@@ -30,4 +30,4 @@ export function tournament_join_room(data, colors) {
 	onGoing.tournament.joinTournament(data);
 }
 
-export default { game_create_room, game_join_room, game_offline_room, tournament_create_room, tournament_join_room, game, tournament };
+export default { game_create_room, game_join_room, game_offline_room, tournament_create_room, tournament_join_room };

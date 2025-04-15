@@ -1,4 +1,5 @@
 import getUser from  "./getUser.js"
+import load2FA from "./load2FA.js";
 
 export default function loadLogin() {
 	const root = document.getElementById("root");
@@ -35,7 +36,6 @@ async function logIn(form) {
 			method: "POST",
 			body: formData,
 		});
-		const data = await response.json();
 		if (!response.ok) {
 			invalidLogin(data);
 			const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
@@ -49,7 +49,7 @@ async function logIn(form) {
   
 		alertPlaceholder.append(wrapper)
 		} else {
-			validLogin(data.token, data.font);
+			load2FA(formData.get("email"));
 		}
 	} catch (e) {
 		console.error(e);
@@ -68,16 +68,4 @@ function invalidLogin(data) {
 		fields[i].classList.remove("is-valid");
 	}
 	
-}
-
-async function validLogin(token, font) {
-	localStorage.setItem("token", token);
-    const user = await getUser(token);
-    localStorage.setItem("language", user["language"]);
-	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = font + "px";
-	window.location.hash='';
-	const switcher = document.getElementById("lang-switcher");
-    if (!switcher)
-        return ;
-	switcher.value = user["language"];
 }
