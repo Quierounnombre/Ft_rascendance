@@ -145,6 +145,10 @@ function server_msg(event) {
 	case "game.end":
 		this.game_round = []
 		break;
+
+	case "error":
+		alert(`DEBUG: ${data["message"]["code"]}`);
+		break;
 	}
 }
 

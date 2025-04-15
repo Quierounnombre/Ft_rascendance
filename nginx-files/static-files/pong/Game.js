@@ -442,6 +442,10 @@ function server_msg(event) {
 		this.renderer.setAnimationLoop(null);
 		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		break;
+
+	case "error":
+		alert(`DEBUG: ${data["message"]["code"]}`);
+		break;
 	}
 }
 

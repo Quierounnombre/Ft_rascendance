@@ -83,14 +83,10 @@ class TournamentConsumer(WebsocketConsumer):
     # TODO: si alguien se sale en medio del torneo?
         self.tournament_name = message["tournament_name"]
 
-        # TODO: si no existe el torneo?
-        # si no existe una instancia de ese torneo, el GameConsumer deberia mandar un mensaje de que no existe
-
         async_to_sync(self.channel_layer.group_add)(
             self.tournament_name, self.channel_name
         )
 
-        # print(f'\033[31mTournamentConsumer::joinTournament -> self.user_id = {self.user_id}', flush=True)
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "tournament.register",
@@ -156,3 +152,9 @@ class TournamentConsumer(WebsocketConsumer):
             }
         }))
         pass
+
+    def error(self, event) -> None:
+            self.send(json.dumps({
+                "type": "error",
+                "message": event["message"]
+            }))

@@ -4,12 +4,6 @@ import threading
 import requests
 import os
 
-# from pong.Ball import Ball
-# from pong.Player import Player
-# from pong.Counter import Counter
-# from pong.CanvasObject import CanvasObject
-# from pong.Game import Game
-
 from pong.generateRandomString import generateRandomString
 
 from channels.layers import get_channel_layer
@@ -44,7 +38,6 @@ class TournamentParticipant:
         for score in self.scores:
             total_points += score
         
-        print(f'{self.user_name} has {total_points}', flush=True)
         return total_points
 
 # ------------------------------------------------------------------------------
@@ -118,8 +111,6 @@ class Tournament(threading.Thread):
         player1 = game["player1"]
         player2 = game["player2"]
 
-        # print(f'\033[31mTournament::createGame -> game room {room_name} ({player1["user_id"]} vs {player2["user_id"]}) created', flush=True)
-
         async_to_sync(channel_layer.group_send)(
             self.tournament_name, {
                 'type': 'create.tournament.game',
@@ -149,8 +140,6 @@ class Tournament(threading.Thread):
 
         current_round = next(iter(self.game_queue))
         
-        # print(f'\033[31mTournament::createRound -> Tournament round {len(self.scheduleDICT) - len(self.game_queue) + 1} created', flush=True)
-
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             self.tournament_name, {
@@ -168,7 +157,6 @@ class Tournament(threading.Thread):
         return True
     
     def endGame(self, room_name, score) -> None:
-        # print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` is in {self.games_finished}', flush=True)
         for player in self.player_list:
             if player.user_id in score:
                 player.scores.append(score[player.user_id])
@@ -176,14 +164,10 @@ class Tournament(threading.Thread):
         if room_name in self.games_finished:
             return
 
-        # print(f'\033[31mTournament::endGame -> Tournament game`{room_name}` has finished', flush=True)
-
         self.games_finished.append(room_name)
         self.round_games_finished += 1
 
-        # print(f'\033[31mTournament::endGame -> Tournament `{self.tournament_name}` round {len(self.scheduleDICT) - len(self.game_queue)} is checking {self.round_games_finished} == {self.target_players // 2} -> {self.round_games_finished == (self.target_players // 2)}', flush=True)
         if self.round_games_finished == (self.target_players // 2):
-            # print(f'\033[31mTournament::endGame -> Tournament `{self.tournament_name}` round {len(self.scheduleDICT) - len(self.game_queue)} has been marked as inactive', flush=True)
             self.round_active = False
             self.round_games_finished = 0
             self.games_finished = []
@@ -192,7 +176,6 @@ class Tournament(threading.Thread):
         pass
 
     def currentRoundHasEnd(self) -> bool:
-        # print(f'\033[32mTournament::currentRoundHasEnd -> {self.round_games_finished == (self.target_players / 2)}', flush=True)
         return self.round_games_finished == (self.target_players / 2)
     
     def run(self) -> None:
@@ -206,7 +189,6 @@ class Tournament(threading.Thread):
             }
         )
 
-        # TODO: no se si solo es en mi portatil, pero a veces parece que pierde algun paquete y se queda pillado
         while True:
             if self.round_active:
                 time.sleep(2)
@@ -215,7 +197,6 @@ class Tournament(threading.Thread):
             if not self.createRound():
                 break
             
-        # TODO: enviar el ranking
         self.is_running = False
         async_to_sync(channel_layer.group_send)(
             self.tournament_name, {
