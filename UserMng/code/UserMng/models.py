@@ -39,5 +39,7 @@ class User(AbstractUser):
 	ball_color = models.CharField(default="#ffffff")
 	counter_color = models.CharField(default="#ffffff")
 
+	have_logged = models.BooleanField(default=False)
+
 	def __str__(self):
 		return (self.username) 

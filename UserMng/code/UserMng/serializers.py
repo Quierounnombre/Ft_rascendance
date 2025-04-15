@@ -112,27 +112,27 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 			'password': {"write_only": True}
 		}
 
-	def validate_email(self, email):
-		if (User.objects.filter(email=email).exists()):
-			detail = {
-				"detail": "User Already exist!"
-			}
-			raise ValidationError(detail=detail)
-		return email
-	
 	def validate(self, instance):
 		if (instance['password'] != instance['password2']):
 			msg = {
 				"message": "Both password must match"
 			}
 			raise ValidationError(msg)
+		if (User.objects.filter(email=instance['email'], have_logged=True).exists()):
+			detail = {
+				"detail": "User Already exist!"
+			}
+			raise ValidationError(detail=detail)
 		return instance
 
 	def create(self, validated_data):
-		password = validated_data.pop('password')
 		validated_data.pop('password2')
-		user = User.objects.create(**validated_data)
+		user, created = User.objects.update_or_create(
+			email=validated_data['email'], 
+			defaults=validated_data
+			)
+		if not created:
+			ValidationError({"detail": "Can't create user"})
+		password = validated_data.pop('password')
 		user.set_password(password)
-		user.save()
-		Token.objects.create(user=user)
 		return (user)
