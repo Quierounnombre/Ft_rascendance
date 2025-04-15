@@ -38,6 +38,7 @@ services:
       - twofactorauth
     volumes:
       - ./nginx-files/static-files:/etc/nginx/html
+      - users_avatars:/etc/nginx/media
     ports:
       - ${NGINX_EXTERNAL_PORT}:${NGINX_INTERNAL_PORT}
     networks:
@@ -78,6 +79,7 @@ services:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     volumes:
       - ./UserMng/code:/UserMng/code
+      - users_avatars:/UserMng/code/media
     depends_on:
       user_db:
         condition: service_healthy
@@ -265,6 +267,8 @@ volumes:
     name: TwoFactorAuth_data
   history_data:
     name: history_data
+  users_avatars:
+    name: users_avatars
 
 networks:
   rascendance-network:
