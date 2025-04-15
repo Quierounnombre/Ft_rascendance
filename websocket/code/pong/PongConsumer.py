@@ -146,16 +146,16 @@ class PongConsumer(WebsocketConsumer):
 
         # TODO: esto solo deberia ser si el juego no esta en curso
         # send to the GameConsumer the instruction to start the game
-        async_to_sync(self.channel_layer.send)(
-            "game_engine", {
-                "type": "game.start",
-                "message": {
-                    "user_id": self.user_id,
-                    "room_name": message["room_name"],
-                    "tournament_name": self.tournament_name
-                }
-            }
-        )
+        # async_to_sync(self.channel_layer.send)(
+        #     "game_engine", {
+        #         "type": "game.start",
+        #         "message": {
+        #             "user_id": self.user_id,
+        #             "room_name": message["room_name"],
+        #             "tournament_name": self.tournament_name
+        #         }
+        #     }
+        # )
 
     #     "room_name": str,
     #     "player_id": int
@@ -206,6 +206,11 @@ class PongConsumer(WebsocketConsumer):
             }
         }))
     
+    def error(self, event) -> None:
+        self.send(json.dumps({
+            "type": "error",
+            "message": event["message"]
+        }))
 
     def create_tournament_game(self, event) -> None:
         pass
