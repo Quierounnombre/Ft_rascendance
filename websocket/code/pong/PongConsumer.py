@@ -206,6 +206,11 @@ class PongConsumer(WebsocketConsumer):
             }
         }))
     
+    def error(self, event) -> None:
+        self.send(json.dumps({
+            "type": "error",
+            "message": event["message"]
+        }))
 
     def create_tournament_game(self, event) -> None:
         pass

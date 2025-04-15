@@ -81,8 +81,16 @@ class GameConsumer(SyncConsumer):
         # print(f'\033[31mGameConsumer::set_player -> setting {message["player"]} ({message["id"]}) in game room {message["room_name"]}', flush=True)
 
         # TODO: y este sleep?
-        while not message["room_name"] in game_rooms:
-            time.sleep(1)
+        if not message["room_name"] in game_rooms:
+            async_to_sync(channel_layer.group_send)(
+                message["room_name"], {
+                    "type": "error",
+                    "message": {
+                        "code": "NOTEXIST"
+                    }
+                }
+            )
+            return
 
         if game_rooms[message["room_name"]].number_players == 2:
             return
@@ -141,6 +149,17 @@ class GameConsumer(SyncConsumer):
         user_id = int(message["user_id"])
         user_name = str(message["user_name"])
 
+        if not tournament_name in tournaments:
+            async_to_sync(channel_layer.group_send)(
+                    message["room_name"], {
+                        "type": "error",
+                        "message": {
+                            "code": "NOTEXIST"
+                        }
+                    }
+                )
+                return
+
         player = TournamentParticipant(user_id, user_name)
 
         if not tournaments[tournament_name].registerPlayer(player):
@@ -162,4 +181,7 @@ class GameConsumer(SyncConsumer):
         pass
 
     def join_tournament_game(self, event) -> None:
+        pass
+
+    def error(self, event) -> None:
         pass
