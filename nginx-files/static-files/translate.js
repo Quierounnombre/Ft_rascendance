@@ -73,6 +73,8 @@ const translations = {
         "hist-res": "Results",
         "hist-tim": "Time",
         "hist-dat": "Date",
+        "2fa-code": "We sent a code your email to validate your identity. Please, check your spam:",
+        "2fa-sub": "Send",
     },
 
     "ESP": {
@@ -144,6 +146,8 @@ const translations = {
         "hist-res": "Resultados",
         "hist-tim": "Tiempo",
         "hist-dat": "Fecha",
+        "2fa-code": "Hemos enviado un código a tu correo para verificar tu indentidad. Por favor, comprueba tu spam:",
+        "2fa-sub": "Enviar",
     },
 
     "CAT": {
@@ -215,6 +219,8 @@ const translations = {
         "hist-res": "Resultats",
         "hist-tim": "Temps",
         "hist-dat": "Data",
+        "2fa-code": "Hem enviat un codi al teu correu per verificar la teva indentidat. Si us plau, comprova el teu spam:",
+        "2fa-sub": "Enviar",
     },
 };
 
@@ -263,7 +269,7 @@ export default function translatePage() {
     const locale = localStorage.getItem("language");
     const key = element.getAttribute("data-i18n-key");
     const translation = translations[locale][key];
-    if (key==="reg-sub" || key=== "login-sub" || key=== "edit-sub")
+    if (key==="reg-sub" || key=== "login-sub" || key=== "edit-sub" || key==="2fa-sub")
      element.setAttribute("value", translation);
     else if (key==="search-bar")
      element.setAttribute("placeholder", translation);

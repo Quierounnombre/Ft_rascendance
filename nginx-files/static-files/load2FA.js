@@ -5,8 +5,9 @@ export default function load2FA(email) {
     const window2FA = document.createElement("form");
     window2FA.setAttribute("id", "2fa");
     window2FA.innerHTML = `
+	<div id="liveAlertPlaceholder"></div>
     <div class="mb-3">
-		<label for="code" data-i18n-key="2fa-code" class="form-label">We sent a code to `+ email +` to validate your identity. Please, check your spam:</label>
+		<label for="code" data-i18n-key="2fa-code" class="form-label">We sent a code your email to validate your identity. Please, check your spam:</label>
 		<input type="text" id="code" name="code" class="form-control" required />
 	</div>
 	<input type="submit" data-i18n-key="2fa-sub" value="Send" id="submit" />
