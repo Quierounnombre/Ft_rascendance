@@ -207,6 +207,9 @@ class PongConsumer(WebsocketConsumer):
         }))
     
     def error(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
         self.send(json.dumps({
             "type": "error",
             "message": event["message"]

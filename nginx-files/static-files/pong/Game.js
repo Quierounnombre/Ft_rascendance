@@ -450,6 +450,7 @@ function server_msg(event) {
 
 	case "error":
 		alert(`DEBUG: ${data["message"]["code"]}`);
+		this.websocket.close();
 		break;
 	}
 }

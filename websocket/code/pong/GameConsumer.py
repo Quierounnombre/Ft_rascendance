@@ -81,6 +81,7 @@ class GameConsumer(SyncConsumer):
                 message["room_name"], {
                     "type": "error",
                     "message": {
+                        "user_id": message["id"],
                         "code": "NOTEXIST"
                     }
                 }
@@ -105,7 +106,16 @@ class GameConsumer(SyncConsumer):
             return
 
         if game_rooms[message["room_name"]].number_players == 2:
-            # TODO: error de sala llena
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                    message["room_name"], {
+                        "type": "error",
+                        "message": {
+                            "user_id": message["id"],
+                            "code": "ROOMFULL"
+                        }
+                    }
+            )
             return
 
         for obj in game_rooms[message["room_name"]].game_objects:
@@ -177,6 +187,7 @@ class GameConsumer(SyncConsumer):
                     message["tournament_name"], {
                         "type": "error",
                         "message": {
+                            "user_id": user_id,
                             "code": "NOTEXIST"
                         }
                     }
