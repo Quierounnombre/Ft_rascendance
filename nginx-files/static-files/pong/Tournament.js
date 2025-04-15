@@ -1,6 +1,7 @@
 import { Game } from "./Game.js"
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
+import { onGoing } from "./pong.js";
 "use strict";
 
 class Tournament {
@@ -117,6 +118,7 @@ function server_msg(event) {
 
 	case "create.tournament.game":
 		this.game_round = new Game(this.colors);
+		onGoing.game = this.game_round;
 
 		this.game_round.game_config = data["message"]["game_config"];
 		this.game_round.room_name = data["message"]["room_name"];
@@ -130,6 +132,7 @@ function server_msg(event) {
 
 	case "join.tournament.game":
 		this.game_round = new Game(this.colors);
+		onGoing.game = this.game_round;
 
 		this.game_round.room_name = data["message"]["room_name"];
 
