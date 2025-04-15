@@ -189,7 +189,7 @@ services:
     volumes:
       - ./TwoFactorAuth/code:/TwoFactorAuth/code
     depends_on:
-      user_db:
+      twofactorauth_db:
         condition: service_healthy
     environment:
       POSTGRES_USER: ${TwoFactorAuth_POSTGRES_USER}

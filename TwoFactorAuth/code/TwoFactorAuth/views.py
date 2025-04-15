@@ -66,7 +66,7 @@ class	ValidateCode(APIView):
 			return (Response('Missing 2FA code', status=bad_request))
 		if not recv_email:
 			return (Response('Missing User for 2FA', status=bad_request))
-		if (len(recv_code) > 20).
+		if (len(recv_code) > 20):
 			return (Response('Invalid code', status=bad_request))
 		
 		try:
