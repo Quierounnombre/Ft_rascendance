@@ -107,6 +107,10 @@ function server_msg(event) {
 	case "tournament.started":
 		this.tournament_name = data["message"]["tournament_name"];
 		break;
+
+	case "tournament.ended":
+		alert(data["message"]);
+		break;
     
 	case "next.round":
 		// TODO: una alerta? notificacion? redireccion?
@@ -143,6 +147,10 @@ function server_msg(event) {
 	
 	case "game.end":
 		this.game_round = []
+		break;
+
+	case "error":
+		alert(`DEBUG: ${data["message"]["code"]}`);
 		break;
 	}
 }

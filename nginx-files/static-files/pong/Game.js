@@ -448,6 +448,10 @@ function server_msg(event) {
 		document.addEventListener("keydown", (event) => {});
 		document.addEventListener("keyup", (event) => {});
 		break;
+
+	case "error":
+		alert(`DEBUG: ${data["message"]["code"]}`);
+		break;
 	}
 }
 

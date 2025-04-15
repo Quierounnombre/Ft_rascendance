@@ -48,14 +48,12 @@ class GameConsumer(SyncConsumer):
         data = message["data"]
 
         if not game_rooms[message["room_name"]].is_running:
-            tmp = len(game_rooms)
+            tmp = len(game_rooms) # TODO: esto para que?
+            result = game_rooms[message["room_name"]].getResult()
             del game_rooms[message["room_name"]]
 
-            # print(f'\033[31mGameConsumer::game_end -> deleted game room `{message["room_name"]}`, game_rooms before: {tmp}, game_rooms now: {len(game_rooms)}, active threads: {threading.active_count()}', flush=True)
-            # print(f'\033[31mGameConsumer::game_end -> tournament_name: `{message["tournament_name"]}`', flush=True)
-
             if message["tournament_name"] != "":
-                tournaments[message["tournament_name"]].endGame(message["room_name"])
+                tournaments[message["tournament_name"]].endGame(message["room_name"], result)
                 
     
     # message: {
@@ -76,12 +74,18 @@ class GameConsumer(SyncConsumer):
     # }
     def set_player(self, event) -> None:
         message = event["message"]
+        channel_layer = get_channel_layer()
 
-        # print(f'\033[31mGameConsumer::set_player -> setting {message["player"]} ({message["id"]}) in game room {message["room_name"]}', flush=True)
-
-        # TODO: y este sleep?
-        while not message["room_name"] in game_rooms:
-            time.sleep(1)
+        if not message["room_name"] in game_rooms:
+            async_to_sync(channel_layer.group_send)(
+                message["room_name"], {
+                    "type": "error",
+                    "message": {
+                        "code": "NOTEXIST"
+                    }
+                }
+            )
+            return
 
         if game_rooms[message["room_name"]].number_players == 2:
             return
@@ -94,12 +98,24 @@ class GameConsumer(SyncConsumer):
                 if game_rooms[message["room_name"]].number_players == 0:
                     obj.playerN = "player1"
                     game_rooms[message["room_name"]].player1_username = message["user_name"]
+                    game_rooms[message["room_name"]].player1_id = message["id"]
                 else:
                     obj.playerN = "player2"
                     game_rooms[message["room_name"]].player2_username = message["user_name"]
+                    game_rooms[message["room_name"]].player2_id = message["id"]
 
                 game_rooms[message["room_name"]].number_players += 1
-
+        
+        if game_rooms[message["room_name"]].number_players == 2:
+            async_to_sync(self.channel_layer.send)(
+                "game_engine", {
+                    "type": "game.start",
+                    "message": {
+                        "room_name": message["room_name"],
+                        "tournament_name": message["tournament_name"]
+                    }
+                }
+            )
         
     # message: {
     #     "room_name": str,
@@ -128,7 +144,6 @@ class GameConsumer(SyncConsumer):
             # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
             return
 
-        # print(f'\033[31mtournament_config: creating tournament `{message["tournament_name"]}`', flush=True)
         tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)
 
     def tournament_register(self, event) -> None:
@@ -138,14 +153,25 @@ class GameConsumer(SyncConsumer):
         user_id = int(message["user_id"])
         user_name = str(message["user_name"])
 
+        if not tournament_name in tournaments:
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                    message["tournament_name"], {
+                        "type": "error",
+                        "message": {
+                            "code": "NOTEXIST"
+                        }
+                    }
+            )
+            return
+
         player = TournamentParticipant(user_id, user_name)
 
         if not tournaments[tournament_name].registerPlayer(player):
             # TODO: quizas enviar que el torneo esta lleno?
-            pass
+            return
 
         if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
-            # print(f'\033[31mGameConsumer::tournament_register -> tournament with name `{tournament_name}` has started', flush=True)
             tournaments[tournament_name].generateSchedule()
             tournaments[tournament_name].start()
         
@@ -159,4 +185,7 @@ class GameConsumer(SyncConsumer):
         pass
 
     def join_tournament_game(self, event) -> None:
+        pass
+
+    def error(self, event) -> None:
         pass
