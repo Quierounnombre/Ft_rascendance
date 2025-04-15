@@ -62,7 +62,6 @@ async function getColors() {
 	}
 }
 
-// TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
 export default async function loadOnline() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);

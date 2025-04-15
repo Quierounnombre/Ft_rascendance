@@ -49,7 +49,6 @@ async function getColors() {
 	}
 }
 
-// TODO: esta sera la funcion para crear salas, para unirse deberia ir por otro lado
 export default async function loadLocal() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
@@ -164,7 +163,7 @@ function doubleBallMap(config) {
 		width: 20,
 		height: 100,
 		speed: 2,
-		move_up: "w", // TODO: esto esta deprecated
+		move_up: "w",
 		move_down: "s"
 	};
 

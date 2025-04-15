@@ -13,13 +13,9 @@ class Game {
  * @param {JSON string} config string with the JSON config
  */
 constructor(colors) {	
-	// TODO: sacar de la base de datos los colores preferidos por el jugador
-
-	// TODO: que al crear la partida se genere el canvas
 	this.colors = colors
 	this.game_objects = new Map()
 
-	// TODO: todo esto lo puede terner el user en su configuracion, por lo que la configuracion propia de los colores iria aqui
 	this.background_color = "black";
 	this.object_color = "white";
 
@@ -78,7 +74,7 @@ constructor(colors) {
 	this.threeCanvas.setAttribute("id", "pong");
 	this.threeCanvas.setAttribute("width", "800");
 	this.threeCanvas.setAttribute("height", "400");
-	this.threeCanvas.setAttribute("style", "border: 2px solid black; display: flex;justify-content: center; align-items: center;"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
+	this.threeCanvas.setAttribute("style", "border: 2px solid black; display: flex;justify-content: center; align-items: center;");
 	this.scene = new THREE.Scene();
 	this.scene.background = new THREE.Color(0x101010);
 
@@ -120,7 +116,6 @@ isEnd() {
 }
 
 createRoom(game_config, room_name = generateRandomString(8)) {
-	// this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
 	this.room_name = room_name;
 	this.playerN = "player1";
 
@@ -181,7 +176,7 @@ joinRoom(room_name) {
 		+ window.location.hostname
 		+ ":" + window.location.port
 		+ '/ws/pong/'
-		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
+		+ this.room_name
 		+ '/'
 	)
 
@@ -224,7 +219,7 @@ offlineRoom(game_config) {
 		+ window.location.hostname
 		+ ":" + window.location.port
 		+ '/ws/pong/'
-		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
+		+ this.room_name
 		+ '/'
 	)
 
@@ -311,13 +306,13 @@ offlineRoom(game_config) {
 			this.user_id = user.id;
 			this.user_name = user.username;
 
-			// TODO: esta invertido para que no este espejado
+			// NOTE: esta invertido para que no este espejado
 			// identificarse
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
-					"user_id": -1, // TODO: -1 para anonimos?
-					"user_name": this.user_name // TODO: -1 para anonimos?
+					"user_id": -1,
+					"user_name": this.user_name
 				}
 			}));
 
@@ -357,9 +352,6 @@ offlineRoom(game_config) {
 }
 
 toJSON() {
-	// TODO: definir bien el JSON que posteriormente se serializara
-	// TODO: id del torneo
-	// TODO: bool de si esta dentro de un torneo
 	const game_objects = JSON.parse(this.game_state);
 
 	return {
@@ -444,10 +436,16 @@ function server_msg(event) {
 		this.websocket.close();
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
-		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		delete onGoing.game;
 		document.addEventListener("keydown", (event) => {});
 		document.addEventListener("keyup", (event) => {});
+
+		const back_button = document.createElement("a");
+		back_button.setAttribute("href", "#game");
+		back_button.setAttribute("style", "font-size:2.5rem; color:blue");
+
+		back_button.innerHTML = `<i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i>`
+		document.getElementById("root").appendChild(back_button);
 		break;
 
 	case "error":

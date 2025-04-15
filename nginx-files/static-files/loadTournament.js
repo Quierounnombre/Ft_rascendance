@@ -64,7 +64,6 @@ async function getColors() {
 	}
 }
 
-// TODO: si se le da muy rapido al boton, te pilla dos imputs
 export default async function loadTournament() {
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
