@@ -1,38 +1,5 @@
 import {game_offline_room} from "./pong/pong.js"
 
-const gameCreator = document.createElement("div");
-gameCreator.setAttribute("id", "canvas_container");
-gameCreator.setAttribute("class", "container");
-gameCreator.innerHTML = `
-<div>
-<div class="d-flex">
-<h2 class="me-3" data-i18n-key="make-local">Create Local room</h2> <i class="bi bi-house-fill" style="font-size:2rem;"></i>
-</div>
-<form id="dataForm" class="container mb-4">
-		<div class="form-floating">
-			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
-			<label for="timeout" data-i18n-key="max-time" class="form-label">Maximum time of the game in seconds</label>
-		</div>
-
-		<div class="form-floating">
-			<input required type="number" name="max_score" id="max_score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42" value="3">
-			<label for="max_score" data-i18n-key="max-score" class="form-label">Maximum score for a player</label>
-		</div>
-		
-		<div class="form-floating">
-			<select class="form-select" name="map" id="map" aria-label="map">
-				<option data-i18n-key="map-default" selected ="default" value="default">Default map</option>
-				<option data-i18n-key="map-two" value="doubleBall">Two balls map</option>
-				<option data-i18n-key="map-float" value="floating">Floating things map</option>
-			</select>
-			<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
-		</div>
-
-		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
-	</form>
-</div>
-`;
-
 async function getColors() {
 	const token = localStorage.getItem("token")
 	const response =  await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/colors/", {
@@ -50,6 +17,39 @@ async function getColors() {
 }
 
 export default async function loadLocal() {
+	const gameCreator = document.createElement("div");
+	gameCreator.setAttribute("id", "canvas_container");
+	gameCreator.setAttribute("class", "container");
+	gameCreator.innerHTML = `
+	<div>
+	<div class="d-flex">
+	<h2 class="me-3" data-i18n-key="make-local">Create Local room</h2> <i class="bi bi-house-fill" style="font-size:2rem;"></i>
+	</div>
+	<form id="dataForm" class="container mb-4">
+			<div class="form-floating">
+				<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
+				<label for="timeout" data-i18n-key="max-time" class="form-label">Maximum time of the game in seconds</label>
+			</div>
+
+			<div class="form-floating">
+				<input required type="number" name="max_score" id="max_score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42" value="3">
+				<label for="max_score" data-i18n-key="max-score" class="form-label">Maximum score for a player</label>
+			</div>
+			
+			<div class="form-floating">
+				<select class="form-select" name="map" id="map" aria-label="map">
+					<option data-i18n-key="map-default" selected ="default" value="default">Default map</option>
+					<option data-i18n-key="map-two" value="doubleBall">Two balls map</option>
+					<option data-i18n-key="map-float" value="floating">Floating things map</option>
+				</select>
+				<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
+			</div>
+
+			<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+	`;
+
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
