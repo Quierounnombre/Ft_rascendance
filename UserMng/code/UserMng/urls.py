@@ -4,6 +4,7 @@ from .views import UserSingUpAPIView
 from .views import UserLogoutAPIView
 from .views import OAuthLoginAPIView
 from .views import OAuthCallbackAPIView
+from .views import GenerateToken
 from .views import ProfileView
 from .views import UserListView
 
@@ -16,6 +17,7 @@ urlpatterns = [
 	path('logout/', UserLogoutAPIView.as_view(), name="user_logout"),
 	path('oauth_login/', OAuthLoginAPIView.as_view(), name='oauth_login'),
 	path('auth_callback/', OAuthCallbackAPIView.as_view(), name='auth_callback'),
+	path('generate_token/', GenerateToken.as_view(), name='generate_token'),
 	path('me/', ProfileView.as_view(
 		{'get':'me',
 		'put':'update'},
