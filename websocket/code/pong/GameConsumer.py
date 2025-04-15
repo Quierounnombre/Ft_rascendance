@@ -86,8 +86,26 @@ class GameConsumer(SyncConsumer):
                 }
             )
             return
+        
+        # TODO: comprobar si ya estaba metido, si lo esta pasarle la misma  info que cuando empieza el juego
+        if message["id"] == game_rooms[message["room_name"]].player1_id or message["id"] == game_rooms[message["room_name"]].player2_id:
+            async_to_sync(channel_layer.group_send)(
+                message["room_name"], {
+                    "type": "game.reconnect",
+                    "message": {
+                        "user_id": message["id"],
+                        "player1_username": game_rooms[message["room_name"]].player1_username,
+                        "player2_username": game_rooms[message["room_name"]].player2_username,
+                        "room_name": message["room_name"],
+                        "tournament_name": message["tournament_name"],
+                        "data": game_rooms[message["room_name"]].serialize()
+                    }
+                }
+            )
+            return
 
         if game_rooms[message["room_name"]].number_players == 2:
+            # TODO: error de sala llena
             return
 
         for obj in game_rooms[message["room_name"]].game_objects:
@@ -188,4 +206,7 @@ class GameConsumer(SyncConsumer):
         pass
 
     def error(self, event) -> None:
+        pass
+
+    def game_reconnect(self, event) -> None:
         pass

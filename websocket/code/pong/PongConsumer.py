@@ -212,6 +212,15 @@ class PongConsumer(WebsocketConsumer):
             "message": event["message"]
         }))
 
+    def game_reconnect(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
+        self.send(json.dumps({
+            "type": "game.reconnect",
+            "message": event["message"]
+        }))
+
     def create_tournament_game(self, event) -> None:
         pass
 

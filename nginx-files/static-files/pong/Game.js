@@ -386,9 +386,9 @@ function server_msg(event) {
 		const tmp = document.createElement("div");
 		tmp.innerHTML = `${this.room_name}`
 		document.getElementById("root").replaceChildren(tmp);
-
 		break;
 
+	case "game.reconnect":
 	case "game.started":
 		this.room_name = data["message"]["room_name"]
 
