@@ -154,7 +154,10 @@ class TournamentConsumer(WebsocketConsumer):
         pass
 
     def error(self, event) -> None:
-            self.send(json.dumps({
-                "type": "error",
-                "message": event["message"]
-            }))
+        if event["message"]["user_id"] != self.user_id and event["message"]["user_id"] != -1:
+            return
+
+        self.send(json.dumps({
+            "type": "error",
+            "message": event["message"]
+        }))
