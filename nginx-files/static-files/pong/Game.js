@@ -164,7 +164,11 @@ createRoom(game_config, room_name = generateRandomString(8)) {
 
 reconect() {
 	document.getElementById("root").replaceChildren(this.banner);
-	document.getElementById("root").appendChild(this.threeCanvas);
+	if (this.game_running) {
+		document.getElementById("root").appendChild(this.threeCanvas);
+	} else {
+		document.getElementById("root").replaceChildren(this.room_html);
+	}
 }
 
 joinRoom(room_name) {
@@ -404,7 +408,9 @@ function server_msg(event) {
 
 		container.appendChild(title);
 		container.appendChild(code);
-		document.getElementById("root").replaceChildren(container);
+		this.room_html = container;
+
+		document.getElementById("root").replaceChildren(this.room_html);
 		translatePage();
 		break;
 
@@ -438,8 +444,8 @@ function server_msg(event) {
 		this.banner.setAttribute("class", "h2 display-1");
 		this.banner.setAttribute("style", "text-align: center")
 		this.banner.innerHTML = data["message"]["player1_username"] + " vs " + data["message"]["player2_username"]
-		this.reconect();
 		this.game_running = true;
+		this.reconect();
 		break;
 	
 	case "game.end":
