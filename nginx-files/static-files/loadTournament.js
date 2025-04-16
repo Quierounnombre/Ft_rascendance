@@ -1,5 +1,6 @@
 import {tournament_create_room} from "./pong/pong.js"
 import {tournament_join_room} from "./pong/pong.js"
+import translatePage from "./translate.js";
 
 async function getColors() {
 	const token = localStorage.getItem("token")
@@ -23,6 +24,7 @@ export default async function loadTournament() {
 	gameCreator.setAttribute("class", "container");
 	gameCreator.innerHTML = `
 	<div>
+	<div id="liveAlertPlaceholder"></div>
 	<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
 	<h2 data-i18n-key="make-tourn">Create tourn</h2>
 	<form id="dataForm" class="container">
@@ -85,7 +87,12 @@ export default async function loadTournament() {
 		delete config.tourn_player_num;
 
 		if (number_players % 2 != 0) {
-			alert("DEBUG, pon un numero de jugadores par"); // TODO: borrar
+			put_alert("error-pair-tournament", "Please, put a pair number of participants to the tournament");
+			return;
+		}
+
+		if (number_players < 4) {
+			put_alert("error-number-tournament", "Please, put a valid number of participants to the tournament. Hint: put a number between 4 and 42, both inclusive");
 			return;
 		}
 
@@ -114,6 +121,22 @@ export default async function loadTournament() {
 
 		tournament_join_room(tournament_name, colors);
 	});
+}
+
+// TODO: esto se puede reutilizar en todos los errores?
+function put_alert(id, msg) {
+	const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+	const wrapper = document.createElement('div')
+
+	wrapper.innerHTML = `
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<div data-i18n-key="${id}">${msg}</div>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	`;
+
+	alertPlaceholder.append(wrapper);
+	translatePage();
 }
 
 

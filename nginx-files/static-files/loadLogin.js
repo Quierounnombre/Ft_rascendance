@@ -44,7 +44,7 @@ async function logIn(form) {
 	  `<div class="alert alert-danger alert-dismissible" role="alert">`,
 	  `   <div>Invalid Login, please try again</div>`,
 	  '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-	  '</div>'
+	  '</div>' // TODO: traducir
 		].join('')
   
 		alertPlaceholder.append(wrapper)

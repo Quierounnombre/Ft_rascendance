@@ -73,6 +73,8 @@ const translations = {
         "hist-res": "Results",
         "hist-tim": "Time",
         "hist-dat": "Date",
+        "error-pair-tournament": "Please, put a pair number of participants to the tournament",
+        "error-number-tournament": "Please, put a valid number of participants to the tournament. Hint: put a number between 4 and 42, both inclusive",
     },
 
     "ESP": {
@@ -144,6 +146,8 @@ const translations = {
         "hist-res": "Resultados",
         "hist-tim": "Tiempo",
         "hist-dat": "Fecha",
+        "error-pair-tournament": "Por favor, pon un número par de jugadores al torneo",
+        "error-number-tournament": "Por favor, pon un número válido de jugadores al tornero. Pista: pon un número entre 4 y 42, ambos incluidos",
     },
 
     "CAT": {
@@ -215,6 +219,8 @@ const translations = {
         "hist-res": "Resultats",
         "hist-tim": "Temps",
         "hist-dat": "Data",
+        "error-pair-tournament": "Si us plau, posa un nombre parell de jugadors al torneig",
+        "error-number-tournament": "Si us plau, posa un número vàlid de jugadors al torner. Pista: posa un número entre 4 i 42, ambdós inclosos",
     },
 };
 
