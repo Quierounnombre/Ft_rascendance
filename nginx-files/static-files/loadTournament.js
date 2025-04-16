@@ -56,7 +56,7 @@ export default async function loadTournament() {
 		</form>
 	</div>
 	<div>
-	<h2 data-i18n-key="join-tourn">Join tourn</h2>
+	<h2 data-i18n-key="join-tourn" class="me-3">Join tourn</h2>
 	<form id="dataForm2" class="container">
 		<div class="form-floating">
 			<input required name="tourn_name2" id="tourn_name2" type="text" class="form-control" size="100">

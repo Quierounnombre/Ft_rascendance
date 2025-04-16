@@ -8,7 +8,7 @@ export default function loadModeGame() {
 gameSelector.setAttribute("id", "canvas_container");
 gameSelector.setAttribute("class", "container");
 gameSelector.innerHTML = `
-<h2 data-i18n-key="game-mode">Create room</h2>
+<h2 data-i18n-key="game-mode" class="h2 display-1" style="text-align: center">Create room</h2>
     <div class="row">
         <div class="col border border-5 border-info-subtle rounded-pill p-4 text-center me-3" style="background-color: lightskyblue; padding:30px">
         <a class="link-offset-2 link-underline link-underline-opacity-0" href="#form-tourn">

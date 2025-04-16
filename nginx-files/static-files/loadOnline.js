@@ -51,7 +51,7 @@ export default async function loadOnline() {
 		</form>
 	</div>
 	<div>
-	<h2 data-i18n-key="join-room">Join room</h2>
+	<h2 data-i18n-key="join-room" class="me-3">Join room</h2>
 	<form id="dataForm2" class="container">
 		<div class="form-floating">
 			<input required name="room_name2" id="room_name2" type="text" class="form-control" size="100">
