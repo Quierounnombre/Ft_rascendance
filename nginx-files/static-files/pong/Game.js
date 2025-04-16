@@ -440,12 +440,12 @@ function server_msg(event) {
 		document.addEventListener("keydown", (event) => {});
 		document.addEventListener("keyup", (event) => {});
 
-		const back_button = document.createElement("a");
-		back_button.setAttribute("href", "#game");
-		back_button.setAttribute("style", "font-size:2.5rem; color:blue");
+		// const back_button = document.createElement("a");
+		// back_button.setAttribute("href", "#game");
+		// back_button.setAttribute("style", "font-size:2.5rem; color:blue");
 
-		back_button.innerHTML = `<i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i>`
-		document.getElementById("root").appendChild(back_button);
+		// back_button.innerHTML = `<i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i>`
+		// document.getElementById("root").appendChild(back_button);// TODO: si alguien esta en otra parte de la web en este punto, lo crea igualmente
 		break;
 
 	case "error":

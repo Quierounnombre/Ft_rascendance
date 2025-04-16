@@ -109,7 +109,11 @@ function server_msg(event) {
 		break;
 
 	case "tournament.ended":
-		alert(data["message"]);
+		const parsed_ranking = JSON.parse(data["message"]);
+		const table = create_table(parsed_ranking);
+
+		document.getElementById("root").replaceChildren(table);
+		this.websocket.close();
 		break;
     
 	case "next.round":
@@ -154,6 +158,41 @@ function server_msg(event) {
 		this.websocket.close();
 		break;
 	}
+}
+
+function create_table(data) {
+	const h1 = document.createElement("th");
+	h1.innerHTML = "Participants";
+	h1.setAttribute("data-i18n-key", "hist-par");
+
+	const h2 = document.createElement("th");
+	h2.innerHTML = "Result";
+	h2.setAttribute("data-i18n-key", "hist-res");
+
+	const h0 = document.createElement("tr");
+	h0.appendChild(h1);
+	h0.appendChild(h2);
+
+	const header = document.createElement("thead");
+	header.appendChild(h0);
+
+	const body = document.createElement("tbody");
+	for (let i in data) {
+		const row = document.createElement("tr");
+		row.innerHTML = `
+			<td>${data[i][0]}</td>
+			<td>${data[i][1]}</td>
+		`;
+		body.appendChild(row);
+	}
+
+	const table= document.createElement("table");
+	table.setAttribute("class", "table");
+
+	table.appendChild(header);
+	table.appendChild(body);
+
+	return table
 }
 
 function websocket_close() {
