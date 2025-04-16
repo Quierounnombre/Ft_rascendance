@@ -2,6 +2,7 @@ import { Game } from "./Game.js"
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
 import { onGoing } from "./pong.js";
+import translatePage from "../translate.js";
 "use strict";
 
 class Tournament {
@@ -60,8 +61,6 @@ joinTournament(tournament_name) {
 			this.user_id = user.id;
 			this.user_name = user.username;
 
-			console.log(`${this.user_name}: ${this.user_id}`)
-
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
@@ -96,10 +95,25 @@ function server_msg(event) {
 	case "tournament.created":
 		this.tournament_name = data["message"]["tournament_name"];
 
-		// TODO: debug temporal
-		const tmp = document.createElement("div");
-		tmp.innerHTML = `${this.tournament_name}`;
-		document.getElementById("root").replaceChildren(tmp);
+		const container = document.createElement("div");
+		container.setAttribute("class", "container");
+
+		const title = document.createElement("h2");
+		title.setAttribute("class", "h2 display-1");
+		title.setAttribute("style", "text-align: center")
+		title.setAttribute("data-i18n-key", "tournament-code");
+
+		const code = document.createElement("h3");
+		code.setAttribute("class", "h3 display-1");
+		code.setAttribute("style", "text-align: center")
+		code.innerHTML = `${this.tournament_name}`;
+
+		// TODO: todas estas cosas tendrian que tener ids y demas cosas para la accesibilidad
+
+		container.appendChild(title);
+		container.appendChild(code);
+		document.getElementById("root").replaceChildren(container);
+		translatePage();
 
 		this.joinTournament(this.tournament_name);
 		break;
@@ -109,7 +123,11 @@ function server_msg(event) {
 		break;
 
 	case "tournament.ended":
-		alert(data["message"]);
+		const parsed_ranking = JSON.parse(data["message"]);
+		const table = create_table(parsed_ranking);
+
+		document.getElementById("root").replaceChildren(table);
+		this.websocket.close();
 		break;
     
 	case "next.round":
@@ -150,9 +168,44 @@ function server_msg(event) {
 		break;
 
 	case "error":
-		alert(`DEBUG: ${data["message"]["code"]}`);
+		this.websocket.close();
 		break;
 	}
+}
+
+function create_table(data) {
+	const h1 = document.createElement("th");
+	h1.innerHTML = "Participants";
+	h1.setAttribute("data-i18n-key", "hist-par");
+
+	const h2 = document.createElement("th");
+	h2.innerHTML = "Result";
+	h2.setAttribute("data-i18n-key", "hist-res");
+
+	const h0 = document.createElement("tr");
+	h0.appendChild(h1);
+	h0.appendChild(h2);
+
+	const header = document.createElement("thead");
+	header.appendChild(h0);
+
+	const body = document.createElement("tbody");
+	for (let i in data) {
+		const row = document.createElement("tr");
+		row.innerHTML = `
+			<td>${data[i][0]}</td>
+			<td>${data[i][1]}</td>
+		`;
+		body.appendChild(row);
+	}
+
+	const table= document.createElement("table");
+	table.setAttribute("class", "table");
+
+	table.appendChild(header);
+	table.appendChild(body);
+
+	return table
 }
 
 function websocket_close() {

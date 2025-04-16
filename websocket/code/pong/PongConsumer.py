@@ -15,7 +15,7 @@ class PongConsumer(WebsocketConsumer):
     strict_ordering = True
 
     def connect(self) -> None:
-        self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
+        self.room_name = f"{self.scope["url_route"]["kwargs"]["room_name"]}"
         self.tournament_name = ""
 
         async_to_sync(self.channel_layer.group_add)(
@@ -75,8 +75,10 @@ class PongConsumer(WebsocketConsumer):
     #     }
     def createRoom(self, message) -> None:
         self.tournament_name = message["tournament_name"]
+        self.room_name = message["room_name"]
 
         # send to the GameConsumer the game room name and its config
+        # TODO: porque salta un warning?
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "game.config",
@@ -207,8 +209,20 @@ class PongConsumer(WebsocketConsumer):
         }))
     
     def error(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
         self.send(json.dumps({
             "type": "error",
+            "message": event["message"]
+        }))
+
+    def game_reconnect(self, event) -> None:
+        if event["message"]["user_id"] != self.user_id:
+            return
+
+        self.send(json.dumps({
+            "type": "game.reconnect",
             "message": event["message"]
         }))
 

@@ -79,14 +79,8 @@ class Tournament(threading.Thread):
         return len(self.player_list) == self.target_players
 
     def generateSchedule(self) -> None:
+        channel_layer = get_channel_layer()
         number_players = len(self.player_list)
-
-        if number_players < 4:
-            raise ValueError("odd players") # TODO: se deberia comprobar antes
-
-        if number_players % 2  != 0:
-            raise ValueError("low players") # TODO: se deberia comprobar antes
-
         temporal_list = self.player_list.copy()
 
         schedule = '['

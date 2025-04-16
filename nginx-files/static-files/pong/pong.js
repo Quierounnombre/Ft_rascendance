@@ -6,13 +6,11 @@ export let onGoing = new Object();
 export function game_create_room(data, colors) {
 	onGoing.game = new Game(colors);
 	onGoing.game.createRoom(data);
-	// game = '';
 }
 
 export function game_join_room(data, colors) {
 	onGoing.game = new Game(colors);
 	onGoing.game.joinRoom(data);
-	// game = '';
 }
 
 export function game_offline_room(data, colors) {

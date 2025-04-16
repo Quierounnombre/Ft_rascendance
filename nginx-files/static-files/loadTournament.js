@@ -1,52 +1,6 @@
 import {tournament_create_room} from "./pong/pong.js"
 import {tournament_join_room} from "./pong/pong.js"
-
-const gameCreator = document.createElement("div");
-gameCreator.setAttribute("id", "canvas_container");
-gameCreator.setAttribute("class", "container");
-gameCreator.innerHTML = `
-<div>
-<h2 data-i18n-key="make-tourn">Create tourn</h2>
-<form id="dataForm" class="container">
-		<div class="form-floating">
-			<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
-			<label for="timeout" data-i18n-key="max-time" class="form-label">Maximum time of the game in seconds</label>
-		</div>
-
-		<div class="form-floating">
-			<input required type="number" name="max_score" id="max_score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42" value="3">
-			<label for="max_score" data-i18n-key="max-score" class="form-label">Maximum score for a player</label>
-		</div>
-		
-		<div class="form-floating">
-			<select class="form-select" name="map" id="map" aria-label="map">
-				<option data-i18n-key="map-default" selected ="default" value="default">Default map</option>
-				<option data-i18n-key="map-two" value="doubleBall">Two balls map</option>
-				<option data-i18n-key="map-float" value="floating">Floating things map</option>
-			</select>
-			<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
-		</div>
-
-		<div class="form-floating">
-			<input required type="number" name="tourn_player_num" id="tourn_player_num" class="form-control" aria-describedby="Number of players for the tournament" min="4" max="42" value="4">
-			<label for="tourn_player_num" data-i18n-key="tourn_player_num" class="form-label">Number of players</label>
-		</div>
-
-		<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
-	</form>
-</div>
-<div>
-<h2 data-i18n-key="join-tourn">Join tourn</h2>
-<form id="dataForm2" class="container">
-	<div class="form-floating">
-		<input required name="tourn_name2" id="tourn_name2" type="text" class="form-control" size="100">
-		<label class="form-label" for="tourn_name2" data-i18n-key="join-form">Join pong tourn</label>
-	</div>
-	<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
-</form>
-</div>
-<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
-`;
+import translatePage from "./translate.js";
 
 async function getColors() {
 	const token = localStorage.getItem("token")
@@ -64,8 +18,55 @@ async function getColors() {
 	}
 }
 
-// TODO: si se le da muy rapido al boton, te pilla dos imputs
 export default async function loadTournament() {
+	const gameCreator = document.createElement("div");
+	gameCreator.setAttribute("id", "canvas_container");
+	gameCreator.setAttribute("class", "container");
+	gameCreator.innerHTML = `
+	<div>
+	<div id="liveAlertPlaceholder"></div>
+	<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
+	<h2 data-i18n-key="make-tourn">Create tourn</h2>
+	<form id="dataForm" class="container">
+			<div class="form-floating">
+				<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
+				<label for="timeout" data-i18n-key="max-time" class="form-label">Maximum time of the game in seconds</label>
+			</div>
+
+			<div class="form-floating">
+				<input required type="number" name="max_score" id="max_score" class="form-control" aria-describedby="maximum score of the game" min="1" max="42" value="3">
+				<label for="max_score" data-i18n-key="max-score" class="form-label">Maximum score for a player</label>
+			</div>
+			
+			<div class="form-floating">
+				<select class="form-select" name="map" id="map" aria-label="map">
+					<option data-i18n-key="map-default" selected ="default" value="default">Default map</option>
+					<option data-i18n-key="map-two" value="doubleBall">Two balls map</option>
+					<option data-i18n-key="map-float" value="floating">Floating things map</option>
+				</select>
+				<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
+			</div>
+
+			<div class="form-floating">
+				<input required type="number" name="tourn_player_num" id="tourn_player_num" class="form-control" aria-describedby="Number of players for the tournament" min="4" max="42" value="4">
+				<label for="tourn_player_num" data-i18n-key="tourn_player_num" class="form-label">Number of players</label>
+			</div>
+
+			<button type="submit" data-i18n-key="crea-submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+	<div>
+	<h2 data-i18n-key="join-tourn">Join tourn</h2>
+	<form id="dataForm2" class="container">
+		<div class="form-floating">
+			<input required name="tourn_name2" id="tourn_name2" type="text" class="form-control" size="100">
+			<label class="form-label" for="tourn_name2" data-i18n-key="join-form">Join pong tourn</label>
+		</div>
+		<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
+	</form>
+	</div>
+	`;
+
 	const root = document.getElementById("root");
 	root.replaceChildren(gameCreator);
 	const form = document.getElementById("dataForm");
@@ -86,7 +87,12 @@ export default async function loadTournament() {
 		delete config.tourn_player_num;
 
 		if (number_players % 2 != 0) {
-			alert("DEBUG, pon un numero de jugadores par"); // TODO: borrar
+			put_alert("error-pair-tournament", "Please, put a pair number of participants to the tournament");
+			return;
+		}
+
+		if (number_players < 4) {
+			put_alert("error-number-tournament", "Please, put a valid number of participants to the tournament. Hint: put a number between 4 and 42, both inclusive");
 			return;
 		}
 
@@ -113,8 +119,31 @@ export default async function loadTournament() {
 		event.preventDefault();
 		const tournament_name = document.getElementById("tourn_name2").value;
 
+		const tmp = document.createElement("h2");
+		tmp.setAttribute("class", "h2 display-1");
+		tmp.setAttribute("style", "text-align: center");
+		tmp.setAttribute("data-i18n-key", "waiting-room");
+		document.getElementById("root").replaceChildren(tmp);
+		translatePage()
+
 		tournament_join_room(tournament_name, colors);
 	});
+}
+
+// TODO: esto se puede reutilizar en todos los errores?
+function put_alert(id, msg) {
+	const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+	const wrapper = document.createElement('div')
+
+	wrapper.innerHTML = `
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<div data-i18n-key="${id}">${msg}</div>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	`;
+
+	alertPlaceholder.append(wrapper);
+	translatePage();
 }
 
 

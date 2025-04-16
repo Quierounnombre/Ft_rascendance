@@ -5,6 +5,7 @@ import { Player } from "./Player.js";
 import { onGoing } from "./pong.js";
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
+import translatePage from "../translate.js";
 import * as THREE from 'three';
 "use strict";
 
@@ -13,13 +14,9 @@ class Game {
  * @param {JSON string} config string with the JSON config
  */
 constructor(colors) {	
-	// TODO: sacar de la base de datos los colores preferidos por el jugador
-
-	// TODO: que al crear la partida se genere el canvas
 	this.colors = colors
 	this.game_objects = new Map()
 
-	// TODO: todo esto lo puede terner el user en su configuracion, por lo que la configuracion propia de los colores iria aqui
 	this.background_color = "black";
 	this.object_color = "white";
 
@@ -78,7 +75,7 @@ constructor(colors) {
 	this.threeCanvas.setAttribute("id", "pong");
 	this.threeCanvas.setAttribute("width", "800");
 	this.threeCanvas.setAttribute("height", "400");
-	this.threeCanvas.setAttribute("style", "border: 2px solid black"); // TODO: estos valores tendran que salir de la configuracion de colores del jugador
+	this.threeCanvas.setAttribute("style", "border: 2px solid black; display: flex;justify-content: center; align-items: center;");
 	this.scene = new THREE.Scene();
 	this.scene.background = new THREE.Color(0x101010);
 
@@ -120,7 +117,6 @@ isEnd() {
 }
 
 createRoom(game_config, room_name = generateRandomString(8)) {
-	// this.room_name = generateRandomString(8); // TODO: no tendria que ir con el pong_?
 	this.room_name = room_name;
 	this.playerN = "player1";
 
@@ -175,13 +171,12 @@ joinRoom(room_name) {
 	this.room_name = room_name;
 	this.playerN = "player2";
 
-
 	this.websocket = new WebSocket(
 		'wss://'
 		+ window.location.hostname
 		+ ":" + window.location.port
 		+ '/ws/pong/'
-		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
+		+ this.room_name
 		+ '/'
 	)
 
@@ -224,7 +219,7 @@ offlineRoom(game_config) {
 		+ window.location.hostname
 		+ ":" + window.location.port
 		+ '/ws/pong/'
-		+ this.room_name // TODO: aqui seria pong_CLAVE o CLAVE?
+		+ this.room_name
 		+ '/'
 	)
 
@@ -307,17 +302,18 @@ offlineRoom(game_config) {
 	this.websocket.onopen = () => {
 		console.log(`WebSocket opened`);
 
+		// TODO: el juego local  no funciona
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
 
-			// TODO: esta invertido para que no este espejado
+			// NOTE: esta invertido para que no este espejado
 			// identificarse
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
-					"user_id": -1, // TODO: -1 para anonimos?
-					"user_name": this.user_name // TODO: -1 para anonimos?
+					"user_id": -1,
+					"user_name": this.user_name
 				}
 			}));
 
@@ -344,7 +340,7 @@ offlineRoom(game_config) {
 			this.websocket.send(JSON.stringify({
 				"type": "join.room",
 				"message": {
-					"room_name": "pong_" + this.room_name,
+					"room_name": this.room_name,
 					"tournament_name": this.tournament_name,
 				}
 			}));
@@ -357,9 +353,6 @@ offlineRoom(game_config) {
 }
 
 toJSON() {
-	// TODO: definir bien el JSON que posteriormente se serializara
-	// TODO: id del torneo
-	// TODO: bool de si esta dentro de un torneo
 	const game_objects = JSON.parse(this.game_state);
 
 	return {
@@ -390,13 +383,32 @@ function server_msg(event) {
 	case "room.created":
 		this.room_name = data["message"]["room_name"]
 
-		// TODO: debug temporal
-		const tmp = document.createElement("div");
-		tmp.innerHTML = `${this.room_name}`
-		document.getElementById("root").replaceChildren(tmp);
+		// TODO: si creas sala, se vas a otra seccion y vuelves, esta con una partida sin  cargar
+		if (data["message"]["tournament_name"] != "")
+			return;
 
+		const container = document.createElement("div");
+		container.setAttribute("class", "container");
+
+		const title = document.createElement("h2");
+		title.setAttribute("class", "h2 display-1");
+		title.setAttribute("style", "text-align: center")
+		title.setAttribute("data-i18n-key", "game-code");
+
+		const code = document.createElement("h3");
+		code.setAttribute("class", "h3 display-1");
+		code.setAttribute("style", "text-align: center")
+		code.innerHTML = `${this.room_name}`;
+
+		// TODO: todas estas cosas tendrian que tener ids y demas cosas para la accesibilidad
+
+		container.appendChild(title);
+		container.appendChild(code);
+		document.getElementById("root").replaceChildren(container);
+		translatePage();
 		break;
 
+	case "game.reconnect":
 	case "game.started":
 		this.room_name = data["message"]["room_name"]
 
@@ -422,7 +434,9 @@ function server_msg(event) {
 				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.threeCanvas, this.scene, this.colors.ball_color)));
 			}
 		}
-		this.banner = document.createElement("h1");
+		this.banner = document.createElement("h2");
+		this.banner.setAttribute("class", "h2 display-1");
+		this.banner.setAttribute("style", "text-align: center")
 		this.banner.innerHTML = data["message"]["player1_username"] + " vs " + data["message"]["player2_username"]
 		this.reconect();
 		this.game_running = true;
@@ -438,12 +452,18 @@ function server_msg(event) {
 					"room_name": self.room_name
 				}
 			}))
+
+			const tmp = document.createElement("h2");
+			tmp.setAttribute("class", "h2 display-1");
+			tmp.setAttribute("style", "text-align: center");
+			tmp.setAttribute("data-i18n-key", "waiting-room");
+			document.getElementById("root").replaceChildren(tmp);
+			translatePage()
 		}
 
 		this.websocket.close();
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
-		console.log(JSON.stringify(this)); // TODO: exportar info de la partida
 		delete onGoing.game;
 		document.addEventListener("keydown", (event) => {});
 		document.addEventListener("keyup", (event) => {});
@@ -451,6 +471,7 @@ function server_msg(event) {
 
 	case "error":
 		alert(`DEBUG: ${data["message"]["code"]}`);
+		this.websocket.close();
 		break;
 	}
 }

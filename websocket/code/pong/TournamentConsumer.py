@@ -148,13 +148,16 @@ class TournamentConsumer(WebsocketConsumer):
             "type": "join.tournament.game",
             "message": {
                 "tournament_name": event["message"]["tournament_name"],
-                "room_name": ("pong_" + event["message"]["room_name"])
+                "room_name": event["message"]["room_name"]
             }
         }))
         pass
 
     def error(self, event) -> None:
-            self.send(json.dumps({
-                "type": "error",
-                "message": event["message"]
-            }))
+        if event["message"]["user_id"] != self.user_id and event["message"]["user_id"] != -1:
+            return
+
+        self.send(json.dumps({
+            "type": "error",
+            "message": event["message"]
+        }))

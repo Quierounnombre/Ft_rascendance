@@ -65,10 +65,13 @@ class GameConsumer(SyncConsumer):
     def player_direction(self, event) -> None:
         message = event["message"]
 
-        game_rooms[message["room_name"]].setPlayerDir(message["player_id"], message["dir"], message["is_moving"])
+        if message["room_name"] in game_rooms:
+            game_rooms[message["room_name"]].setPlayerDir(message["player_id"], message["dir"], message["is_moving"])
     
     # message: {
     #     "room_name": str,
+    #     "tournament_name": str,
+    #     "user_name": str,
     #     "player": str
     #     "id": int
     # }
@@ -81,13 +84,41 @@ class GameConsumer(SyncConsumer):
                 message["room_name"], {
                     "type": "error",
                     "message": {
+                        "user_id": message["id"],
                         "code": "NOTEXIST"
+                    }
+                }
+            )
+            return
+        
+        # TODO: comprobar si ya estaba metido, si lo esta pasarle la misma  info que cuando empieza el juego
+        if message["id"] == game_rooms[message["room_name"]].player1_id or message["id"] == game_rooms[message["room_name"]].player2_id:
+            async_to_sync(channel_layer.group_send)(
+                message["room_name"], {
+                    "type": "game.reconnect",
+                    "message": {
+                        "user_id": message["id"],
+                        "player1_username": game_rooms[message["room_name"]].player1_username,
+                        "player2_username": game_rooms[message["room_name"]].player2_username,
+                        "room_name": message["room_name"],
+                        "tournament_name": message["tournament_name"],
+                        "data": game_rooms[message["room_name"]].serialize()
                     }
                 }
             )
             return
 
         if game_rooms[message["room_name"]].number_players == 2:
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                    message["room_name"], {
+                        "type": "error",
+                        "message": {
+                            "user_id": message["id"],
+                            "code": "ROOMFULL"
+                        }
+                    }
+            )
             return
 
         for obj in game_rooms[message["room_name"]].game_objects:
@@ -141,7 +172,37 @@ class GameConsumer(SyncConsumer):
         number_players = int(message["number_players"])
 
         if number_players < 4 or number_players % 2 != 0:
-            # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
+            if number_players < 4:
+                async_to_sync(channel_layer.group_send)(
+                    self.tournament_name, {
+                        'type': 'error',
+                        'message': {
+                            "user_id": -1,
+                            "code": "LOWPLAYERS"
+                        }
+                    }
+                )
+            if number_players > 42:
+                async_to_sync(channel_layer.group_send)(
+                    self.tournament_name, {
+                        'type': 'error',
+                        'message': {
+                            "user_id": -1,
+                            "code": "HIGHPLAYERS"
+                        }
+                    }
+                )
+
+            if number_players % 2  != 0:
+                async_to_sync(channel_layer.group_send)(
+                    self.tournament_name, {
+                        'type': 'error',
+                        'message': {
+                            "user_id": -1,
+                            "code": "ODDPLAYERS"
+                        }
+                    }
+                )
             return
 
         tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)
@@ -159,6 +220,7 @@ class GameConsumer(SyncConsumer):
                     message["tournament_name"], {
                         "type": "error",
                         "message": {
+                            "user_id": user_id,
                             "code": "NOTEXIST"
                         }
                     }
@@ -188,4 +250,7 @@ class GameConsumer(SyncConsumer):
         pass
 
     def error(self, event) -> None:
+        pass
+
+    def game_reconnect(self, event) -> None:
         pass
