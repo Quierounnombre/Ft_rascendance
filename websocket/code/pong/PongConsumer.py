@@ -74,9 +74,12 @@ class PongConsumer(WebsocketConsumer):
     #         "data": la info del formulario para generar la sala
     #     }
     def createRoom(self, message) -> None:
+        print(f'\033[1;32mPongConsumer::createRoom', flush=True)
         self.tournament_name = message["tournament_name"]
+        self.room_name = message["room_name"]
 
         # send to the GameConsumer the game room name and its config
+        # TODO: porque salta un warning?
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "game.config",
@@ -114,6 +117,7 @@ class PongConsumer(WebsocketConsumer):
     #     "type": "join_room",
     #     "message": {"room_name": str}
     def joinRoom(self, message) -> None:
+        print(f'\033[1;32mPongConsumer::joinRoom', flush=True)
         self.room_name = message["room_name"]
         self.tournament_name = message["tournament_name"]
 

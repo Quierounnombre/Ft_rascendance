@@ -76,6 +76,7 @@ class GameConsumer(SyncConsumer):
         message = event["message"]
         channel_layer = get_channel_layer()
 
+        print(f'\033[1;32mGameConsumer::set_player -> checking if room exists', flush=True)
         if not message["room_name"] in game_rooms:
             async_to_sync(channel_layer.group_send)(
                 message["room_name"], {
@@ -89,6 +90,7 @@ class GameConsumer(SyncConsumer):
             return
         
         # TODO: comprobar si ya estaba metido, si lo esta pasarle la misma  info que cuando empieza el juego
+        print(f'\033[1;32mGameConsumer::set_player -> checking if player is already in the room', flush=True)
         if message["id"] == game_rooms[message["room_name"]].player1_id or message["id"] == game_rooms[message["room_name"]].player2_id:
             async_to_sync(channel_layer.group_send)(
                 message["room_name"], {
@@ -105,6 +107,7 @@ class GameConsumer(SyncConsumer):
             )
             return
 
+        print(f'\033[1;32mGameConsumer::set_player -> checking if the room is already full', flush=True)
         if game_rooms[message["room_name"]].number_players == 2:
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
@@ -118,6 +121,7 @@ class GameConsumer(SyncConsumer):
             )
             return
 
+        print(f'\033[1;32mGameConsumer::set_player -> setting player', flush=True)
         for obj in game_rooms[message["room_name"]].game_objects:
             if obj.id == message["player"] and obj.pk < 0:
                 obj.pk = message["id"]
@@ -134,6 +138,7 @@ class GameConsumer(SyncConsumer):
 
                 game_rooms[message["room_name"]].number_players += 1
         
+        print(f'\033[1;32mGameConsumer::set_player -> checking if the room needs to start', flush=True)
         if game_rooms[message["room_name"]].number_players == 2:
             async_to_sync(self.channel_layer.send)(
                 "game_engine", {

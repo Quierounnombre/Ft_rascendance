@@ -302,6 +302,7 @@ offlineRoom(game_config) {
 	this.websocket.onopen = () => {
 		console.log(`WebSocket opened`);
 
+		// TODO: el juego local  no funciona
 		getUser(localStorage.getItem("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
@@ -386,6 +387,7 @@ function server_msg(event) {
 		const tmp = document.createElement("div");
 		tmp.innerHTML = `${this.room_name}`
 		document.getElementById("root").replaceChildren(tmp);
+		// TODO: si creas sala, se vas a otra seccion y vuelves, esta con una partida sin  cargar
 		break;
 
 	case "game.reconnect":
