@@ -78,6 +78,7 @@ const translations = {
         "waiting-room": "Waiting room",
         "tournament-code": "Tournament code:",
         "game-code": "Game code:",
+        "game-end": "The game has finished",
     },
 
     "ESP": {
@@ -154,6 +155,7 @@ const translations = {
         "waiting-room": "Sala de espera",
         "tournament-code": "Código del torneo:",
         "game-code": "Código de la partida:",
+        "game-end": "La partida ha terminado",
     },
 
     "CAT": {
@@ -230,6 +232,7 @@ const translations = {
         "waiting-room": "Sala d'espera",
         "tournament-code": "Codi del torneig:",
         "game-code": "Codi de la partida",
+        "game-end": "La partida ha acabat",
     },
 };
 

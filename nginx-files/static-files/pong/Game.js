@@ -465,6 +465,13 @@ function server_msg(event) {
 			tmp.setAttribute("data-i18n-key", "waiting-room");
 			document.getElementById("root").replaceChildren(tmp);
 			translatePage()
+		} else {
+			const tmp2 = document.createElement("h3");
+			tmp2.setAttribute("class", "h3 display-1");
+			tmp2.setAttribute("style", "text-align: center");
+			tmp2.setAttribute("data-i18n-key", "game-end");
+			document.getElementById("root").appendChild(tmp2);
+			translatePage()
 		}
 
 		this.websocket.close();
