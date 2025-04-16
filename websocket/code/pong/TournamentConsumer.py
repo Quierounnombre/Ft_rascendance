@@ -148,7 +148,7 @@ class TournamentConsumer(WebsocketConsumer):
             "type": "join.tournament.game",
             "message": {
                 "tournament_name": event["message"]["tournament_name"],
-                "room_name": ("pong_" + event["message"]["room_name"])
+                "room_name": event["message"]["room_name"]
             }
         }))
         pass

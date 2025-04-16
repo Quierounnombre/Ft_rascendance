@@ -65,7 +65,8 @@ class GameConsumer(SyncConsumer):
     def player_direction(self, event) -> None:
         message = event["message"]
 
-        game_rooms[message["room_name"]].setPlayerDir(message["player_id"], message["dir"], message["is_moving"])
+        if message["room_name"] in game_rooms:
+            game_rooms[message["room_name"]].setPlayerDir(message["player_id"], message["dir"], message["is_moving"])
     
     # message: {
     #     "room_name": str,
@@ -171,7 +172,37 @@ class GameConsumer(SyncConsumer):
         number_players = int(message["number_players"])
 
         if number_players < 4 or number_players % 2 != 0:
-            # TODO: esto deberia estar bien del front, pero por si acaso hay algun gracioso enviar error
+            if number_players < 4:
+                async_to_sync(channel_layer.group_send)(
+                    self.tournament_name, {
+                        'type': 'error',
+                        'message': {
+                            "user_id": -1,
+                            "code": "LOWPLAYERS"
+                        }
+                    }
+                )
+            if number_players > 42:
+                async_to_sync(channel_layer.group_send)(
+                    self.tournament_name, {
+                        'type': 'error',
+                        'message': {
+                            "user_id": -1,
+                            "code": "HIGHPLAYERS"
+                        }
+                    }
+                )
+
+            if number_players % 2  != 0:
+                async_to_sync(channel_layer.group_send)(
+                    self.tournament_name, {
+                        'type': 'error',
+                        'message': {
+                            "user_id": -1,
+                            "code": "ODDPLAYERS"
+                        }
+                    }
+                )
             return
 
         tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)

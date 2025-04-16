@@ -15,7 +15,7 @@ class PongConsumer(WebsocketConsumer):
     strict_ordering = True
 
     def connect(self) -> None:
-        self.room_name = f"pong_{self.scope["url_route"]["kwargs"]["room_name"]}"
+        self.room_name = f"{self.scope["url_route"]["kwargs"]["room_name"]}"
         self.tournament_name = ""
 
         async_to_sync(self.channel_layer.group_add)(

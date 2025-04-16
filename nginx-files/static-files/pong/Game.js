@@ -5,6 +5,7 @@ import { Player } from "./Player.js";
 import { onGoing } from "./pong.js";
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
+import translatePage from "../translate.js";
 import * as THREE from 'three';
 "use strict";
 
@@ -169,7 +170,6 @@ reconect() {
 joinRoom(room_name) {
 	this.room_name = room_name;
 	this.playerN = "player2";
-
 
 	this.websocket = new WebSocket(
 		'wss://'
@@ -383,11 +383,29 @@ function server_msg(event) {
 	case "room.created":
 		this.room_name = data["message"]["room_name"]
 
-		// TODO: debug temporal
-		const tmp = document.createElement("div");
-		tmp.innerHTML = `${this.room_name}`
-		document.getElementById("root").replaceChildren(tmp);
 		// TODO: si creas sala, se vas a otra seccion y vuelves, esta con una partida sin  cargar
+		if (data["message"]["tournament_name"] != "")
+			return;
+
+		const container = document.createElement("div");
+		container.setAttribute("class", "container");
+
+		const title = document.createElement("h2");
+		title.setAttribute("class", "h2 display-1");
+		title.setAttribute("style", "text-align: center")
+		title.setAttribute("data-i18n-key", "game-code");
+
+		const code = document.createElement("h3");
+		code.setAttribute("class", "h3 display-1");
+		code.setAttribute("style", "text-align: center")
+		code.innerHTML = `${this.room_name}`;
+
+		// TODO: todas estas cosas tendrian que tener ids y demas cosas para la accesibilidad
+
+		container.appendChild(title);
+		container.appendChild(code);
+		document.getElementById("root").replaceChildren(container);
+		translatePage();
 		break;
 
 	case "game.reconnect":
@@ -416,8 +434,9 @@ function server_msg(event) {
 				this.game_objects.set(tmp2[i].id, (new CanvasObject(tmp2[i], this.threeCanvas, this.scene, this.colors.ball_color)));
 			}
 		}
-		this.banner = document.createElement("h1");
-		this.banner.setAttribute("style", "display: flex;justify-content: center; align-items: center;")
+		this.banner = document.createElement("h2");
+		this.banner.setAttribute("class", "h2 display-1");
+		this.banner.setAttribute("style", "text-align: center")
 		this.banner.innerHTML = data["message"]["player1_username"] + " vs " + data["message"]["player2_username"]
 		this.reconect();
 		this.game_running = true;
@@ -433,6 +452,13 @@ function server_msg(event) {
 					"room_name": self.room_name
 				}
 			}))
+
+			const tmp = document.createElement("h2");
+			tmp.setAttribute("class", "h2 display-1");
+			tmp.setAttribute("style", "text-align: center");
+			tmp.setAttribute("data-i18n-key", "waiting-room");
+			document.getElementById("root").replaceChildren(tmp);
+			translatePage()
 		}
 
 		this.websocket.close();
@@ -441,13 +467,6 @@ function server_msg(event) {
 		delete onGoing.game;
 		document.addEventListener("keydown", (event) => {});
 		document.addEventListener("keyup", (event) => {});
-
-		// const back_button = document.createElement("a");
-		// back_button.setAttribute("href", "#game");
-		// back_button.setAttribute("style", "font-size:2.5rem; color:blue");
-
-		// back_button.innerHTML = `<i class="bi bi-arrow-left-circle-fill" style="font-size:2.5rem; color:blue"></i>`
-		// document.getElementById("root").appendChild(back_button);// TODO: si alguien esta en otra parte de la web en este punto, lo crea igualmente
 		break;
 
 	case "error":

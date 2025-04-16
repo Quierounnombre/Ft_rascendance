@@ -119,6 +119,13 @@ export default async function loadTournament() {
 		event.preventDefault();
 		const tournament_name = document.getElementById("tourn_name2").value;
 
+		const tmp = document.createElement("h2");
+		tmp.setAttribute("class", "h2 display-1");
+		tmp.setAttribute("style", "text-align: center");
+		tmp.setAttribute("data-i18n-key", "waiting-room");
+		document.getElementById("root").replaceChildren(tmp);
+		translatePage()
+
 		tournament_join_room(tournament_name, colors);
 	});
 }

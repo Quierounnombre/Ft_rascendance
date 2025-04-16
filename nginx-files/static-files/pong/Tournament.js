@@ -2,6 +2,7 @@ import { Game } from "./Game.js"
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
 import { onGoing } from "./pong.js";
+import translatePage from "../translate.js";
 "use strict";
 
 class Tournament {
@@ -60,8 +61,6 @@ joinTournament(tournament_name) {
 			this.user_id = user.id;
 			this.user_name = user.username;
 
-			console.log(`${this.user_name}: ${this.user_id}`)
-
 			this.websocket.send(JSON.stringify({
 				"type": "identify",
 				"message": {
@@ -96,10 +95,25 @@ function server_msg(event) {
 	case "tournament.created":
 		this.tournament_name = data["message"]["tournament_name"];
 
-		// TODO: debug temporal
-		const tmp = document.createElement("div");
-		tmp.innerHTML = `${this.tournament_name}`;
-		document.getElementById("root").replaceChildren(tmp);
+		const container = document.createElement("div");
+		container.setAttribute("class", "container");
+
+		const title = document.createElement("h2");
+		title.setAttribute("class", "h2 display-1");
+		title.setAttribute("style", "text-align: center")
+		title.setAttribute("data-i18n-key", "tournament-code");
+
+		const code = document.createElement("h3");
+		code.setAttribute("class", "h3 display-1");
+		code.setAttribute("style", "text-align: center")
+		code.innerHTML = `${this.tournament_name}`;
+
+		// TODO: todas estas cosas tendrian que tener ids y demas cosas para la accesibilidad
+
+		container.appendChild(title);
+		container.appendChild(code);
+		document.getElementById("root").replaceChildren(container);
+		translatePage();
 
 		this.joinTournament(this.tournament_name);
 		break;
@@ -154,7 +168,6 @@ function server_msg(event) {
 		break;
 
 	case "error":
-		alert(`DEBUG: ${data["message"]["code"]}`);
 		this.websocket.close();
 		break;
 	}
