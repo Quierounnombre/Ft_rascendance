@@ -79,6 +79,7 @@ const translations = {
         "tournament-code": "Tournament code:",
         "game-code": "Game code:",
         "game-end": "The game has finished",
+        "NOTEXIST": "The game doesn't exist",
     },
 
     "ESP": {
@@ -156,6 +157,7 @@ const translations = {
         "tournament-code": "Código del torneo:",
         "game-code": "Código de la partida:",
         "game-end": "La partida ha terminado",
+        "NOTEXIST": "La partida no existe",
     },
 
     "CAT": {
@@ -233,6 +235,7 @@ const translations = {
         "tournament-code": "Codi del torneig:",
         "game-code": "Codi de la partida",
         "game-end": "La partida ha acabat",
+        "NOTEXIST": "La partida no existeix",
     },
 };
 

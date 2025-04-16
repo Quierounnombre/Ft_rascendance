@@ -483,8 +483,23 @@ function server_msg(event) {
 		break;
 
 	case "error":
-		alert(`DEBUG: ${data["message"]["code"]}`);
+		switch(data["message"]["code"]) {
+		case "NOTEXIST":
+			const tmp3 = document.createElement("h3");
+			tmp3.setAttribute("class", "h3 display-1");
+			tmp3.setAttribute("style", "text-align: center");
+			tmp3.setAttribute("data-i18n-key", "NOTEXIST");
+			document.getElementById("root").replaceChildren(tmp3);
+			translatePage()
+			break;
+		default:
+			break;
+		}
+
 		this.websocket.close();
+		delete onGoing.game;
+		document.addEventListener("keydown", (event) => {});
+		document.addEventListener("keyup", (event) => {});
 		break;
 	}
 }
