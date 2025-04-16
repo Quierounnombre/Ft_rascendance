@@ -340,7 +340,7 @@ offlineRoom(game_config) {
 			this.websocket.send(JSON.stringify({
 				"type": "join.room",
 				"message": {
-					"room_name": "pong_" + this.room_name,
+					"room_name": this.room_name,
 					"tournament_name": this.tournament_name,
 				}
 			}));

@@ -74,7 +74,6 @@ class PongConsumer(WebsocketConsumer):
     #         "data": la info del formulario para generar la sala
     #     }
     def createRoom(self, message) -> None:
-        print(f'\033[1;32mPongConsumer::createRoom', flush=True)
         self.tournament_name = message["tournament_name"]
         self.room_name = message["room_name"]
 
@@ -117,7 +116,6 @@ class PongConsumer(WebsocketConsumer):
     #     "type": "join_room",
     #     "message": {"room_name": str}
     def joinRoom(self, message) -> None:
-        print(f'\033[1;32mPongConsumer::joinRoom', flush=True)
         self.room_name = message["room_name"]
         self.tournament_name = message["tournament_name"]
 

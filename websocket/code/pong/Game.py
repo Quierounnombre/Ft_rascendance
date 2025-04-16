@@ -31,9 +31,9 @@ class Game(threading.Thread):
         self.is_running = False
 
         self.player1_username =  ''
-        self.player1_id = -1
+        self.player1_id = -42
         self.player2_username =  ''
-        self.player2_id = -1
+        self.player2_id = -42
 
         data = json.loads(data)
 
