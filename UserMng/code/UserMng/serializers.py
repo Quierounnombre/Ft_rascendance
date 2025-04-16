@@ -88,6 +88,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
 			raise ValidationError(detail="Empty password")
 		if (not instance['email']):
 			raise ValidationError(detail="Empty email")
+		if (User.objects.filter(email=instance['email'], have_logged=False).exists()):
+			detail = {
+				"detail": "User Not Verify!"
+			}
+			raise ValidationError(detail=detail)
 		return instance
 
 class UserSingUpSerializer(serializers.ModelSerializer):
@@ -126,6 +131,7 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 		return instance
 
 	def create(self, validated_data):
+		password = validated_data.pop('password')
 		validated_data.pop('password2')
 		user, created = User.objects.update_or_create(
 			email=validated_data['email'], 
@@ -133,6 +139,6 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 			)
 		if not created:
 			ValidationError({"detail": "Can't create user"})
-		password = validated_data.pop('password')
 		user.set_password(password)
+		user.save()
 		return (user)

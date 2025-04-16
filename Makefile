@@ -34,3 +34,15 @@ reall:
 	docker network prune -f
 	make create
 	make up
+
+#LONG METHOD THAT JUST ENSURES NO PREVIOUS DATA CAN MODIFY THE OUTCOME
+just_in_case:
+	docker rm -f $(shell docker ps -qa)
+	docker rmi $(shell docker images -qa)
+	docker volume rm $(shell docker volume ls -q)
+	docker system prune -a -f
+	docker network prune -f
+	make create
+	make up
+
+.PHONY: up down ps create rmi rm logs re reall just_in_case

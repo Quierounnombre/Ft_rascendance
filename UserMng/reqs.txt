@@ -18,3 +18,7 @@ i18next
 
 # Request lib
 requests>=2.32.3
+
+#JWT
+djangorestframework-simplejwt>=1.0.0
+djangorestframework-simplejwt[crypto]>=1.0.0

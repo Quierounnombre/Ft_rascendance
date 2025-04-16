@@ -111,7 +111,6 @@ class	GenerateToken(APIView):
 		json_for_validate = self.load_validate_response(request)
 		validate_url = 'http://TwoFactorAuth:8081/email/validate/'
 		response = requests.post(validate_url, json=json_for_validate)
-		print(response.status_code)
 		if (response.status_code != status.HTTP_200_OK):
 			return (Response(response, status=bad_request))
 		#SEND FIRST TO 2FA code to validate

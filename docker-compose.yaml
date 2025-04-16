@@ -97,6 +97,8 @@ services:
       DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
       API_UID: ${API_UID}
       API_SECRET: ${API_SECRET}
+      JWT_PRIVATE: ${JWT_PRIVATE}
+      JWT_PUBLIC: ${JWT_PUBLIC}
     networks:
       - rascendance-network
       - twofactorauth-network
