@@ -168,7 +168,38 @@ function server_msg(event) {
 		break;
 
 	case "error":
+		const tmp3 = document.createElement("h3");
+		tmp3.setAttribute("class", "h3 display-1");
+		tmp3.setAttribute("style", "text-align: center");
+
+		console.log(`${data["message"]["code"]}`); // TODO: borrar
+
+		switch(data["message"]["code"]) {
+		case "NOTEXIST":
+			tmp3.setAttribute("data-i18n-key", "tournament-NOTEXIST");
+			break;
+
+		case "ROOMFULL":
+			tmp3.setAttribute("data-i18n-key", "tournament-ROOMFULL");
+			break;
+
+		case "LOWPLAYERS":
+		case "HIGHPLAYERS":
+		case "ODDPLAYERS":
+			tmp3.setAttribute("data-i18n-key", "easter-egg");
+			break;
+
+		default:
+			break;
+		}
+
+		document.getElementById("root").replaceChildren(tmp3);
+		translatePage();
+
 		this.websocket.close();
+		delete onGoing.game;
+		document.addEventListener("keydown", (event) => {});
+		document.addEventListener("keyup", (event) => {});
 		break;
 	}
 }

@@ -171,38 +171,47 @@ class GameConsumer(SyncConsumer):
         tournament_name = message["tournament_name"]
         number_players = int(message["number_players"])
 
-        if number_players < 4 or number_players % 2 != 0:
-            if number_players < 4:
-                async_to_sync(channel_layer.group_send)(
-                    self.tournament_name, {
-                        'type': 'error',
-                        'message': {
-                            "user_id": -1,
-                            "code": "LOWPLAYERS"
-                        }
-                    }
-                )
-            if number_players > 42:
-                async_to_sync(channel_layer.group_send)(
-                    self.tournament_name, {
-                        'type': 'error',
-                        'message': {
-                            "user_id": -1,
-                            "code": "HIGHPLAYERS"
-                        }
-                    }
-                )
+        channel_layer = get_channel_layer()
 
-            if number_players % 2  != 0:
-                async_to_sync(channel_layer.group_send)(
-                    self.tournament_name, {
-                        'type': 'error',
-                        'message': {
-                            "user_id": -1,
-                            "code": "ODDPLAYERS"
-                        }
+        async_to_sync(self.channel_layer.group_add)(
+           tournament_name, self.channel_name
+        )
+
+        if number_players < 4:
+            async_to_sync(channel_layer.group_send)(
+                tournament_name, {
+                    'type': 'error',
+                    'message': {
+                        "user_id": -1,
+                        "code": "LOWPLAYERS"
                     }
-                )
+                }
+            )
+            return
+
+        if number_players > 42:
+            async_to_sync(channel_layer.group_send)(
+                tournament_name, {
+                    'type': 'error',
+                    'message': {
+                        "user_id": -1,
+                        "code": "HIGHPLAYERS"
+                    }
+                }
+            )
+            return
+
+        if number_players % 2  != 0:
+            print(f'\033[1;31mhi', flush=True)
+            async_to_sync(channel_layer.group_send)(
+                tournament_name, {
+                    "type": "error",
+                    "message": {
+                        "user_id": -1,
+                        "code": "ODDPLAYERS"
+                    }
+                }
+            )
             return
 
         tournaments[message["tournament_name"]] = Tournament(number_players, game_config, tournament_name)
@@ -217,13 +226,13 @@ class GameConsumer(SyncConsumer):
         if not tournament_name in tournaments:
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
-                    message["tournament_name"], {
-                        "type": "error",
-                        "message": {
-                            "user_id": user_id,
-                            "code": "NOTEXIST"
-                        }
+                tournament_name, {
+                    "type": "error",
+                    "message": {
+                        "user_id": user_id,
+                        "code": "NOTEXIST"
                     }
+                }
             )
             return
 

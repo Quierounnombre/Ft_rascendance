@@ -488,7 +488,7 @@ function server_msg(event) {
 			const tmp3 = document.createElement("h3");
 			tmp3.setAttribute("class", "h3 display-1");
 			tmp3.setAttribute("style", "text-align: center");
-			tmp3.setAttribute("data-i18n-key", "NOTEXIST");
+			tmp3.setAttribute("data-i18n-key", "game-NOTEXIST");
 			document.getElementById("root").replaceChildren(tmp3);
 			translatePage()
 			break;

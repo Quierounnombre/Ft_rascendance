@@ -79,7 +79,10 @@ const translations = {
         "tournament-code": "Tournament code:",
         "game-code": "Game code:",
         "game-end": "The game has finished",
-        "NOTEXIST": "The game doesn't exist",
+        "game-NOTEXIST": "The game doesn't exist",
+        "tournament-NOTEXIST": "The tournament doesn't exist",
+        "tournament-ROOMFULL": "The tournament is full",
+        "easter-egg": '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=uwnvNbEGD1g9iZ2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
     },
 
     "ESP": {
@@ -157,7 +160,10 @@ const translations = {
         "tournament-code": "Código del torneo:",
         "game-code": "Código de la partida:",
         "game-end": "La partida ha terminado",
-        "NOTEXIST": "La partida no existe",
+        "game-NOTEXIST": "La partida no existe",
+        "tournament-NOTEXIST": "El torneo no existe",
+        "tournament-ROOMFULL": "El torneo está lleno",
+        "easter-egg": '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=uwnvNbEGD1g9iZ2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
     },
 
     "CAT": {
@@ -235,7 +241,10 @@ const translations = {
         "tournament-code": "Codi del torneig:",
         "game-code": "Codi de la partida",
         "game-end": "La partida ha acabat",
-        "NOTEXIST": "La partida no existeix",
+        "game-NOTEXIST": "La partida no existeix",
+        "tournament-NOTEXIST": "El torneig no existeix",
+        "tournament-ROOMFULL": "El torneig és ple",
+        "easter-egg": '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=uwnvNbEGD1g9iZ2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
     },
 };
 
