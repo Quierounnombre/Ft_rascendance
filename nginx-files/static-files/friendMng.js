@@ -22,7 +22,6 @@ export function addFriend(id, button) {
 		button.innerHTML = "Eliminar Amigo";
 	else if (lang === "CAT")
 		button.innerHTML = "Borrar Amic";
-	button.setAttribute("onclick", "deleteFriend("+ id +", this)");
 }
 
 export function deleteFriend(id, button) {
@@ -47,7 +46,14 @@ export function deleteFriend(id, button) {
 		button.innerHTML = "Añadir Amigo";
 	else if (lang === "CAT")
 		button.innerHTML = "Afegir Amic";
-	button.setAttribute("onclick", "addFriend("+ id +", this)");
+}
+
+export function manageFriend(id, button) {
+	if (button.getAttribute("data-i18n-key")==="del-friend") {
+		deleteFriend(id, button)
+	} else {
+		addFriend(id, button)
+	}
 }
 
 export function seeProfile(id) {
@@ -55,4 +61,4 @@ export function seeProfile(id) {
 	window.location.hash = "#user"
 }
 
-export default {addFriend, deleteFriend, seeProfile}
+export default {manageFriend, seeProfile}
