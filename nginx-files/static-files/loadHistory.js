@@ -1,9 +1,10 @@
 import getHistoryTable from "./getHistoryTable.js";
 import getUser from "./getUser.js";
 import translatePage from "./translate.js";
+import {getCookie} from "./cookiesManagement.js"
 
 export default function loadHistory() {
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	if (!token) {
 		window.location.hash = "";
 		return ;

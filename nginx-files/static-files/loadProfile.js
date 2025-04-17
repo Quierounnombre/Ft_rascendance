@@ -2,17 +2,18 @@ import editProfile from "./editProfile.js";
 import getUser from "./getUser.js";
 import getUserElement from "./getUserElement.js";
 import translatePage from "./translate.js";
+import {getCookie, deleteCookie} from "./cookiesManagement.js"
 
 export default async function loadProfile() {
 	const root = document.getElementById("root");
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	if (!token) {
 		window.location.hash = '#anon-menu';
 		return ;
 	}
 	const user = await getUser(token);
 	if (user === -1){
-		localStorage.removeItem("token");
+		deleteCookie("token");
 		window.location.hash = "#anon-menu";
 		return -1;
 	}
@@ -50,7 +51,7 @@ export default async function loadProfile() {
 }
 
 async function getColors() {
-	const token = localStorage.getItem("token")
+	const token = getCookie("token")
 	const response =  await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/colors/", {
 		method: "GET",
 		headers: {
@@ -111,7 +112,7 @@ async function getProfileElement(user) {
 }
 
 function logOut() {
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	try {
 		fetch("https://" + window.location.hostname + ":" + window.location.port+ "/profile/logout/", {
 			method: "POST",
@@ -120,7 +121,7 @@ function logOut() {
 			},
 		}).then((response) => {
 		document.getElementsByTagName("html")[0].style["font-size"] = "16px";
-		localStorage.removeItem("token");
+		deleteCookie("token");
 		var event = new Event('hashchange');
 		window.dispatchEvent(event);
 		});

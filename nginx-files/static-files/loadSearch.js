@@ -2,6 +2,8 @@ import getMyFriends from "./getMyFriends.js";
 import getUser from "./getUser.js";
 import searchUsers from "./searchUsers.js";
 import translatePage from "./translate.js";
+import {getCookie} from "./cookiesManagement.js"
+import { seeProfile, addFriend, deleteFriend } from "./friendMng.js";
 
 export default async function loadSearch() {
 	if (! "query" in localStorage) {
@@ -9,7 +11,7 @@ export default async function loadSearch() {
 		return ;
 	}
 	const query = localStorage.getItem("query");
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	
 	if (!token) {
 		window.location.hash = "#anon-menu";
@@ -30,7 +32,7 @@ export default async function loadSearch() {
 }
 
 async function usersList(users, me) {
-    const token = localStorage.getItem("token");
+    const token = getCookie("token");
     if (!token) {
         window.location.hash = "#anon-menu";
         return -1;
@@ -55,11 +57,26 @@ async function usersList(users, me) {
            <h4 class="card-title">`+ user["username"] +`</h4>
            <p class="card-text">`+ user['email'] +`</p>
             ` + friendButton(user["id"], friends) + `
-			<button type="button" class="btn btn-lg btn-warning" data-i18n-key="see-prof" onclick="seeProfile(`+user["id"]+`)">See Profile</button>
+			<button type="button" class="btn btn-lg btn-warning" data-i18n-key="see-prof" userid="`+user["id"]+`">See Profile</button>
 		</div>
 		<div class="w-100"></div>
 		</div>
     `});
+	const buttons = userList.getElementsByTagName("button");
+	[...buttons].forEach(button => {
+		if (button.getAttribute("data-i18n-key") === "see-prof") {
+			button.addEventListener("click", () => {
+				seeProfile(button.getAttribute("userid"));
+			})
+		} else if (button.getAttribute("data-i18n-key")==="del-friend") {
+			button.addEventListener("click", () => {
+				deleteFriend(button.getAttribute("userid"), button);
+			})
+		} else if (button.getAttribute("data-i18n-key")==="add-friend") {
+			button.addEventListener("click", () => {
+				addFriend(button.getAttribute("userid"), button);
+			})
+	}})
     translatePage();
 	return userList;
 }
@@ -70,7 +87,7 @@ function friendButton(id, friends) {
 	}
 	for (let friend in friends) {
 		if (friends[friend].id == id)
-			return `<button type="button" data-i18n-key="del-friend" class="btn btn-lg btn-outline-primary" onclick="deleteFriend(`+ id +`, this)">Delete friend</button>`;
+			return `<button type="button" data-i18n-key="del-friend" class="btn btn-lg btn-outline-primary" userid="`+ id +`">Delete friend</button>`;
 	}
-	return `<button type="button" data-i18n-key="add-friend" class="btn btn-lg me-2 btn-primary" onclick="addFriend(`+ id +`, this)">Add Friend</button>`;
+	return `<button type="button" data-i18n-key="add-friend" class="btn btn-lg me-2 btn-primary" userid="`+ id +`">Add Friend</button>`;
 }
