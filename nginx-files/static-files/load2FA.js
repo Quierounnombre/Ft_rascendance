@@ -1,5 +1,6 @@
 import translatePage from "./translate.js";
 import getUser from "./getUser.js";
+import {setCookie} from "./cookiesManagement.js"
 
 export default function load2FA(email) {
     const window2FA = document.createElement("form");
@@ -51,7 +52,7 @@ async function validate2FA(form, email) {
 }
 
 async function validLogin(token, font) {
-	localStorage.setItem("token", token);
+	setCookie("token", token);
     const user = await getUser(token);
     localStorage.setItem("language", user["language"]);
     console.log(user["language"]);

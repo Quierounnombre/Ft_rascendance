@@ -2,6 +2,7 @@ import { Game } from "./Game.js"
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
 import { onGoing } from "./pong.js";
+import { getCookie } from "../cookiesManagement.js";
 import translatePage from "../translate.js";
 "use strict";
 
@@ -57,7 +58,7 @@ joinTournament(tournament_name) {
 	this.websocket.onopen = () => {
 		console.log(`Tournament WebSocket opened`);
 
-		getUser(localStorage.getItem("token")).then((user) => {
+		getUser(getCookie("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
 

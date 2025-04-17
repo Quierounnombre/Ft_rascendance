@@ -1,7 +1,8 @@
 import {game_offline_room} from "./pong/pong.js"
+import { getCookie } from "./cookiesManagement.js";
 
 async function getColors() {
-	const token = localStorage.getItem("token")
+	const token = getCookie("token")
 	const response =  await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/colors/", {
 		method: "GET",
 		headers: {

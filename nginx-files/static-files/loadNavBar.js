@@ -1,6 +1,7 @@
 import getUser from "./getUser.js";
 import translatePage from "./translate.js";
 import bindLocaleSwitcher from "./translate.js";
+import { getCookie } from "./cookiesManagement.js";
 
 export default async function loadNavBar(loc) {
     const profile = await profileButton();
@@ -40,7 +41,7 @@ export default async function loadNavBar(loc) {
 
 
 async function profileButton() {
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	if (!token) {
 		return -1;
 	}

@@ -1,5 +1,3 @@
-// hay token y funciona ? cargar home : cargar login
-
 "use strict";
 import loadAnonHeader from "./loadAnonHeader.js";
 import loadAnonMenu from "./loadAnonMenu.js";
@@ -17,11 +15,12 @@ import loadModeGame from "./loadModeGame.js";
 import loadLocal from "./loadLocal.js";
 import loadOnline from "./loadOnline.js";
 import loadTournament from "./loadTournament.js";
+import {getCookie} from "./cookiesManagement.js"
 
 function changeLayout() {
 	var loc = window.location.hash;
 	const defaultLocale = "ENG";
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	const lang = localStorage.getItem("language");
 	if (!lang)
 	localStorage.setItem("language", defaultLocale);

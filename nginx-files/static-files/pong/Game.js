@@ -5,6 +5,7 @@ import { Player } from "./Player.js";
 import { onGoing } from "./pong.js";
 import getUser from "../getUser.js"
 import generateRandomString from "../generateRandomString.js";
+import { getCookie } from "../cookiesManagement.js";
 import translatePage from "../translate.js";
 import * as THREE from 'three';
 "use strict";
@@ -132,7 +133,7 @@ createRoom(game_config, room_name = generateRandomString(8)) {
 	this.websocket.onopen = () => {
 		console.log(`WebSocket opened`);
 
-		getUser(localStorage.getItem("token")).then((user) => {
+		getUser(getCookie("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
 			// identificarse
@@ -187,7 +188,7 @@ joinRoom(room_name) {
 	this.websocket.onopen = () => {
 		console.log(`WebSocket opened`);
 
-		getUser(localStorage.getItem("token")).then((user) => {
+		getUser(getCookie("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
 
@@ -307,7 +308,7 @@ offlineRoom(game_config) {
 		console.log(`WebSocket opened`);
 
 		// TODO: el juego local  no funciona
-		getUser(localStorage.getItem("token")).then((user) => {
+		getUser(getCookie("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
 

@@ -1,4 +1,5 @@
 import translatePage from "./translate.js";
+import {getCookie} from "./cookiesManagement.js"
 
 export default function editProfile() {
     const submitButton = document.createElement("input");
@@ -41,7 +42,7 @@ avatar_field.innerHTML = `<label data-i18n-key="prof-avatar" for="avtar" class="
 function saveChanges() {
 	const form = document.getElementById("profile");
 	const formData = new FormData(form);
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	const switcher = document.getElementById("lang-switcher");
 	try {
 		fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/me/", {

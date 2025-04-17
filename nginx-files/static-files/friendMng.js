@@ -1,6 +1,8 @@
-function addFriend(id, button) {
+import { getCookie } from "./cookiesManagement.js";
+
+export function addFriend(id, button) {
 	const formData = new FormData();
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	const lang = localStorage.getItem("language");
 	formData.append("friendID", id)
 
@@ -23,9 +25,9 @@ function addFriend(id, button) {
 	button.setAttribute("onclick", "deleteFriend("+ id +", this)");
 }
 
-function deleteFriend(id, button) {
+export function deleteFriend(id, button) {
 	const formData = new FormData();
-	const token = localStorage.getItem("token");
+	const token = getCookie("token");
 	const lang = localStorage.getItem("language");
 	formData.append("friendID", id);
 
@@ -48,7 +50,9 @@ function deleteFriend(id, button) {
 	button.setAttribute("onclick", "addFriend("+ id +", this)");
 }
 
-function seeProfile(id) {
+export function seeProfile(id) {
 	localStorage.setItem("user_id", id);
 	window.location.hash = "#user"
 }
+
+export default {addFriend, deleteFriend, seeProfile}
