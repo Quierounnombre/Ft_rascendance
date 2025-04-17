@@ -15,8 +15,7 @@ export default  function loadAnonMenu() {
 	registerButton.setAttribute("class", "btn btn-light btn-lg col-3");
     registerButton.setAttribute("style", "--bs-btn-font-size: 42px");
     registerButton.setAttribute("data-i18n-key", "reg-button");
-	OAuthButton.setAttribute("class", "btn btn-dark btn-lg col-3");
-	OAuthButton.setAttribute("disabled", "");
+	OAuthButton.setAttribute("class", "btn btn-success btn-lg col-3");
     OAuthButton.setAttribute("style", "--bs-btn-font-size: 42px");
     OAuthButton.setAttribute("data-i18n-key", "oauth-button");
 
@@ -26,7 +25,6 @@ export default  function loadAnonMenu() {
 
 	loginButton.setAttribute("onclick", `window.location.hash='\#anon-login'`);
 	registerButton.setAttribute("onclick", `window.location.hash='\#anon-register'`);
-
 	div.appendChild(loginButton);
 	div.appendChild(registerButton);
 	div.appendChild(OAuthButton);
