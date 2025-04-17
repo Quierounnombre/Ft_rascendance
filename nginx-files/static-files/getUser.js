@@ -3,7 +3,7 @@ export default async function getUser(token) {
 		const response = await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/me/", {
 			method: "GET",
 			headers: {
-				"Authorization": "Token " + token,
+				"AUTHORIZATION": "Bearer " + token,
 			}
 		});
 		if (response.ok) {

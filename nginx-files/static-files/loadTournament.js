@@ -9,7 +9,7 @@ async function getColors() {
 	const response =  await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/colors/", {
 		method: "GET",
 		headers: {
-			"Authorization": "Token " + token,
+			"AUTHORIZATION": "Bearer " + token,
 		}
 	});
 	if (response.ok) {

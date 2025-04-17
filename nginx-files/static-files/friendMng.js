@@ -10,7 +10,7 @@ export function addFriend(id, button) {
         method: "PUT",
 		body: formData,
 		headers: {
-			"Authorization": "Token " + token,
+			"AUTHORIZATION": "Bearer " + token,
 		},
 	})
 
@@ -35,7 +35,7 @@ export function deleteFriend(id, button) {
         method: "DELETE",
 		body: formData,
 		headers: {
-			"Authorization": "Token " + token,
+			"AUTHORIZATION": "Bearer " + token,
 		},
 	})
 

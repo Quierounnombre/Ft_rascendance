@@ -64,7 +64,7 @@ SIMPLE_JWT = {
 	"ISSUER" :  None,
 	"JWK_URL" : None,
 	"LEEWAY" : 0,
-	"AUTH_HEADER_TYPES" : 'Bearer',
+	"AUTH_HEADER_TYPES" : ('Bearer',),
 	"AUTH_HEADER_NAME" : 'HTTP_AUTHORIZATION',
 	"USER_ID_FIELD": "email",
 	"USER_ID_CLAIM" : 'email', #WE USE EMAIL, but  should be aware of user_id?

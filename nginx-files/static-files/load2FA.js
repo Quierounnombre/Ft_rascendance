@@ -1,6 +1,6 @@
 import translatePage from "./translate.js";
 import getUser from "./getUser.js";
-import {setCookie} from "./cookiesManagement.js"
+import {getCookie, setCookie} from "./cookiesManagement.js"
 
 export default function load2FA(email) {
     const window2FA = document.createElement("form");
@@ -44,21 +44,38 @@ async function validate2FA(form, email) {
   
 		alertPlaceholder.append(wrapper)
 		} else {
-			validLogin(data.token, data.font);
+			validLogin(data.access, data.refresh);
 		}
 	} catch (e) {
 		console.error(e);
 	}
 }
 
-async function validLogin(token, font) {
+async function validLogin(token, refresh) {
 	setCookie("token", token);
+	setCookie("refresh", refresh);
     const user = await getUser(token);
-    localStorage.setItem("language", user["language"]);
-	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = font + "px";
+//     localStorage.setItem("language", user["language"]);
 	window.location.hash='';
 	const switcher = document.getElementById("lang-switcher");
     if (!switcher)
         return ;
 	switcher.value = user["language"];
+	const intervalID = window.setInterval(refreshToken, 3600*1000)
+	localStorage.setItem("refreshInterval", intervalID);
+}
+
+function refreshToken() {
+	const refresh = getCookie("refresh");
+	const formData = new FormData();
+	formData.append("refresh", refresh)
+	fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/api/token/refresh/", {
+		method: "POST",
+		body: formData
+	}).then((respose) => {
+		respose.json().then((data) => {
+			setCookie("token", data.access);
+			setCookie("refresh", data.refresh);
+		})
+	})
 }

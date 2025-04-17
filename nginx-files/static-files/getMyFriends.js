@@ -3,7 +3,7 @@ export default async function getMyFriends(token) {
 		const response = await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/friends/", {
 			method: "GET",
 			headers: {
-				"Authorization": "Token " + token,
+				"AUTHORIZATION": "Bearer " + token,
 			}
 		});
 		if (response.ok) {

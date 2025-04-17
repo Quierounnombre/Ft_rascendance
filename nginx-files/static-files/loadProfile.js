@@ -53,7 +53,7 @@ async function getColors() {
 	const response =  await fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/colors/", {
 		method: "GET",
 		headers: {
-			"Authorization": "Token " + token,
+			"AUTHORIZATION": "Bearer " + token,
 		}
 	});
 	if (response.ok) {
@@ -110,16 +110,22 @@ async function getProfileElement(user) {
 }
 
 function logOut() {
+	const refresh = getCookie("refresh");
 	const token = getCookie("token");
+	const formData = new FormData();
+	formData.append("refresh", refresh);
 	try {
 		fetch("https://" + window.location.hostname + ":" + window.location.port+ "/profile/logout/", {
 			method: "POST",
 			headers: {
-				"Authorization": "Token " + token,
+				"AUTHORIZATION": "Bearer " + token,
 			},
+			body: formData,
 		}).then((response) => {
 		document.getElementsByTagName("html")[0].style["font-size"] = "16px";
 		deleteCookie("token");
+		deleteCookie("refresh");
+		clearInterval(localStorage.getItem("refreshInterval"));
 		var event = new Event('hashchange');
 		window.dispatchEvent(event);
 		});
