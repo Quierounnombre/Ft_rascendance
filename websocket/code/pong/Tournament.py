@@ -34,13 +34,13 @@ class TournamentParticipant:
     def getScores(self) -> dict:
         return self.scores
     
-    # TODO: cambiar a una unica variable
     def getTotalPoints(self) -> int:
         total_points = 0;
 
         for score in self.scores:
             total_points += score
         
+        print(f'{self.user_name}: {total_points}: {self.scores}', flush=True)
         return total_points
 
 # ------------------------------------------------------------------------------

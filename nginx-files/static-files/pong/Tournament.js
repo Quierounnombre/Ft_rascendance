@@ -90,8 +90,6 @@ joinTournament(tournament_name) {
 function server_msg(event) {
 	const data = JSON.parse(event["data"]);
 
-	console.log(`Tournament has recived a msg type: ${data["type"]}`)
-
 	switch(data["type"]) {
 	case "tournament.created":
 		this.tournament_name = data["message"]["tournament_name"];
@@ -172,8 +170,6 @@ function server_msg(event) {
 		const tmp3 = document.createElement("h3");
 		tmp3.setAttribute("class", "h3 display-1");
 		tmp3.setAttribute("style", "text-align: center");
-
-		console.log(`${data["message"]["code"]}`); // TODO: borrar
 
 		switch(data["message"]["code"]) {
 		case "NOTEXIST":

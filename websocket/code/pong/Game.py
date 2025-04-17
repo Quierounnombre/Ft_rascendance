@@ -146,7 +146,7 @@ class Game(threading.Thread):
                 self.player1_id: 2,
                 self.player2_id: 0
             }
-        elif player1_score > player2_score: 
+        elif player1_score < player2_score: 
             return {
                 self.player1_id: 0,
                 self.player2_id: 2

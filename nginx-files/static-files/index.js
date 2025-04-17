@@ -34,7 +34,7 @@ function changeLayout() {
 		loc = "#game"
 	}
 	if (window.location.search) {
-		loc = "#oauth"
+		loc = "#anon-oauth"
 	}
 
 	if (loc.startsWith("#anon-")) {
@@ -43,6 +43,8 @@ function changeLayout() {
 			loadLogin();
 		} else if (loc === "#anon-register") {
 			loadRegister();
+		} else if (loc === "#anon-oauth") {
+			loadOAuthCallback();
 		} else {
 			loadAnonMenu();
 		}
@@ -66,8 +68,6 @@ function changeLayout() {
 			loadProfile();
 		} else if (loc === "#user") {
 			loadUser();
-		} else if (loc === "#oauth") {
-			loadOAuthCallback();
 		} else {
 			loadModeGame();
 		}

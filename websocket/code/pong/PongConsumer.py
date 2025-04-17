@@ -237,3 +237,6 @@ class PongConsumer(WebsocketConsumer):
 
     def next_round(self, event) -> None:
         pass
+
+    def tournament_ended(self, event) -> None:
+        pass

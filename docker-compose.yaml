@@ -100,6 +100,7 @@ services:
       API_UID: ${API_UID}
       API_SECRET: ${API_SECRET}
       NGINX_EXTERNAL_PORT: ${NGINX_EXTERNAL_PORT}
+      OAUTH_HOST: ${OAUTH_HOST}
     networks:
       - rascendance-network
       - twofactorauth-network

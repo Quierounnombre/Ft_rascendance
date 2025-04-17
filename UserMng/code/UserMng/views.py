@@ -219,7 +219,7 @@ class OAuthLoginAPIView(APIView):
 		redirect_uri = reverse('auth_callback')
 		params = {
 			'client_id' : settings.API_UID,
-			'redirect_uri': "https://localhost:" + os.environ.get("NGINX_EXTERNAL_PORT"),# + "#oauth",
+			'redirect_uri': "https://" + os.environ.get("OAUTH_HOST") + ":" + os.environ.get("NGINX_EXTERNAL_PORT"),# + "#oauth",
 			'scope': 'public',
 			'response_type' : 'code',
 			'state': state_token,
@@ -248,7 +248,7 @@ class OAuthCallbackAPIView(APIView):
 		data = {
 			'client_id' : settings.API_UID,
 			'client_secret' : settings.API_SECRET,
-			'redirect_uri' : "https://localhost:" + os.environ.get("NGINX_EXTERNAL_PORT"),# + "#oauth",
+			'redirect_uri' : "https://" + os.environ.get("OAUTH_HOST") + ":"  + os.environ.get("NGINX_EXTERNAL_PORT"),# + "#oauth",
 			'code' : code,
 			'grant_type' : 'authorization_code',
 		}

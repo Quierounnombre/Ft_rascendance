@@ -19,8 +19,6 @@ export default async function loadProfile() {
 	}
 	const userElement = await getProfileElement(user);
 
-	console.log(userElement);
-
 	const logoutButton = document.createElement("button");
 	logoutButton.setAttribute("type", "button");
 	logoutButton.setAttribute("class", "btn btn-lg btn-danger");

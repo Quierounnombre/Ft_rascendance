@@ -163,8 +163,6 @@ class TournamentConsumer(WebsocketConsumer):
         pass
 
     def error(self, event) -> None:
-        print(f'\033[1;31m{event["message"]}', flush=True)
-
         if event["message"]["user_id"] != self.user_id and event["message"]["user_id"] != -1:
             return
 

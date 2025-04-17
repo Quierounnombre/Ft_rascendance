@@ -51,7 +51,6 @@ export default async function loadLocal() {
 	const form = document.getElementById("dataForm");
 	const colors = await getColors();
 
-	console.log("loaded");
 	form.addEventListener("submit", (event) => {
 		event.preventDefault();
 		const config = {};

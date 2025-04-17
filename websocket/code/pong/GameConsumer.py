@@ -202,7 +202,6 @@ class GameConsumer(SyncConsumer):
             return
 
         if number_players % 2  != 0:
-            print(f'\033[1;31mhi', flush=True)
             async_to_sync(channel_layer.group_send)(
                 tournament_name, {
                     "type": "error",
@@ -272,4 +271,7 @@ class GameConsumer(SyncConsumer):
         pass
 
     def game_reconnect(self, event) -> None:
+        pass
+
+    def tournament_ended(self, event) -> None:
         pass
