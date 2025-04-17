@@ -15,9 +15,10 @@ export default  function loadAnonMenu() {
 	registerButton.setAttribute("class", "btn btn-light btn-lg col-3");
     registerButton.setAttribute("style", "--bs-btn-font-size: 42px");
     registerButton.setAttribute("data-i18n-key", "reg-button");
-	OAuthButton.setAttribute("class", "btn btn-success btn-lg col-3");
+	OAuthButton.setAttribute("class", "btn btn-dark btn-lg col-3");
     OAuthButton.setAttribute("style", "--bs-btn-font-size: 42px");
     OAuthButton.setAttribute("data-i18n-key", "oauth-button");
+	OAuthButton.addEventListener("click", OAuthLogin)
 
 	loginButton.innerHTML = "Log In";
 	registerButton.innerHTML = "Register";
@@ -30,4 +31,8 @@ export default  function loadAnonMenu() {
 	div.appendChild(OAuthButton);
 
 	root.replaceChildren(div);
+}
+
+function OAuthLogin() {
+	window.location.href = "https://" + window.location.hostname + ":" + window.location.port + "/profile/oauth_login/";
 }

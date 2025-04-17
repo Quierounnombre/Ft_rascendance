@@ -16,6 +16,7 @@ import loadLocal from "./loadLocal.js";
 import loadOnline from "./loadOnline.js";
 import loadTournament from "./loadTournament.js";
 import {getCookie} from "./cookiesManagement.js"
+import loadOAuthCallback from "./loadOAuthCallback.js";
 
 function changeLayout() {
 	var loc = window.location.hash;
@@ -31,6 +32,9 @@ function changeLayout() {
 				
 	if (loc == "") {
 		loc = "#game"
+	}
+	if (window.location.search) {
+		loc = "#oauth"
 	}
 
 	if (loc.startsWith("#anon-")) {
@@ -62,6 +66,8 @@ function changeLayout() {
 			loadProfile();
 		} else if (loc === "#user") {
 			loadUser();
+		} else if (loc === "#oauth") {
+			loadOAuthCallback();
 		} else {
 			loadModeGame();
 		}

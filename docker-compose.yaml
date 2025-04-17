@@ -99,6 +99,7 @@ services:
       DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
       API_UID: ${API_UID}
       API_SECRET: ${API_SECRET}
+      NGINX_EXTERNAL_PORT: ${NGINX_EXTERNAL_PORT}
     networks:
       - rascendance-network
       - twofactorauth-network

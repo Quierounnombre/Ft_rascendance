@@ -216,10 +216,10 @@ class OAuthLoginAPIView(APIView):
 	def get(self, request):
 		state_token = token_urlsafe(32)
 		request.session['oauth_state'] = state_token
-		redirect_uri = request.build_absolute_uri(reverse('auth_callback'))
+		redirect_uri = reverse('auth_callback')
 		params = {
 			'client_id' : settings.API_UID,
-			'redirect_uri': redirect_uri,
+			'redirect_uri': "https://localhost:" + os.environ.get("NGINX_EXTERNAL_PORT"),# + "#oauth",
 			'scope': 'public',
 			'response_type' : 'code',
 			'state': state_token,
@@ -243,12 +243,12 @@ class OAuthCallbackAPIView(APIView):
 		if not code:
 			return (Response({'error':'Auth code not recived'}, status=bad_request))
 	
-		redirect_uri = request.build_absolute_uri(reverse('auth_callback'))
+		redirect_uri = (reverse('auth_callback'))
 		token_url = 'https://api.intra.42.fr/v2/oauth/token'
 		data = {
 			'client_id' : settings.API_UID,
 			'client_secret' : settings.API_SECRET,
-			'redirect_uri' : redirect_uri,
+			'redirect_uri' : "https://localhost:" + os.environ.get("NGINX_EXTERNAL_PORT"),# + "#oauth",
 			'code' : code,
 			'grant_type' : 'authorization_code',
 		}
