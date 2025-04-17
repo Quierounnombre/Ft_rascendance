@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("WEBSOCKET_DJANGO_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if (os.environ.get("DEBUG") == "False"):
@@ -82,12 +82,12 @@ WSGI_APPLICATION = 'websocket.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('WS_DATABASE_NAME'),
-        'PORT': os.environ.get('WS_DATABASE_PORT'),
+		'ENGINE': 'django.db.backends.{}'.format(os.environ.get('DATABASE_ENGINE')),
+		'NAME': os.environ.get('POSTGRES_DB'),
+		'USER': os.environ.get('POSTGRES_USER'),
+		'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+		'HOST': os.environ.get('DATABASE_HOST'),
+		'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
 

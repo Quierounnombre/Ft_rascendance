@@ -63,9 +63,9 @@ services:
       - rascendance-network
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}"]
-      retries: 15
+      retries: 20
       timeout: 3s
-      interval: 1s
+      interval: 2s
 
   usermng:
     restart: always
@@ -148,9 +148,9 @@ services:
       - rascendance-network
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB_HISTORY}"]
-      retries: 15
+      retries: 20
       timeout: 3s
-      interval: 1s
+      interval: 2s
 
 # websocket
 
@@ -158,10 +158,20 @@ services:
     build:
       context: websocket
     container_name: ${WEBSOCKET_NAME}
-    env_file:
-      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_WS}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_HOST: ${DB_WS_HOST}
+      BACKEND_PORT: ${WEBSOCKET_PORT}
+      WS_REDIS_PORT: ${WS_REDIS_PORT}
     depends_on:
-      web-db:
+      ws-db:
         condition: service_healthy
     networks:
       - websocket-network
@@ -180,10 +190,10 @@ services:
     networks:
       - websocket-network
 
-  web-db:
+  ws-db:
     restart: always
     image: postgres:latest
-    container_name: ${WS_DATABASE_NAME}
+    container_name: ${DB_WS_HOST}
     volumes:
       - websocket_data:/var/lib/postgresql/data
     expose:
@@ -191,15 +201,15 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: ${POSTGRES_DB_WS}
       PGUSER: ${POSTGRES_USER}
     networks:
       - websocket-network
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}"]
-      retries: 15
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB_WS}"]
+      retries: 20
       timeout: 3s
-      interval: 1s
+      interval: 2s
 
 #TwoFactorAuth
 
@@ -220,9 +230,9 @@ services:
       - twofactorauth-network
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${TwoFactorAuth_DB}"]
-      retries: 15
+      retries: 20
       timeout: 3s
-      interval: 1s
+      interval: 2s
 
   twofactorauth:
     restart: always
