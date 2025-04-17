@@ -53,7 +53,6 @@ class UserSaveSerializer(serializers.ModelSerializer):
 			response['avatar'] = instance.avatar.url
 		return response
 
-
 class UserColorsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
@@ -88,6 +87,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
 			raise ValidationError(detail="Empty password")
 		if (not instance['email']):
 			raise ValidationError(detail="Empty email")
+		if (User.objects.filter(email=instance['email'], have_logged=False).exists()):
+			detail = {
+				"detail": "User Not Verify!"
+			}
+			raise ValidationError(detail=detail)
 		return instance
 
 class UserSingUpSerializer(serializers.ModelSerializer):
@@ -112,27 +116,28 @@ class UserSingUpSerializer(serializers.ModelSerializer):
 			'password': {"write_only": True}
 		}
 
-	def validate_email(self, email):
-		if (User.objects.filter(email=email).exists()):
-			detail = {
-				"detail": "User Already exist!"
-			}
-			raise ValidationError(detail=detail)
-		return email
-	
 	def validate(self, instance):
 		if (instance['password'] != instance['password2']):
 			msg = {
 				"message": "Both password must match"
 			}
 			raise ValidationError(msg)
+		if (User.objects.filter(email=instance['email'], have_logged=True).exists()):
+			detail = {
+				"detail": "User Already exist!"
+			}
+			raise ValidationError(detail=detail)
 		return instance
 
 	def create(self, validated_data):
 		password = validated_data.pop('password')
 		validated_data.pop('password2')
-		user = User.objects.create(**validated_data)
+		user, created = User.objects.update_or_create(
+			email=validated_data['email'], 
+			defaults=validated_data
+			)
+		if not created:
+			ValidationError({"detail": "Can't create user"})
 		user.set_password(password)
 		user.save()
-		Token.objects.create(user=user)
 		return (user)
