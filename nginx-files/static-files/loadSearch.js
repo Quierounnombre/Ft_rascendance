@@ -37,7 +37,7 @@ async function usersList(users, me) {
         window.location.hash = "#anon-menu";
         return -1;
     }
-	users = users.filter((user) => user.username !== me.username)
+	users = users.filter((user) => user.email !== me.email)
     const friends = await getMyFriends(token)
     const userList = document.createElement("div");
 	if (users.length === 0) {

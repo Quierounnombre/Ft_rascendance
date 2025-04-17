@@ -1,5 +1,8 @@
 include .env
 
+all:
+	docker compose up --build
+
 up:
 	docker compose up -d
 

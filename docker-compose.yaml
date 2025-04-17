@@ -75,8 +75,6 @@ services:
     container_name: UserMng
     expose:
       - ${BACKEND_PORT}
-    ports:
-      - ${BACKEND_PORT}:${BACKEND_PORT}
     volumes:
       - ./UserMng/code:/UserMng/code
       - users_avatars:/UserMng/code/media
