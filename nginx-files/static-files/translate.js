@@ -83,6 +83,8 @@ const translations = {
         "tournament-NOTEXIST": "The tournament doesn't exist",
         "tournament-ROOMFULL": "The tournament is full",
         "easter-egg": '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=uwnvNbEGD1g9iZ2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+        "map-big": "Big ball map",
+        "map-big-little": "A map with a big ball and a little ball",
     },
 
     "ESP": {
@@ -134,7 +136,7 @@ const translations = {
         "max-score": "Puntuación máxima por jugador",
         "map-select": "Selección de mapa",
         "map-default": "Mapa normal",
-        "map-two": "Mapa con par de bolas",
+        "map-two": "Mapa con un par de bolas",
         "map-float": "Mapa con cosas flotando",
         "col-back": "Selector de color para fondo",
         "col-play1": "Selector de color para jugador 1",
@@ -164,6 +166,8 @@ const translations = {
         "tournament-NOTEXIST": "El torneo no existe",
         "tournament-ROOMFULL": "El torneo está lleno",
         "easter-egg": '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=uwnvNbEGD1g9iZ2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+        "map-big": "Mapa con una gran bola",
+        "map-big-little": "Mapa con una gran bola y otra mas pequeña",
     },
 
     "CAT": {
@@ -245,6 +249,8 @@ const translations = {
         "tournament-NOTEXIST": "El torneig no existeix",
         "tournament-ROOMFULL": "El torneig és ple",
         "easter-egg": '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=uwnvNbEGD1g9iZ2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+        "map-big": "Mapa amb una pilota gran",
+        "map-big-little": "Mapa amb pilota gran i pilota petita",
     },
 };
 

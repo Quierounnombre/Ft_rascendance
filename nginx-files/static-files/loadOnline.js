@@ -1,6 +1,6 @@
 import {game_create_room} from "./pong/pong.js"
 import {game_join_room} from "./pong/pong.js"
-import { getMapForm, defaultMap, doubleBallMap, floatingMap} from "./gameMaps.js"
+import {getMapForm, defaultMap, doubleBallMap, bigBallMap, floatingMap, bigBallLittleBallMap} from "./gameMaps.js"
 
 async function getColors() {
 	const token = localStorage.getItem("token")
@@ -78,8 +78,14 @@ export default async function loadOnline() {
 		case "doubleBall":
 			data_to_send = doubleBallMap(config);
 			break;
-		case "floating":
+		case "floatingMap":
 			data_to_send = floatingMap(config);
+			break;
+		case "bigBallMap":
+			data_to_send = bigBallMap(config);
+			break;
+		case "bigBallLittleBallMap":
+			data_to_send = bigBallLittleBallMap(config);
 			break;
 		default:
 			data_to_send = defaultMap(config);

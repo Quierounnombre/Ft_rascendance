@@ -1,5 +1,5 @@
 import {game_offline_room} from "./pong/pong.js"
-import { getMapForm, defaultMap, doubleBallMap, floatingMap } from "./gameMaps.js"
+import {getMapForm, defaultMap, doubleBallMap, bigBallMap, floatingMap, bigBallLittleBallMap} from "./gameMaps.js"
 
 async function getColors() {
 	const token = localStorage.getItem("token")
@@ -65,8 +65,14 @@ export default async function loadLocal() {
 		case "doubleBall":
 			data_to_send = doubleBallMap(config);
 			break;
-		case "floating":
+		case "floatingMap":
 			data_to_send = floatingMap(config);
+			break;
+		case "bigBallMap":
+			data_to_send = bigBallMap(config);
+			break;
+		case "bigBallLittleBallMap":
+			data_to_send = bigBallLittleBallMap(config);
 			break;
 		default:
 			data_to_send = defaultMap(config);
@@ -77,7 +83,6 @@ export default async function loadLocal() {
 		const game_container = document.getElementById("canvas_container");
 		game_container.innerHTML = `<canvas id="pong" width="800" height="400" style="border: 2px solid ${config.counter_color}"></canvas>`;
 
-		console.log("local");
 		game_offline_room(jsonData, colors)
 	});
 }
