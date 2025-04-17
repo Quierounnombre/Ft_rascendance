@@ -22,6 +22,15 @@ class TournamentConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code) -> None:
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
+                "type": "tournament.disconnect",
+                "message": {
+                    "tournament_name": self.tournament_name,
+                }
+            }
+        )
+ 
         async_to_sync(self.channel_layer.group_discard)(
             self.tournament_name, self.channel_name
         )
