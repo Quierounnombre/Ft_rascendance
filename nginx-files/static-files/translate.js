@@ -172,7 +172,7 @@ const translations = {
 
     "CAT": {
         "log-button": "Entra",
-        "reg-button": "Registrat",
+        "reg-button": "Registre",
         "oauth-button": "Amb 42",
         "anon-header": "Benvinguts a Rascendance🏓",
         "footer-1":`Rascendance es un projecte creat per`,
