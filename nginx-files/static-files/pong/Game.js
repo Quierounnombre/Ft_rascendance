@@ -27,6 +27,9 @@ constructor(colors) {
 	this.tournament_name = ""
 
 	document.addEventListener("keydown", (event) => {
+		if (!this.game_running)
+			return;
+
 		if (event.key === 'ArrowUp') {
 			this.dir = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
@@ -50,6 +53,10 @@ constructor(colors) {
 	});
 
 	document.addEventListener("keyup", (event) => {
+		if (!this.game_running)
+			return;
+
+
 		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
 			this.is_moving = false;
 			this.dir = 0
@@ -228,6 +235,8 @@ offlineRoom(game_config) {
 	)
 
 	document.addEventListener("keydown", (event) => {
+		if (!this.game_running)
+			return;
 		if (event.key === 'ArrowUp') {
 			this.websocket.send(JSON.stringify({
 				"type": "direction",
@@ -277,6 +286,9 @@ offlineRoom(game_config) {
 	});
 
 	document.addEventListener("keyup", (event) => {
+		if (!this.game_running)
+			return;
+
 		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
 			this.websocket.send(JSON.stringify({
 				"type": "direction",
@@ -478,8 +490,6 @@ function server_msg(event) {
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
 		delete onGoing.game;
-		document.addEventListener("keydown", (event) => {});
-		document.addEventListener("keyup", (event) => {});
 		break;
 
 	case "error":

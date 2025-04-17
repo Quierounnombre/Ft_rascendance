@@ -13,6 +13,7 @@ constructor(obj, canvas, scene, color) {
 	this.height = this.radius * 2;
 	this.recalculateHitbox();
 
+	this.material.side = THREE.DoubleSide;
 	this.geometry = new THREE.SphereGeometry( this.radius );
 	this.mesh = new THREE.Mesh(this.geometry, this.material);
 	this.mesh.position.x = this.x;

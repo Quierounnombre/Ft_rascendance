@@ -7,7 +7,7 @@ export function getMapForm() {
 				<option data-i18n-key="map-two" value="doubleBall">Two balls map</option>
 				<option data-i18n-key="map-big" value="bigBallMap">Big ball map</option>
 				<option data-i18n-key="map-big-little" value="bigBallLittleBallMap">A big ball with a little ball</option>
-				<option data-i18n-key="map-float" value="floatingMap">Floating things map</option>
+				<option data-i18n-key="map-float" value="bigBallLittleBallMap">A big ball with a little ball</option>
 			</select>
 			<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
 		</div>
