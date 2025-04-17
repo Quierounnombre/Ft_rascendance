@@ -45,7 +45,7 @@ constructor(obj, canvas, scene, color) {
 	this.point_x4 = this.x + this.width / 2;
 	this.point_y4 = this.y + this.height / 2;
 
-	this.geometry = new THREE.BoxGeometry(this.width, this.height, 20);
+	this.geometry = new THREE.BoxGeometry(this.width, this.height, 42);
 	this.material = new THREE.MeshPhongMaterial({color: this.color})
 	this.mesh = new THREE.Mesh(this.geometry, this.material);
 	this.mesh.position.x = this.x;

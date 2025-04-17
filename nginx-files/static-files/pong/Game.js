@@ -28,6 +28,9 @@ constructor(colors) {
 	this.tournament_name = ""
 
 	document.addEventListener("keydown", (event) => {
+		if (!this.game_running)
+			return;
+
 		if (event.key === 'ArrowUp') {
 			this.dir = -4; // NOTE: este numero para que haya cierto degradado en la velocidad, que tambien es menor de base
 			this.is_moving = true;
@@ -51,6 +54,10 @@ constructor(colors) {
 	});
 
 	document.addEventListener("keyup", (event) => {
+		if (!this.game_running)
+			return;
+
+
 		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
 			this.is_moving = false;
 			this.dir = 0
@@ -82,7 +89,9 @@ constructor(colors) {
 
 	var FOV = 70;
 	var z = this.threeCanvas.height / (2 * Math.tan(((FOV * Math.PI) / 180)/2))
-	this.camera = new THREE.PerspectiveCamera(FOV, this.threeCanvas.width / this.threeCanvas.height, z, z + 30)
+	this.camera = new THREE.PerspectiveCamera(FOV, this.threeCanvas.width / this.threeCanvas.height, z, z + 50)
+	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+	this.scene.add( light );
 	this.camera.position.z = z + 11;
 	this.camera.position.x = this.threeCanvas.width / 2;
 	this.camera.position.y = - this.threeCanvas.height / 2;
@@ -229,6 +238,8 @@ offlineRoom(game_config) {
 	)
 
 	document.addEventListener("keydown", (event) => {
+		if (!this.game_running)
+			return;
 		if (event.key === 'ArrowUp') {
 			this.websocket.send(JSON.stringify({
 				"type": "direction",
@@ -278,6 +289,9 @@ offlineRoom(game_config) {
 	});
 
 	document.addEventListener("keyup", (event) => {
+		if (!this.game_running)
+			return;
+
 		if (event.key === "ArrowUp" || event.key === "ArrowDown" ) {
 			this.websocket.send(JSON.stringify({
 				"type": "direction",
@@ -479,8 +493,6 @@ function server_msg(event) {
 		this.game_running = false;
 		this.renderer.setAnimationLoop(null);
 		delete onGoing.game;
-		document.addEventListener("keydown", (event) => {});
-		document.addEventListener("keyup", (event) => {});
 		break;
 
 	case "error":
