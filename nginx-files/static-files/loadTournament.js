@@ -24,12 +24,11 @@ export default async function loadTournament() {
 	const map_selector = getMapForm();
 	const gameCreator = document.createElement("div");
 	gameCreator.setAttribute("id", "canvas_container");
-	gameCreator.setAttribute("class", "container");
+	gameCreator.setAttribute("class", "container-");
 	gameCreator.innerHTML = `
 	<div>
 	<div id="liveAlertPlaceholder"></div>
-	<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
-	<h2 data-i18n-key="make-tourn">Create tourn</h2>
+	<h2 data-i18n-key="make-tourn">Create tourn</h2> <i class="bi bi-trophy-fill" style="font-size:2rem;"></i> 
 	<form id="dataForm" class="container">
 			<div class="form-floating">
 				<input required type="number" name="timeout" id="timeout" class="form-control" aria-describedby="timeout of the game" min="30" max="180" value="60">
@@ -61,6 +60,7 @@ export default async function loadTournament() {
 		<button type="submit" name="submit" data-i18n-key="join-submit" id="submit" class="btn btn-primary">Submit</button>
 	</form>
 	</div>
+	<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
 	`;
 
 	const root = document.getElementById("root");
