@@ -53,7 +53,6 @@ class UserSaveSerializer(serializers.ModelSerializer):
 			response['avatar'] = instance.avatar.url
 		return response
 
-
 class UserColorsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User

@@ -40,6 +40,7 @@ class User(AbstractUser):
 	counter_color = models.CharField(default="#ffffff")
 
 	have_logged = models.BooleanField(default=False)
+	is_logged = models.BooleanField(default=False)
 
 	def __str__(self):
 		return (self.username) 

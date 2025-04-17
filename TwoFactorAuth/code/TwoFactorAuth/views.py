@@ -38,7 +38,10 @@ class	SendEmail(APIView):
 		target_email = request.GET.get('email')
 
 		self.erase_previous_token_from_db(target_email)
-		new_code = TwoFA_code(code=(token_urlsafe(6)), email=(target_email), timestamp=(self.timestamp_limit()))
+		try:
+			new_code = TwoFA_code(code=(token_urlsafe(6)), email=(target_email), timestamp=(self.timestamp_limit()))
+		except:
+			return(Response("can't create 2FA code", status=bad_request))
 
 		txt = "Welcome to the ramscendance, this is your 2FA, bear in mind, you only have 5 minutes to input the code: {code}".format(code=new_code.code)
 		send_mail(
@@ -49,7 +52,6 @@ class	SendEmail(APIView):
 			fail_silently=False,
 		)
 		new_code.save()
-
 		return(Response(status=status.HTTP_200_OK))
 
 class	ValidateCode(APIView):	

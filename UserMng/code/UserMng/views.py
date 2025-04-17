@@ -8,6 +8,7 @@ from django.urls import reverse
 from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from UserMng.models import User
 
 from rest_framework.views import APIView
@@ -32,6 +33,16 @@ from secrets import token_urlsafe
 
 import requests
 import os
+
+def create_tokens(user):
+	refresh = RefreshToken.for_user(user)
+	
+	refresh.payload.pop('user_id', None)
+	refresh.payload['email'] = user.email
+	return {
+		'refresh' : str (refresh),
+		'access' : str(refresh.access_token),
+	}
 
 def load_query_string(params):
 	q_str = ""
@@ -77,13 +88,6 @@ class	UserLoginAPIView(APIView):
 
 class	GenerateToken(APIView):
 	
-	def login_succesfull_response(self, token, user):
-		response = { 
-			'success': True,
-			'token':token.key,
-		}
-		return (response)
-	
 	def	load_validate_response(self, request):
 		response = {
 			'email' : request.data['email'],
@@ -117,12 +121,15 @@ class	GenerateToken(APIView):
 		
 		user = User.objects.get(email=request.data['email'])
 		user.have_logged = True
+		user.is_logged = True
+		try:
+			previous_token = RefreshToken(user)
+			previous_token.blacklist()
+		except:
+			print("{0} No previous token".format(request.data['email']))
 		user.save()
-		token, created = Token.objects.get_or_create(user=user)
-		if (not created):
-			Response('TOKEN CREATION FAILURE', status=bad_request)
-		response = self.login_succesfull_response(token, user)
-		return (Response(response, status=status.HTTP_200_OK))
+		token = create_tokens(user)
+		return (Response(token, status=status.HTTP_200_OK))
 
 
 class	UserSingUpAPIView(APIView):
@@ -147,7 +154,7 @@ class	UserSingUpAPIView(APIView):
 		raise ValidationError(serializer.errors, code=status.HTTP_406_NOT_ACCEPTABLE)
 
 class UserLogoutAPIView(APIView):
-	permission_classes = [IsAuthenticated]
+	#permission_classes = [IsAuthenticated]
 
 	def logout_response(self):
 		response = {
@@ -156,9 +163,18 @@ class UserLogoutAPIView(APIView):
 		}
 		return (response)
 
-	def post(self, request, *args):
-		token = Token.objects.get(user=request.user)
-		token.delete()
+	def post(self, request):
+		if (not request.data["refresh"]):
+			return (Response("Missing token", status=status.HTTP_400_BAD_REQUEST))
+		try:
+			token = RefreshToken(request.data["refresh"])
+			email = token.get('email')
+			user = User.objects.get(email=email)
+			user.is_looged = False
+			user.save()
+			token.blacklist()
+		except:
+			Response(status=status.HTTP_400_BAD_REQUEST)
 		return (Response(self.logout_response(), status=status.HTTP_200_OK))
 
 class ProfileView(viewsets.ModelViewSet):
@@ -171,7 +187,7 @@ class ProfileView(viewsets.ModelViewSet):
 		serializer = self.get_serializer(self.object)
 		return Response(serializer.data)
 
-	def update(self, request, *args, **kwargs):
+	def update(self, request):
 		User = get_user_model()
 		self.object = get_object_or_404(User, pk=request.user.id)
 		serializer = UserSaveSerializer(self.object, data=request.data,context={'request': request})
@@ -191,12 +207,12 @@ class ProfileView(viewsets.ModelViewSet):
 		serializer = FriendsSerializer(self.object)
 		return Response(serializer.data)
 	
-	def add_friend(self, request, *args, **kwargs):
+	def add_friend(self, request):
 		self.object = get_object_or_404(get_user_model(), pk=request.user.id)
 		self.object.following.add(request.data["friendID"])
 		return Response(status=status.HTTP_204_NO_CONTENT)
 	
-	def delete_friend(self, request, *args, **kwargs):
+	def delete_friend(self, request):
 		self.object = get_object_or_404(get_user_model(), pk=request.user.id)
 		self.object.following.remove(request.data["friendID"])
 		return Response(status=status.HTTP_204_NO_CONTENT)
@@ -270,7 +286,7 @@ class OAuthCallbackAPIView(APIView):
 		user_info_response = requests.get(user_info_url, params=user_params)
 		user_info = user_info_response.json()
 
-		if not User.objects.filter(email=user_info.get('email')).exists():
+		if not User.objects.filter(email=user_info.get('email'), have_logged=False).exists():
 			email = user_info.get('email')
 			username = user_info.get('login')
 			first_name = user_info.get('first_name')
@@ -286,12 +302,8 @@ class OAuthCallbackAPIView(APIView):
 				)
 
 		user = User.objects.get(email=user_info.get('email'))
-		token = Token.objects.get_or_create(user=user)[0]
-		response = { 
-			'success': True,
-			'username': user.username,
-			'email': user.email,
-			'token': token.key
-		}
+		user.is_looged = True
+		user.save()
+		token = create_tokens(user)
 
-		return (Response(response, status=status.HTTP_200_OK))
+		return (Response(token, status=status.HTTP_200_OK))
