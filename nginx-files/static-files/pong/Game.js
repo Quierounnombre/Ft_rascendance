@@ -88,7 +88,9 @@ constructor(colors) {
 
 	var FOV = 70;
 	var z = this.threeCanvas.height / (2 * Math.tan(((FOV * Math.PI) / 180)/2))
-	this.camera = new THREE.PerspectiveCamera(FOV, this.threeCanvas.width / this.threeCanvas.height, z, z + 30)
+	this.camera = new THREE.PerspectiveCamera(FOV, this.threeCanvas.width / this.threeCanvas.height, z, z + 50)
+	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+	this.scene.add( light );
 	this.camera.position.z = z + 11;
 	this.camera.position.x = this.threeCanvas.width / 2;
 	this.camera.position.y = - this.threeCanvas.height / 2;

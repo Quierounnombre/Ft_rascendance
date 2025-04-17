@@ -14,14 +14,16 @@ constructor(obj, canvas, scene, color) {
 	this.recalculateHitbox();
 
 	this.material.side = THREE.DoubleSide;
+	this.material =  new THREE.MeshStandardMaterial({color: this.color, emissive: this.color})
 	this.geometry = new THREE.SphereGeometry( this.radius );
 	this.mesh = new THREE.Mesh(this.geometry, this.material);
+	this.mesh.position.z = - this.radius + 5
 	this.mesh.position.x = this.x;
 	this.mesh.position.y = - this.y;
 	this.light = new THREE.PointLight(0xffffff, 300, 0, 1)
 	this.light.position.x = this.mesh.position.x;
 	this.light.position.y = this.mesh.position.y;
-	this.light.position.z = canvas.height / (2 * Math.tan(((70 * Math.PI) / 180)/2));
+	// this.light.position.z = canvas.height / (2 * Math.tan(((70 * Math.PI) / 180)/2));
 	scene.add(this.mesh);
 	scene.add(this.light);
 }

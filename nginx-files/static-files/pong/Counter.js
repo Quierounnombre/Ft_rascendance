@@ -18,9 +18,10 @@ constructor(obj, canvas, scene, color) {
 	this.texture.needsUpdate = true;
 	this.material = new THREE.MeshPhongMaterial({map: this.texture, color: this.color});
 	this.mesh = new THREE.Mesh(this.geometry, this.material);
+	this.mesh.rotation.x = Math.PI / 4;
 	this.mesh.position.x = this.canvas.width / 2;
 	this.mesh.position.y = - this.canvas.height / 2;
-	this.mesh.position.z = - 10;
+	this.mesh.position.z = - 30;
 	scene.add(this.mesh);
 }
 
