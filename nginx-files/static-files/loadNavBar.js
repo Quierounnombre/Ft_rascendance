@@ -9,6 +9,11 @@ export default async function loadNavBar(loc) {
 		window.location.hash = "#anon-menu";
         return ;
     }
+	const settings = await changeSettings();
+	if (settings === -1) {
+		window.location.hash = "#anon-menu";
+        return ;
+    }
 	const header = document.getElementById("header");
 	header.innerHTML = `
 <nav class="navbar navbar-expand-lg fixed-topnavbar navbar-dark bg-dark">
@@ -35,6 +40,7 @@ export default async function loadNavBar(loc) {
 	});
     const bar = document.getElementById("links");
 	bar.appendChild(profile);
+	
     bindLocaleSwitcher();
     translatePage();
 }
@@ -61,4 +67,24 @@ async function profileButton() {
 		() => {window.location.hash = "#profile"});
 
 	return profile;
+}
+
+async function changeSettings()
+{
+	const token = getCookie("token");
+	if (!token) {
+		return -1;
+	}
+
+	const user = await getUser(token);
+	if (user === -1) {
+		return -1;
+	}
+
+	localStorage.setItem("language", user["language"]);
+	document.getElementsByTagName( "html" )[0].style[ "font-size" ] = user["font"] + "px";
+	const switcher = document.getElementById("lang-switcher");
+    if (!switcher)
+        return ;
+	switcher.value = user["language"];
 }
