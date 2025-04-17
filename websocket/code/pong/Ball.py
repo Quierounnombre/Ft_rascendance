@@ -7,8 +7,8 @@ class Ball(CanvasObject):
     def __init__(self, obj):
         super().__init__(obj)
         self.radius = obj['radius']
-        self.width = self.radius * 2
-        self.height = self.radius * 2
+        self.width = self.radius * 2 -2
+        self.height = self.radius * 2 -2
         self.recalculateHitbox()
         self.counter = []
 

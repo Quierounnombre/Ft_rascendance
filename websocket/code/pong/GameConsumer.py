@@ -245,6 +245,16 @@ class GameConsumer(SyncConsumer):
         if not tournaments[tournament_name].is_running and tournaments[tournament_name].isTournamentFull():
             tournaments[tournament_name].generateSchedule()
             tournaments[tournament_name].start()
+    
+    def tournament_disconnect(self, event) -> None:
+        tournament_name = event["message"]["tournament_name"]
+
+        if not tournament_name in tournaments:
+            return
+        
+        if len(tournaments[tournament_name].player_list) < 2:
+            print(f'Tournament `{tournament_name} has been deleted')
+            del tournaments[tournament_name]
         
     def tournament_started(self, event) -> None:
         pass
