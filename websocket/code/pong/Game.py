@@ -185,8 +185,6 @@ class Game(threading.Thread):
                 player2_score = obj.player2_score
                 duration = obj.time_passed
 
-            # TODO: cosas de torneo
-
         requests.post(f'http://history:{os.environ["HISTORY_PORT"]}/add/', json={
             "player1_id": player1_id,
             "player1_score": player1_score,

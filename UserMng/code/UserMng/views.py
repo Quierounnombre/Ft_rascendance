@@ -87,7 +87,6 @@ class	UserLoginAPIView(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #! BE AWARE TO PASS THE EMAIL AND CODE IN THE BODY
-#TODO CHEKEAR CON FRONTEND PARA INTEGRARLO
 
 class	GenerateToken(APIView):
 	
