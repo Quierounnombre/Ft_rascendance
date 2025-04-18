@@ -3,7 +3,6 @@ import json
 
 class CanvasObject:
     def __init__(self, obj):
-        # TODO: crear un diccionario que nazca de parsear la string JSON obj
         self.color = "white"
         self.id = "generic"
         self.type = "generic"
@@ -19,47 +18,75 @@ class CanvasObject:
         self.canvas_height = 400
         self.pk = -42
 
-        if 'color' in obj:          self.color = str(obj['color'])
-        else:                       self.color = "white"
+        if 'color' in obj and type(obj['color]'] is str):
+            self.color = str(obj['color'])
+        else:
+            self.color = "white"
 
-        if 'id' in obj:             self.id = str(obj['id'])
-        else:                       self.id = "generic"
+        if 'id' in obj and type(obj['id']) is str:
+            self.id = str(obj['id'])
+        else:
+            self.id = "generic"
 
-        if 'type' in obj:           self.type = str(obj['type'])
-        else:                       self.type = "generic"
+        if 'type' in obj and type(obj['type']) is str:
+            self.type = str(obj['type'])
+        else:
+            self.type = "generic"
 
-        if 'x' in obj:              self.x = float(obj['x'])
-        else:                       self.x = 0
+        if 'x' in obj and (type(obj['x']) is float or type(obj['x']) is int):
+            self.x = float(obj['x'])
+        else:
+            self.x = 0
 
-        if 'y' in obj:              self.y = float(obj['y'])
-        else:                       self.y = 0
+        if 'y' in obj and (type(obj['y']) is float or type(obj['y']) is int):
+            self.y = float(obj['y'])
+        else:
+            self.y = 0
 
-        if 'dirX' in obj:           self.dirX = float(obj['dirX'])
-        else:                       self.dirX = 0
+        if 'dirX' in obj and (type(obj['dirX']) is float or type(obj['dirX']) is int):
+            self.dirX = float(obj['dirX'])
+        else:
+            self.dirX = 0
 
-        if 'dirY' in obj:           self.dirY = float(obj['dirY'])
-        else:                       self.dirY = 0
+        if 'dirY' in obj and (type(obj['dirY']) is float or type(obj['dirY']) is int):
+            self.dirY = float(obj['dirY'])
+        else:
+            self.dirY = 0
 
-        if 'speed' in obj:          self.speed = float(obj['speed'])
-        else:                       self.speed = 4
+        if 'speed' in obj and (type(obj['speed']) is float or type(obj['speed']) is int):
+            self.speed = float(obj['speed'])
+        else:
+            self.speed = 4
 
-        if 'is_moving' in obj:      self.is_moving = obj['is_moving']
-        else:                       self.is_moving = False
+        if 'is_moving' in obj and type(obj['is_moving'] is bool):
+            self.is_moving = obj['is_moving']
+        else:
+            self.is_moving = False
 
-        if 'width' in obj:          self.width = float(obj['width'])
-        else:                       self.width = 0
+        if 'width' in obj and (type(obj['width']) is float or type(obj['width']) is int):
+            self.width = float(obj['width'])
+        else:
+            self.width = 0
 
-        if 'height' in obj:         self.height = float(obj['height'])
-        else:                       self.height = 0
+        if 'height' in obj and (type(obj['height']) is float or type(obj['height']) is int):
+            self.height = float(obj['height'])
+        else:
+            self.height = 0
 
-        if 'canvas_width' in obj:   self.canvas_width = float(obj['canvas_width'])
-        else:                       self.canvas_width = 800
+        if 'canvas_width' in obj and (type(obj['canvas_width']) is float or type(obj['canvas_width']) is int):
+            self.canvas_width = float(obj['canvas_width'])
+        else:
+            self.canvas_width = 800
 
-        if 'canvas_height' in obj:  self.canvas_height = float(obj['canvas_height'])
-        else:                       self.canvas_height = 400
+        if 'canvas_height' in obj and (type(obj['canvas_height']) is float or type(obj['canvas_height']) is int):
+            self.canvas_height = float(obj['canvas_height'])
+        else:
+            self.canvas_height = 400
 
-        if 'font' in obj:           self.font = str(obj['font'])
-        else:                       self.font = "42px Arial"
+        if 'font' in obj and type(obj['font'] is str):
+            self.font = str(obj['font'])
+        else:
+            self.font = "42px Arial"
 
 
         # xy1---------xy2
