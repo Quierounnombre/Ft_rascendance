@@ -52,10 +52,10 @@ INSTALLED_APPS = [
 ]
 
 SIMPLE_JWT = {
-	"ACCESS_TOKEN_LIFETIME" : timedelta(minutes=5),
+	"ACCESS_TOKEN_LIFETIME" : timedelta(minutes=70),
 	"REFRESH_TOKEN_LIFETIME" : timedelta(days=7),
 	"ROTATE_REFRESH_TOKENS" : True,
-	"BLACKLIST_AFTER_ROTATION" :  True, #TODO Blacklisting?
+	"BLACKLIST_AFTER_ROTATION" :  True,
 	"UPDATE_LAST_LOGIN" : False,#! IF TRUE: TROTHLE
 	"ALGORITHM" : 'HS256',
 	"SIGNING_KEY" : SECRET_KEY,
@@ -64,24 +64,25 @@ SIMPLE_JWT = {
 	"ISSUER" :  None,
 	"JWK_URL" : None,
 	"LEEWAY" : 0,
-	"AUTH_HEADER_TYPES" : 'Bearer',
+	"AUTH_HEADER_TYPES" : ('Bearer',),
 	"AUTH_HEADER_NAME" : 'HTTP_AUTHORIZATION',
 	"USER_ID_FIELD": "email",
 	"USER_ID_CLAIM" : 'email', #WE USE EMAIL, but  should be aware of user_id?
 	"USER_AUTHENTICATION_RULE" : 'rest_framework_simplejwt.authentication.default_user_authentication_rule', #MAYBE I MISS SOMETHIMG?
-	"AUTH_TOKEN_CLASSES" : ("rest_framework_simplejwttokens.AccessToken",),
+	"AUTH_TOKEN_CLASSES" : ("rest_framework_simplejwt.tokens.AccessToken",),
 	"TOKEN_TYPE_CLAIM" : "token_type",
 	"JTI_CLAIM" : 'jti',
 	"TOKEN_USER_CLASS" : 'rest_framework_simplejwt.models.TokenUser',
-	"TOKEN_OBTAIN_SERIALIZER": "UserMng.serializers.TokenSerializer",
 	"TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+	"TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
+	"TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
 
 }
 
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': [
 		#'rest_framework.authentication.TokenAuthentication',
-		'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
+		'rest_framework_simplejwt.authentication.JWTAuthentication',
 	],
 }
 

@@ -3,7 +3,7 @@ import getUser from "./getUser.js";
 import searchUsers from "./searchUsers.js";
 import translatePage from "./translate.js";
 import {getCookie} from "./cookiesManagement.js"
-import { seeProfile, addFriend, deleteFriend } from "./friendMng.js";
+import { seeProfile, manageFriend } from "./friendMng.js";
 
 export default async function loadSearch() {
 	if (! "query" in localStorage) {
@@ -37,7 +37,7 @@ async function usersList(users, me) {
         window.location.hash = "#anon-menu";
         return -1;
     }
-	users = users.filter((user) => user.username !== me.username)
+	users = users.filter((user) => user.email !== me.email)
     const friends = await getMyFriends(token)
     const userList = document.createElement("div");
 	if (users.length === 0) {
@@ -68,13 +68,9 @@ async function usersList(users, me) {
 			button.addEventListener("click", () => {
 				seeProfile(button.getAttribute("userid"));
 			})
-		} else if (button.getAttribute("data-i18n-key")==="del-friend") {
+		} else {
 			button.addEventListener("click", () => {
-				deleteFriend(button.getAttribute("userid"), button);
-			})
-		} else if (button.getAttribute("data-i18n-key")==="add-friend") {
-			button.addEventListener("click", () => {
-				addFriend(button.getAttribute("userid"), button);
+				manageFriend(button.getAttribute("userid"), button);
 			})
 	}})
     translatePage();

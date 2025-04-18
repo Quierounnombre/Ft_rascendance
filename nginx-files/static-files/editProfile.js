@@ -48,7 +48,7 @@ function saveChanges() {
 		fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/me/", {
 			method: "PUT",
 			headers: {
-				"Authorization": "Token " + token,
+				"AUTHORIZATION": "Bearer " + token,
 			},
 			body: formData,
 		}).then((response) => {

@@ -9,7 +9,7 @@ from .views import ProfileView
 from .views import UserListView
 
 from rest_framework import permissions
-from rest_framework import authentication
+from rest_framework_simplejwt import authentication
 
 urlpatterns = [
 	path('login/', UserLoginAPIView.as_view(), name="user_login"),
@@ -22,22 +22,22 @@ urlpatterns = [
 		{'get':'me',
 		'put':'update'},
 		permission_classes = [permissions.IsAuthenticated], 
-		authentication_classes = [authentication.TokenAuthentication],
+		authentication_classes = [authentication.JWTAuthentication],
 		), name="profile"),
 	path('colors/', ProfileView.as_view(
 		{'get':'colors'},
         permission_classes = [permissions.IsAuthenticated], 
-		authentication_classes = [authentication.TokenAuthentication],
+		authentication_classes = [authentication.JWTAuthentication],
 	)),
     path('users/', UserListView.as_view(
 		permission_classes = [permissions.IsAuthenticated], 
-		authentication_classes = [authentication.TokenAuthentication],
+		authentication_classes = [authentication.JWTAuthentication],
 	), name="user_list"),
 	path('friends/', ProfileView.as_view(
 		{'get':'friends',
    		'put': 'add_friend',
         'delete': 'delete_friend'},
 		permission_classes = [permissions.IsAuthenticated], 
-		authentication_classes = [authentication.TokenAuthentication],
+		authentication_classes = [authentication.JWTAuthentication],
 		), name="friends"),
 ]

@@ -15,6 +15,7 @@ LANGUAGES = [
 
 class User(AbstractUser):
 	avatar = models.ImageField(default="default_user_img.png")
+	username = models.CharField(max_length=255)
 	language = models.CharField(
 		max_length = 3,
 		choices = LANGUAGES,

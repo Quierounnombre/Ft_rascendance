@@ -279,6 +279,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // the page
 export function bindLocaleSwitcher() {
     const locale = localStorage.getItem("language");
+    if (!locale)
+      locale = "ESP";
     const switcher = document.getElementById("lang-switcher");
     if (!switcher)
         return ;
@@ -303,6 +305,8 @@ export default function translatePage() {
   // corresponding to the element's data-i18n-key
   function translateElement(element) {
     const locale = localStorage.getItem("language");
+    if (!locale)
+      locale = "ESP";
     const key = element.getAttribute("data-i18n-key");
     const translation = translations[locale][key];
     if (key==="reg-sub" || key=== "login-sub" || key=== "edit-sub" || key==="2fa-sub")

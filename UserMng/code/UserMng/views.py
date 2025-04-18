@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from UserMng.models import User
 
 from rest_framework.views import APIView
@@ -37,11 +37,14 @@ import os
 def create_tokens(user):
 	refresh = RefreshToken.for_user(user)
 	
-	refresh.payload.pop('user_id', None)
 	refresh.payload['email'] = user.email
+
+	access = AccessToken.for_user(user)
+
+	access.payload['email'] = user.email
 	return {
 		'refresh' : str (refresh),
-		'access' : str(refresh.access_token),
+		'access' : str(access),
 	}
 
 def load_query_string(params):
