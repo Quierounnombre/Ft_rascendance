@@ -1,5 +1,6 @@
 import getUser from  "./getUser.js"
 import load2FA from "./load2FA.js";
+import translatePage from "./translate.js";
 
 export default function loadRegister() {
 	const root = document.getElementById("root");
@@ -62,12 +63,13 @@ async function signUp(form) {
 			  const wrapper = document.createElement('div')
 				  wrapper.innerHTML = [
 			`<div class="alert alert-danger alert-dismissible" role="alert">`,
-				`    <div>Invalid Register, please try again</div>`,
+				`    <div data-i18n-key="invalid-regis">Invalid Register, please try again</div>`,
 				'   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
 			'</div>'
 			  ].join('')
 	
 			  alertPlaceholder.append(wrapper)
+			  translatePage();
 		}
 	} catch (e) {
 		console.error(e);
