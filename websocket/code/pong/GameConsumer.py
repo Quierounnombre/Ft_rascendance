@@ -254,6 +254,19 @@ class GameConsumer(SyncConsumer):
         if len(tournaments[tournament_name].player_list) < 2:
             print(f'Tournament `{tournament_name} has been deleted')
             del tournaments[tournament_name]
+
+    def game_disconnect(self, event) -> None:
+        room_name = event["message"]["room_name"]
+
+        if event["message"]["tournament_name"] != "":
+            return
+
+        if not room_name in game_rooms:
+            return
+        
+        if game_rooms[room_name].number_players < 2:
+            print(f'Game `{room_name} has been deleted')
+            del game_rooms[room_name]
         
     def tournament_started(self, event) -> None:
         pass

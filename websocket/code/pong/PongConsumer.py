@@ -25,16 +25,15 @@ class PongConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code) -> None:
-        # TODO: porque si alguien se desconecta deberia terminal el juego?
-        # async_to_sync(self.channel_layer.send)(
-        #     "game_engine", {
-        #         "type": "game.end",
-        #         "message": {
-        #             "room_name": self.room_name,
-        #             "data": ""
-        #         }
-        #     }
-        # )
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
+                "type": "game.disconnect",
+                "message": {
+                    "tournament_name": self.tournament_name,
+                    "room_name": self.room_name,
+                }
+            }
+        )
 
         async_to_sync(self.channel_layer.group_discard)(
             self.room_name, self.channel_name
