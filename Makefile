@@ -45,5 +45,8 @@ just_in_case:
 	docker volume rm $(shell docker volume ls -q)
 	docker system prune -a -f
 	docker network prune -f
+	rm -rf history/code/history/migrations/
+	rm -rf TwoFactorAuth/code/TwoFactorAuth/migrations/
+	rm -rf UserMng/code/UserMng/migrations
 
 .PHONY: up down ps create rmi rm logs re reall just_in_case

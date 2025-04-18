@@ -1,4 +1,4 @@
-import { setCookie } from "./cookiesManagement.js";
+import { setCookie, getCookie } from "./cookiesManagement.js";
 
 export default function loadOAuthCallback() {
 	fetch("https://" + window.location.hostname + ":" + window.location.port + "/profile/auth_callback/" + window.location.search).then(
