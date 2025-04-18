@@ -178,8 +178,6 @@ STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/UserMng/code/media'
 
-REDIRECT_URI = os.environ.get('REDIRECT_URI')
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
