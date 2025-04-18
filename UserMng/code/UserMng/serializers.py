@@ -1,11 +1,9 @@
 from UserMng.models import User
 from rest_framework.exceptions import ValidationError
-from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 from rest_framework import status
 
 class UserProfileSerializer(serializers.ModelSerializer):
-	is_logged = serializers.SerializerMethodField()
 
 	class Meta:
 		model = User
@@ -18,11 +16,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			"language",
 			"is_logged",
 		]
-
-	def get_is_logged(self, user):
-		if Token.objects.filter(user=user):
-			return True
-		return False
 
 	def to_representation(self, instance):
 		response = super(UserProfileSerializer, self).to_representation(instance)

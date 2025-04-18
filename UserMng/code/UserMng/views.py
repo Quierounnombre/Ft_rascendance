@@ -172,7 +172,7 @@ class UserLogoutAPIView(APIView):
 			token = RefreshToken(request.data["refresh"])
 			email = token.get('email')
 			user = User.objects.get(email=email)
-			user.is_looged = False
+			user.is_logged = False
 			user.save()
 			token.blacklist()
 		except:
@@ -311,7 +311,7 @@ class OAuthCallbackAPIView(APIView):
 				)
 
 		user = User.objects.get(email=user_info.get('email'))
-		user.is_looged = True
+		user.is_logged = True
 		user.save()
 		token = create_tokens(user)
 
