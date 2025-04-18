@@ -6,7 +6,11 @@ from pong.CanvasObject import CanvasObject
 class Ball(CanvasObject):
     def __init__(self, obj):
         super().__init__(obj)
-        self.radius = obj['radius']
+        if 'radius' in obj and (type(obj['radius']) is int or type(obj['radius']) is float):
+            self.radius = float(obj['radius'])
+        else:
+            self.radius = 10
+
         self.width = self.radius * 2 -2
         self.height = self.radius * 2 -2
         self.recalculateHitbox()

@@ -39,21 +39,35 @@ class Game(threading.Thread):
 
         for obj in data:
             if obj["type"] == "config":
-                if 'background_color' in obj:
+                if 'background_color' in obj and type(obj['background_color'] is str):
                     self.background_color = obj['background_color']
-                if 'timeout' in obj:
-                    self.timeout= obj['timeout']
-                if 'max_score' in obj:
+
+                if 'timeout' in obj and (type(obj['timeout']) is int or type(obj['timeout']) is float):
+                    self.timeout = obj['timeout']
+                    if self.timeout < 30:
+                        self.timeout = 30
+                    elif self.timeout > 180:
+                        self.timeout = 180
+
+                if 'max_score' in obj and (type(obj['max_score']) is int or type(obj['max_score']) is float):
                     self.max_score = obj['max_score']
+                    if self.max_score < 1:
+                        self.max_score = 1
+                    elif self.max_score > 42:
+                        self.max_score = 42
+
             elif obj["type"] == "player":
                 tmp = Player(obj)
                 self.game_objects.append(tmp)
+
             elif obj["type"] == "ball":
                 tmp = Ball(obj)
                 self.game_objects.append(tmp)
+
             elif obj["type"] == "counter":
                 tmp = Counter(obj)
                 self.game_objects.append(tmp)
+
             else:
                 tmp = CanvasObject(obj)
                 self.game_objects.append(tmp)
@@ -100,8 +114,6 @@ class Game(threading.Thread):
             }
         }
     
-    # TODO: metodo para mandar a todos que ya ha terminado la partida
-    
     def broadcastState(self, msg_type) -> None:
         channel_layer = get_channel_layer()
 
@@ -124,16 +136,15 @@ class Game(threading.Thread):
                 obj.start_time[0] = time.time()
 
         self.is_running = True
-        while not self.isEnd(): # TODO: no esta terminando
+        while not self.isEnd():
             for obj in self.game_objects:
                 obj.update(self.game_objects)
             self.broadcastState("game.state")
             time.sleep(0.01)
 
         self.is_running = False
-        self.exportToDatabase() # TODO: hacer que funcione
-        self.broadcastState("game.end")# TODO: el metodo requiere el game room
-        # TODO: pasar a la base de datos el resultado
+        self.exportToDatabase()
+        self.broadcastState("game.end")
     
     def getResult(self) -> dict:
         for obj in self.game_objects:
