@@ -107,8 +107,6 @@ function server_msg(event) {
 		code.setAttribute("style", "text-align: center")
 		code.innerHTML = `${this.tournament_name}`;
 
-		// TODO: todas estas cosas tendrian que tener ids y demas cosas para la accesibilidad
-
 		container.appendChild(title);
 		container.appendChild(code);
 		document.getElementById("root").replaceChildren(container);
@@ -158,7 +156,6 @@ function server_msg(event) {
 
 		this.game_round.tournament_name = data["message"]["tournament_name"]
 
-		// TODO: el que se une no le llega estados del juego
 		this.game_round.joinRoom(this.room_name);
 		break;
 	
