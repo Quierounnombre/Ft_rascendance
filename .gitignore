@@ -3,6 +3,6 @@
 .secrets
 *.pyc
 media/
-migrations/
+migrations
 key
 key.pub
