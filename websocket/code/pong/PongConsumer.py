@@ -6,10 +6,6 @@ from channels.layers import get_channel_layer
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 
-# TODO: esto hara que la estructura del js tenga que cambiar, haciendo que en lugar
-# de tener todos los objetos con sus metodos, tenga que ir generando el array en 
-# funcion de lo que le pase el server, renderizar y luego destruir
-
 class PongConsumer(WebsocketConsumer):
     http_user = True
     strict_ordering = True
@@ -77,7 +73,6 @@ class PongConsumer(WebsocketConsumer):
         self.room_name = message["room_name"]
 
         # send to the GameConsumer the game room name and its config
-        # TODO: porque salta un warning?
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "game.config",

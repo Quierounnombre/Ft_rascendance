@@ -21,7 +21,7 @@ class Game(threading.Thread):
         self.background_color = "back"
         self.object_color = "white"
 
-        self.timeout = 60 # TODO: esta en segundos, mirar como deberia ser
+        self.timeout = 60
         self.max_score = 5
     
         self.room_name = room_name
