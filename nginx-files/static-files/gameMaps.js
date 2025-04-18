@@ -3,11 +3,11 @@ export function getMapForm() {
 	return (`
 		<div class="form-floating">
 			<select class="form-select" name="map" id="map" aria-label="map">
-				<option data-i18n-key="map-default" selected ="defaultMap" value="defaultMap">Default map</option>
-				<option data-i18n-key="map-two" value="doubleBall">Two balls map</option>
-				<option data-i18n-key="map-big" value="bigBallMap">Big ball map</option>
-				<option data-i18n-key="map-big-little" value="bigBallLittleBallMap">A big ball with a little ball</option>
-				<option data-i18n-key="map-float" value="bigBallLittleBallMap">A big ball with a little ball</option>
+				<option data-i18n-key="map-default" selected ="defaultMap" value="defaultMap"></option>
+				<option data-i18n-key="map-two" value="doubleBall"></option>
+				<option data-i18n-key="map-big" value="bigBallMap"></option>
+				<option data-i18n-key="map-big-little" value="bigBallLittleBallMap"></option>
+				<option data-i18n-key="map-float" value="floatingMap"></option>
 			</select>
 			<label for="map" class="form-label" data-i18n-key="map-select" >Map selection</label>
 		</div>

@@ -88,6 +88,9 @@ export default async function loadOnline() {
 		case "bigBallLittleBallMap":
 			data_to_send = bigBallLittleBallMap(config);
 			break;
+		case "floatingMap":
+			data_to_send = floatingMap(config);
+			break;
 		default:
 			data_to_send = defaultMap(config);
 		}
