@@ -1,5 +1,6 @@
 import getUser from  "./getUser.js"
 import load2FA from "./load2FA.js";
+import translatePage from "./translate.js";
 
 export default function loadLogin() {
 	const root = document.getElementById("root");
@@ -42,12 +43,12 @@ async function logIn(form) {
 			const wrapper = document.createElement('div')
 			wrapper.innerHTML = [
 	  `<div class="alert alert-danger alert-dismissible" role="alert">`,
-	  `   <div>Invalid Login, please try again</div>`,
+	  `   <div data-i18n-key="invalid-login">Invalid Login, please try again</div>`,
 	  '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-	  '</div>' // TODO: traducir
+	  '</div>'
 		].join('')
-  
 		alertPlaceholder.append(wrapper)
+		translatePage();
 		} else {
 			load2FA(formData.get("email"));
 		}
@@ -57,11 +58,12 @@ async function logIn(form) {
 			const wrapper = document.createElement('div')
 			wrapper.innerHTML = [
 	  `<div class="alert alert-danger alert-dismissible" role="alert">`,
-	  `   <div>Invalid Login, please try again</div>`,
+	  `   <div data-i18n-key="invalid-login">Invalid Login, please try again</div>`,
 	  '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
 	  '</div>'
 		].join('')
 		alertPlaceholder.append(wrapper)
+		translatePage();
 	}
 }
 

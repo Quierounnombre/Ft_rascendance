@@ -21,7 +21,7 @@ class Game(threading.Thread):
         self.background_color = "back"
         self.object_color = "white"
 
-        self.timeout = 60 # TODO: esta en segundos, mirar como deberia ser
+        self.timeout = 60
         self.max_score = 5
     
         self.room_name = room_name
@@ -184,8 +184,6 @@ class Game(threading.Thread):
                 player1_score = obj.player1_score
                 player2_score = obj.player2_score
                 duration = obj.time_passed
-
-            # TODO: cosas de torneo
 
         requests.post(f'http://history:{os.environ["HISTORY_PORT"]}/add/', json={
             "player1_id": player1_id,

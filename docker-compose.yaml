@@ -170,6 +170,7 @@ services:
       DATABASE_HOST: ${DB_WS_HOST}
       BACKEND_PORT: ${WEBSOCKET_PORT}
       WS_REDIS_PORT: ${WS_REDIS_PORT}
+      HISTORY_PORT: ${HISTORY_PORT}
     depends_on:
       ws-db:
         condition: service_healthy

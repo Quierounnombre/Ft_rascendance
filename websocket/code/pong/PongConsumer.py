@@ -6,10 +6,6 @@ from channels.layers import get_channel_layer
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 
-# TODO: esto hara que la estructura del js tenga que cambiar, haciendo que en lugar
-# de tener todos los objetos con sus metodos, tenga que ir generando el array en 
-# funcion de lo que le pase el server, renderizar y luego destruir
-
 class PongConsumer(WebsocketConsumer):
     http_user = True
     strict_ordering = True
@@ -25,16 +21,15 @@ class PongConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code) -> None:
-        # TODO: porque si alguien se desconecta deberia terminal el juego?
-        # async_to_sync(self.channel_layer.send)(
-        #     "game_engine", {
-        #         "type": "game.end",
-        #         "message": {
-        #             "room_name": self.room_name,
-        #             "data": ""
-        #         }
-        #     }
-        # )
+        async_to_sync(self.channel_layer.send)(
+            "game_engine", {
+                "type": "game.disconnect",
+                "message": {
+                    "tournament_name": self.tournament_name,
+                    "room_name": self.room_name,
+                }
+            }
+        )
 
         async_to_sync(self.channel_layer.group_discard)(
             self.room_name, self.channel_name
@@ -78,7 +73,6 @@ class PongConsumer(WebsocketConsumer):
         self.room_name = message["room_name"]
 
         # send to the GameConsumer the game room name and its config
-        # TODO: porque salta un warning?
         async_to_sync(self.channel_layer.send)(
             "game_engine", {
                 "type": "game.config",
@@ -119,18 +113,9 @@ class PongConsumer(WebsocketConsumer):
         self.room_name = message["room_name"]
         self.tournament_name = message["tournament_name"]
 
-        # TODO: si no existe la sala?
-        # si no existe una instancia de esa sala, el GameConsumer deberia mandar un mensaje de que no existe
-
-        # join the game room
-        # TODO: esto seria realmete necesario?, es decir, ya se ha metido al conectarse no?
         async_to_sync(self.channel_layer.group_add)(
             self.room_name, self.channel_name
         )
-
-        # TODO: si el que creo la sala sale y se vuelve a meter, deberia entrar como player1
-        # el juego de deberia asignar autometicamente?
-        # reconectarse no deberia relanzar un game.start()
 
         # send to the GameConsumer the pk of the player2
         async_to_sync(self.channel_layer.send)(
@@ -145,19 +130,6 @@ class PongConsumer(WebsocketConsumer):
                 }
             }
         )
-
-        # TODO: esto solo deberia ser si el juego no esta en curso
-        # send to the GameConsumer the instruction to start the game
-        # async_to_sync(self.channel_layer.send)(
-        #     "game_engine", {
-        #         "type": "game.start",
-        #         "message": {
-        #             "user_id": self.user_id,
-        #             "room_name": message["room_name"],
-        #             "tournament_name": self.tournament_name
-        #         }
-        #     }
-        # )
 
     #     "room_name": str,
     #     "player_id": int
@@ -197,6 +169,8 @@ class PongConsumer(WebsocketConsumer):
         }))
 
     def game_end(self, event) -> None:
+        # if self.tournament_name != "":
+
         self.send(json.dumps({
             "type": "game.end",
             "message": {

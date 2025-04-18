@@ -1,5 +1,6 @@
 import translatePage from "./translate.js";
 import {getCookie} from "./cookiesManagement.js"
+import put_alert from "./put_alert.js"
 
 export default function editProfile() {
     const submitButton = document.createElement("input");
@@ -11,7 +12,7 @@ submitButton.setAttribute("id", "submit");
     const avatar_field = document.createElement("div");
 avatar_field.setAttribute("class", "mb-3 row");
 avatar_field.innerHTML = `<label data-i18n-key="prof-avatar" for="avtar" class="col-sm-2 form-label col-form-label">Change Avatar:</label>
-		<div class="col-sm-10"><input type="file" accept=".jpg,.gif,.png,.webp" class="form-control" id="avtar" name="avatar"</div>`
+		<div class="col-sm-10"><input type="file" accept=".jpg,.gif,.png,.webp" class="form-control" id="avatar" name="avatar"</div>`
 
 	const form = document.getElementById("profile");
 	const fields = form.getElementsByTagName("input");
@@ -52,15 +53,27 @@ function saveChanges() {
 			},
 			body: formData,
 		}).then((response) => {
-			response.json().then((data) => {
-				document.getElementsByTagName("html")[0].style["font-size"] = data.font + "px";
-                localStorage.setItem("language", data.language);
-				if (switcher)
-					switcher.value = data.language;
-			});
-			var event = new Event('hashchange');
-			window.dispatchEvent(event);
-		})
+			if (response.status == 413) {
+				put_alert("big-img", "Image is too big");
+				document.getElementById("avatar").value = "";
+
+			} else {
+				response.json().then((data) => {
+				if (response.ok) {
+					document.getElementsByTagName("html")[0].style["font-size"] = data.font + "px";
+                	localStorage.setItem("language", data.language);
+					if (switcher)
+						switcher.value = data.language;
+					var event = new Event('hashchange');
+					window.dispatchEvent(event);
+				} else {
+					for (let i in data) {
+						put_alert(i+"-ERROR", "");
+					}
+				}})
+		
+			}});
+			translatePage();
 	} catch (e) {
 		console.error(e);
 	}

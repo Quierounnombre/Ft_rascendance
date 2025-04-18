@@ -321,7 +321,6 @@ offlineRoom(game_config) {
 	this.websocket.onopen = () => {
 		console.log(`WebSocket opened`);
 
-		// TODO: el juego local  no funciona
 		getUser(getCookie("token")).then((user) => {
 			this.user_id = user.id;
 			this.user_name = user.username;
@@ -400,7 +399,6 @@ function server_msg(event) {
 	case "room.created":
 		this.room_name = data["message"]["room_name"]
 
-		// TODO: si creas sala, se vas a otra seccion y vuelves, esta con una partida sin  cargar
 		if (data["message"]["tournament_name"] != "")
 			return;
 
@@ -416,8 +414,6 @@ function server_msg(event) {
 		code.setAttribute("class", "h3 display-1");
 		code.setAttribute("style", "text-align: center")
 		code.innerHTML = `${this.room_name}`;
-
-		// TODO: todas estas cosas tendrian que tener ids y demas cosas para la accesibilidad
 
 		container.appendChild(title);
 		container.appendChild(code);
@@ -462,16 +458,7 @@ function server_msg(event) {
 		break;
 	
 	case "game.end":
-		// TODO: esto deberia estar en el backend
 		if (data["message"]["tournament_name"] != "") {
-			this.websocket.send(JSON.stringify({
-				"type": "end.tournament.game",
-				"message": {
-					"tournament_name": data["message"]["tournament_name"],
-					"room_name": self.room_name
-				}
-			}))
-
 			const tmp = document.createElement("h2");
 			tmp.setAttribute("class", "h2 display-1");
 			tmp.setAttribute("style", "text-align: center");

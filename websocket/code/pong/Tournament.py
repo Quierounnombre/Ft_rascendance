@@ -59,10 +59,10 @@ class Tournament(threading.Thread):
         self.tournament_end = False
 
         if num_players % 2 != 0:
-            raise ValueError("odd players") # TODO: se deberia comprobar antes
+            raise ValueError("odd players")
         
         if num_players < 4:
-            raise ValueError("low players") # TODO: se deberia comprobar antes
+            raise ValueError("low players")
 
     def registerPlayer(self, player : TournamentParticipant) -> bool:
         if len(list(filter(lambda p: p.user_id == player.user_id, self.player_list))) != 0:
@@ -204,8 +204,6 @@ class Tournament(threading.Thread):
                 "message": json.dumps(self.getPlayersRanking())
             }
         )
-
-
     
     def getPlayersRanking(self) -> list:
         tmp = map(lambda p: (p.getUserName(), p.getTotalPoints()), self.player_list)

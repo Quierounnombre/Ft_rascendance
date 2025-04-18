@@ -87,7 +87,6 @@ class	UserLoginAPIView(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #! BE AWARE TO PASS THE EMAIL AND CODE IN THE BODY
-#TODO CHEKEAR CON FRONTEND PARA INTEGRARLO
 
 class	GenerateToken(APIView):
 	
@@ -173,7 +172,7 @@ class UserLogoutAPIView(APIView):
 			token = RefreshToken(request.data["refresh"])
 			email = token.get('email')
 			user = User.objects.get(email=email)
-			user.is_looged = False
+			user.is_logged = False
 			user.save()
 			token.blacklist()
 		except:
@@ -254,11 +253,16 @@ class OAuthCallbackAPIView(APIView):
 
 		received_state = request.GET.get('state')
 		stored_state = request.session.pop('oauth_state', None)
-		if not stored_state or stored_state != received_state:
+		if not stored_state:
+			print("not stored state", flush=True)
+			return (Response({'error': 'Invalid or missing state parameter.'}, status=bad_request))
+		if stored_state != received_state:
+			print("state not the same", flush=True)
 			return (Response({'error': 'Invalid or missing state parameter.'}, status=bad_request))
 
 		code = request.GET.get('code')
 		if not code:
+			print("no code", flush=True)
 			return (Response({'error':'Auth code not recived'}, status=bad_request))
 	
 		redirect_uri = (reverse('auth_callback'))
@@ -273,11 +277,13 @@ class OAuthCallbackAPIView(APIView):
 
 		token_response = requests.post(token_url, data=data)
 		if token_response.status_code != status.HTTP_200_OK:
+			print("post token url failed", flush=True)
 			return (Response({'error': 'Failed to obtain access token.'}, status=bad_request))
 
 		token_json = token_response.json()
 		access_token = token_json.get('access_token')
 		if not access_token:
+			print("not access", flush=True)
 			return (Response({'error':'Access token not obtained.'}, status=bad_request))
 
 		user_info_url = 'https://api.intra.42.fr/v2/me'
@@ -305,7 +311,7 @@ class OAuthCallbackAPIView(APIView):
 				)
 
 		user = User.objects.get(email=user_info.get('email'))
-		user.is_looged = True
+		user.is_logged = True
 		user.save()
 		token = create_tokens(user)
 

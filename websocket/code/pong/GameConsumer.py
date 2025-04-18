@@ -48,7 +48,6 @@ class GameConsumer(SyncConsumer):
         data = message["data"]
 
         if not game_rooms[message["room_name"]].is_running:
-            tmp = len(game_rooms) # TODO: esto para que?
             result = game_rooms[message["room_name"]].getResult()
             del game_rooms[message["room_name"]]
 
@@ -91,7 +90,6 @@ class GameConsumer(SyncConsumer):
             )
             return
         
-        # TODO: comprobar si ya estaba metido, si lo esta pasarle la misma  info que cuando empieza el juego
         if message["id"] == game_rooms[message["room_name"]].player1_id or message["id"] == game_rooms[message["room_name"]].player2_id:
             async_to_sync(channel_layer.group_send)(
                 message["room_name"], {
@@ -153,11 +151,14 @@ class GameConsumer(SyncConsumer):
     #     "data": json converted to string with the config
     # }
     def game_config(self, event) -> None:
-        # TODO: revisar que no existe la sala ya
         message = event["message"]
 
         self.room_name = message["room_name"]
         self.tournament_name = message["tournament_name"]
+
+        if self.room_name in game_rooms:
+            return
+
         game_rooms[message["room_name"]] = Game(room_name=self.room_name, tournament_name=message["tournament_name"], data=message["data"])
 
         # Join room group
@@ -254,6 +255,19 @@ class GameConsumer(SyncConsumer):
         if len(tournaments[tournament_name].player_list) < 2:
             print(f'Tournament `{tournament_name} has been deleted')
             del tournaments[tournament_name]
+
+    def game_disconnect(self, event) -> None:
+        room_name = event["message"]["room_name"]
+
+        if event["message"]["tournament_name"] != "":
+            return
+
+        if not room_name in game_rooms:
+            return
+        
+        if game_rooms[room_name].number_players < 2:
+            print(f'Game `{room_name} has been deleted')
+            del game_rooms[room_name]
         
     def tournament_started(self, event) -> None:
         pass

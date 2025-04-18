@@ -14,7 +14,6 @@ class TournamentConsumer(WebsocketConsumer):
     def connect(self) -> None:
         self.tournament_name = f"tournament_{self.scope["url_route"]["kwargs"]["room_name"]}"
 
-        # TODO: quizas esto se deberia hacer en el join room, y que todos entren con el codigo devuelto por el create room
         async_to_sync(self.channel_layer.group_add)(
             self.tournament_name, self.channel_name
         )
@@ -74,7 +73,6 @@ class TournamentConsumer(WebsocketConsumer):
                 }
             }
         )
-        # TODO: dado que aqui no se registra, que acto seguido se una al torneo desde el cliente
 
         # send the client the room code of the new game room
         self.send(json.dumps({
@@ -89,7 +87,6 @@ class TournamentConsumer(WebsocketConsumer):
     #           "id": int
     #      }
     def joinTournament(self, message) -> None:
-    # TODO: si alguien se sale en medio del torneo?
         self.tournament_name = message["tournament_name"]
 
         async_to_sync(self.channel_layer.group_add)(

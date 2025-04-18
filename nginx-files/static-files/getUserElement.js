@@ -46,6 +46,10 @@ export default function getUserElement(user) {
 	const form = document.createElement("form");
 	form.setAttribute("id", "profile");
 
+	const alertDiv = document.createElement("div");
+	alertDiv.setAttribute("id", "liveAlertPlaceholder");
+
+	form.appendChild(alertDiv);
 	form.appendChild(avatar);
 	form.appendChild(emailField);
 	form.appendChild(usernameField);

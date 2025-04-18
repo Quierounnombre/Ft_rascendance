@@ -186,7 +186,6 @@ class CanvasObject:
         self.point_y4 = self.y + self.height / 2;
 
     def keepInsideCanvas(self):
-        # TODO: el canvas como te lo van a pasar, solo necesitas el tamano, pero tendra que pasarse en el json del constructor
         if self.point_x1 < 0:
             self.moveTo((self.point_x2 - self.point_x1) / 2, self.y)
         elif self.point_x2 > self.canvas_width:
