@@ -3,6 +3,7 @@ import {tournament_join_room} from "./pong/pong.js"
 import translatePage from "./translate.js";
 import {getMapForm, defaultMap, doubleBallMap, bigBallMap, floatingMap, bigBallLittleBallMap} from "./gameMaps.js"
 import {getCookie} from "./cookiesManagement.js"
+import put_alert from "./put_alert.js"
 
 async function getColors() {
 	const token = getCookie("token")
@@ -130,20 +131,4 @@ export default async function loadTournament() {
 
 		tournament_join_room(tournament_name, colors);
 	});
-}
-
-// TODO: esto se puede reutilizar en todos los errores?
-function put_alert(id, msg) {
-	const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-	const wrapper = document.createElement('div')
-
-	wrapper.innerHTML = `
-		<div class="alert alert-danger alert-dismissible" role="alert">
-			<div data-i18n-key="${id}">${msg}</div>
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
-	`;
-
-	alertPlaceholder.append(wrapper);
-	translatePage();
 }

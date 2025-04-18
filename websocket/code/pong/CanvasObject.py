@@ -3,7 +3,6 @@ import json
 
 class CanvasObject:
     def __init__(self, obj):
-        # TODO: crear un diccionario que nazca de parsear la string JSON obj
         self.color = "white"
         self.id = "generic"
         self.type = "generic"

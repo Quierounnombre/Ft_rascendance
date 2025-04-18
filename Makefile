@@ -45,7 +45,5 @@ just_in_case:
 	docker volume rm $(shell docker volume ls -q)
 	docker system prune -a -f
 	docker network prune -f
-	make create
-	make up
 
 .PHONY: up down ps create rmi rm logs re reall just_in_case
