@@ -28,7 +28,6 @@ export default async function loadTournament() {
 	gameCreator.innerHTML = `
 	<div>
 	<div id="liveAlertPlaceholder"></div>
-	<a href="#game"><i class="bi bi-arrow-left-circle-fill" style="font-size:3rem; color:blue"></i></a>
 	<h2 data-i18n-key="make-tourn">Create tourn</h2>
 	<form id="dataForm" class="container">
 			<div class="form-floating">
