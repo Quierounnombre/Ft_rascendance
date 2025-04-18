@@ -126,11 +126,11 @@ function server_msg(event) {
 		const table = create_table(parsed_ranking);
 
 		document.getElementById("root").replaceChildren(table);
+		translatePage();
 		this.websocket.close();
 		break;
     
 	case "next.round":
-		// TODO: una alerta? notificacion? redireccion?
 		break;
 
 	case "create.tournament.game":
