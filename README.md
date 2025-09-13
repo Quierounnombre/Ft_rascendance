@@ -1,6 +1,15 @@
-Online Pong game, with its own game engine, user managment, microservices, Oauth, friend system, localization, and built as a SPA.
+# Online Pong Game 🎮
 
-Built as the final proyect for 42 comon core.
+An online Pong game with:  
+- Custom game engine  
+- User management  
+- Microservices architecture  
+- OAuth authentication  
+- Friend system  
+- Localization  
+- Single Page Application (SPA)  
+
+Built as the final project for **42 Common Core**.
 
 ## Collaborators
 
