@@ -1,34 +1,23 @@
-<!DOCTYPE html>
-<body>
+# Online Pong Game 🎮
 
-<h1>Online Pong Game 🎮</h1>
+An online Pong game with:
 
-<p>An online Pong game with:</p>
-<ul>
-    <li>Custom game engine</li>
-    <li>User management</li>
-    <li>Microservices architecture</li>
-    <li>OAuth authentication</li>
-    <li>Friend system</li>
-    <li>Localization</li>
-    <li>Single Page Application (SPA)</li>
-</ul>
+- Custom game engine
+- User management
+- Microservices architecture
+- OAuth authentication
+- Friend system
+- Localization
+- Single Page Application (SPA)
 
-<p>Built as the final project for <strong>42 Common Core</strong>.</p>
+Built as the final project for **42 Common Core**.
 
-https://youtu.be/89I3PFZp99o
+[Watch the video on YouTube](https://youtu.be/89I3PFZp99o)
 
-<h2>Collaborators</h2>
+## Collaborators
 
-<blockquote>
-    <ul>
-        <li><a href="https://github.com/Quierounnombre" target="_blank">Quierounnombre</a></li>
-        <li><a href="https://github.com/ferri666" target="_blank">ferri666</a></li>
-        <li><a href="https://github.com/hitchhikergalactic" target="_blank">hitchhikergalactic</a></li>
-        <li><a href="https://github.com/pablo-is-a-goblin" target="_blank">pablo-is-a-goblin</a></li>
-        <li><a href="https://github.com/witemirlo" target="_blank">witemirlo</a></li>
-    </ul>
-</blockquote>
-
-</body>
-</html>
+- [Quierounnombre](https://github.com/Quierounnombre)
+- [ferri666](https://github.com/ferri666)
+- [hitchhikergalactic](https://github.com/hitchhikergalactic)
+- [pablo-is-a-goblin](https://github.com/pablo-is-a-goblin)
+- [witemirlo](https://github.com/witemirlo)
