@@ -17,8 +17,7 @@
 <p>Built as the final project for <strong>42 Common Core</strong>.</p>
 
 <video width="640" height="360" controls>
-        <source src="https://example.com/video.mp4" type="video/mp4">
-        Your browser does not support the video tag.
+    <source src="https://youtu.be/89I3PFZp99o">
 </video>
 
 <h2>Collaborators</h2>
