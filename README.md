@@ -16,11 +16,10 @@
 
 <p>Built as the final project for <strong>42 Common Core</strong>.</p>
 
-<div>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/89I3PFZp99o" 
-    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-</div>
+<video width="640" height="360" controls>
+        <source src="https://example.com/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+</video>
 
 <h2>Collaborators</h2>
 
