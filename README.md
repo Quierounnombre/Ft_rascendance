@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Online Pong Game 🎮</title>
-</head>
 <body>
 
 <h1>Online Pong Game 🎮</h1>
@@ -21,9 +16,9 @@
 
 <p>Built as the final project for <strong>42 Common Core</strong>.</p>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/89I3PFZp99o" 
+<video width="560" height="315" src="https://www.youtube.com/embed/89I3PFZp99o" 
 frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-</iframe>
+</video>
 
 <h2>Collaborators</h2>
 
