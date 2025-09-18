@@ -11,6 +11,8 @@ An online Pong game with:
 
 Built as the final project for **42 Common Core**.
 
+[Watch this!](https://youtu.be/89I3PFZp99o)
+
 ## Collaborators
 
 > - [Quierounnombre](https://github.com/Quierounnombre)
