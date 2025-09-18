@@ -16,9 +16,7 @@
 
 <p>Built as the final project for <strong>42 Common Core</strong>.</p>
 
-<video width="640" height="360" controls>
-    <source src="https://youtu.be/89I3PFZp99o">
-</video>
+https://youtu.be/89I3PFZp99o
 
 <h2>Collaborators</h2>
 
