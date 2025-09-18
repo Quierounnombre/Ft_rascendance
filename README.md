@@ -12,7 +12,7 @@ An online Pong game with:
 
 Built as the final project for **42 Common Core**.
 
-[Watch the video on YouTube](https://youtu.be/89I3PFZp99o)
+[![Watch the video](https://img.youtube.com/vi/89I3PFZp99o/0.jpg)](https://youtu.be/89I3PFZp99o)
 
 ## Collaborators
 
